@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "lectern-enchanted-books",
+	"version": "${version}",
+	"name": "Lectern Enchanted Books",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Bristn"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/lectern-enchanted-books/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.bristn.lectern.LecternEnchantedBooks"
+		],
+		"fabric-datagen": [
+			"net.bristn.lectern.LecternEnchantedBooksDataGenerator"
+		],
+		"client": [
+			"net.bristn.lectern.LecternEnchantedBooksClient"
+		]
+	},
+	"mixins": [
+		"lectern-enchanted-books.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
