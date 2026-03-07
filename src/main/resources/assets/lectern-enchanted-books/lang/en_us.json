@@ -1,0 +1,5 @@
+{
+    "item.lectern-enchanted-books.test_item": "Test Item US",
+    "enchantment.lectern-enchanted-books.no-description": "Unable to find a translation for this enchantment. To add one, implement the key: %s",
+    "enchantment.minecraft.sharpness.desc": "Description text for the sharpness enchantment"
+}

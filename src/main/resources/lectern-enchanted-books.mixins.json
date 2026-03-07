@@ -3,7 +3,10 @@
 	"package": "net.bristn.lectern.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"BlockEntityMixin",
+		"LecternBlockEntityMixin",
+		"LecternBlockMixin",
+		"particle.LecternParticleMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

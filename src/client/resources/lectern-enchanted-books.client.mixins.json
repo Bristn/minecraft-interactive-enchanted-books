@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.bristn.lectern.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "LecternRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
