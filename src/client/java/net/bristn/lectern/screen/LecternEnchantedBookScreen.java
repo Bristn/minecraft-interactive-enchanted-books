@@ -21,8 +21,10 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
     public static final Identifier BOOK_LOCATION = Identifier.withDefaultNamespace("textures/gui/book.png");
 
-    // TODO: slot directory contains icons for the different tools & armor, but this ResourceLocation is not correct
-    // TODO: Check if supported group of enchantment has some data to tell which slots are correct and get their icons
+    // TODO: slot directory contains icons for the different tools & armor, but this
+    // ResourceLocation is not correct
+    // TODO: Check if supported group of enchantment has some data to tell which
+    // slots are correct and get their icons
     public static final Identifier PICKAXE_LOCATION = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/test.png");
     public static final Identifier test = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/sword.png");
 
@@ -63,9 +65,11 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
     // protected void createMenuControls() {
     // if (this.minecraft.player.mayBuild()) {
-    // this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button) -> this.onClose()).bounds(this.width / 2 - 100, 196, 98, 20).build());
+    // this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button)
+    // -> this.onClose()).bounds(this.width / 2 - 100, 196, 98, 20).build());
     // this.addRenderableWidget(
-    // Button.builder(Component.translatable("lectern.take_book"), (button) -> this.sendButtonClick(3)).bounds(this.width / 2 + 2, 196, 98, 20).build());
+    // Button.builder(Component.translatable("lectern.take_book"), (button) ->
+    // this.sendButtonClick(3)).bounds(this.width / 2 + 2, 196, 98, 20).build());
     // } else {
     // super.createMenuControls();
     // }
@@ -100,7 +104,9 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
     // void bookChanged() {
     // // ItemStack itemStack = this.menu.getBook();
-    // // this.setBookAccess((BookViewScreen.BookAccess) Objects.requireNonNullElse(BookAccess.fromItem(itemStack), BookViewScreen.EMPTY_ACCESS));
+    // // this.setBookAccess((BookViewScreen.BookAccess)
+    // Objects.requireNonNullElse(BookAccess.fromItem(itemStack),
+    // BookViewScreen.EMPTY_ACCESS));
     // }
 
     // void pageChanged() {
@@ -125,16 +131,20 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
         // var imageWidth = 192;
         // var imageHeight = 192;
-        // guiGraphics.blit(BOOK_LOCATION, (this.width - imageWidth) / 2, 2, 0, 0, imageWidth, imageHeight);
+        // guiGraphics.blit(BOOK_LOCATION, (this.width - imageWidth) / 2, 2, 0, 0,
+        // imageWidth, imageHeight);
 
-        // guiGraphics.blit(PICKAXE_LOCATION, (this.width - 8) / 2 + 8 / 2, 2, 0, 0, 8, 8);
-        // guiGraphics.blit(BOOK_LOCATION, this.width / 2, this.height / 2, 0, 0, 192, 192);
+        // guiGraphics.blit(PICKAXE_LOCATION, (this.width - 8) / 2 + 8 / 2, 2, 0, 0, 8,
+        // 8);
+        // guiGraphics.blit(BOOK_LOCATION, this.width / 2, this.height / 2, 0, 0, 192,
+        // 192);
 
         // TODO: Icon does not render due traansparency
         graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_LOCATION, this.width / 2, this.height / 2, 0.0F, 0.0F, 32, 32, 32, 32);
 
         // guiGraphics.blit(test, this.width / 2, this.height / 2, 0, 0, 32, 32);
 
-        // graphics.blit(RenderPipelines.GUI_TEXTURED, texture2, 90, 190, u, v, 14, 14, regionWidth, regionHeight, 256, 256);
+        // graphics.blit(RenderPipelines.GUI_TEXTURED, texture2, 90, 190, u, v, 14, 14,
+        // regionWidth, regionHeight, 256, 256);
     }
 }

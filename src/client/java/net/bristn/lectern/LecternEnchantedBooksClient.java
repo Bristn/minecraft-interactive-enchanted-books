@@ -16,19 +16,23 @@ public class LecternEnchantedBooksClient implements ClientModInitializer {
     public void onInitializeClient() {
         MenuScreens.register(LecternScreenHandler.SCREEN_HANDLER, LecternEnchantedBookScreen::new);
 
-        PayloadTypeRegistry.serverboundPlay().register(ItemStackSyncS2CLoad.PACKET_ID, ItemStackSyncS2CLoad.PACKET_CODEC);
-        ClientPlayNetworking.registerGlobalReceiver(ItemStackSyncS2CLoad.PACKET_ID, ((payload, context) -> {
-            if (context.client().level == null)
-                return;
-            if (context.client().level.getBlockEntity(payload.pos()) instanceof LecternBlockEntity lectern) {
-                lectern.setBook(payload.stack());
-                lectern.setChanged();
-            }
-        }));
+        // PayloadTypeRegistry.serverboundPlay().register(ItemStackSyncS2CLoad.PACKET_ID,
+        // ItemStackSyncS2CLoad.PACKET_CODEC);
+        // ClientPlayNetworking.registerGlobalReceiver(ItemStackSyncS2CLoad.PACKET_ID,
+        // ((payload, context) -> {
+        // if (context.client().level == null)
+        // return;
+        // if (context.client().level.getBlockEntity(payload.pos()) instanceof
+        // LecternBlockEntity lectern) {
+        // lectern.setBook(payload.stack());
+        // lectern.setChanged();
+        // }
+        // }));
 
-        var location = Identifier.withDefaultNamespace("textures/gui/demo_background.png");
+        // var location =
+        // Identifier.withDefaultNamespace("textures/gui/demo_background.png");
 
-        LecternEnchantedBooks.LOGGER.info(location.toString());
+        // LecternEnchantedBooks.LOGGER.info(location.toString());
 
         // TODO: Read exclusive sets from minecraft.tags.enchantment.exclusive_set
         // TODO: Read slots & possible tems from minecraft.tags.item.enchantable

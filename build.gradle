@@ -18,12 +18,6 @@ repositories {
 	// for more information about repositories.
 }
 
-fabricApi {
-	configureDataGeneration {
-		client = true
-	}
-}
-
 loom {
 	splitEnvironmentSourceSets()
 
@@ -34,6 +28,12 @@ loom {
 		}
 	}
 
+}
+
+fabricApi {
+	configureDataGeneration {
+		client = true
+	}
 }
 
 dependencies {
@@ -60,6 +60,10 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
+	toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+	
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 	// if it is present.
 	// If you remove this line, sources will not be generated.

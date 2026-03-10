@@ -1,19 +1,14 @@
 package net.bristn.lectern.mixin;
 
-import net.bristn.lectern.LecternAccess;
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.KnowledgeBookItem;
-import net.minecraft.world.item.WrittenBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -26,11 +21,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LecternBlockEntity.class)
-public abstract class LecternBlockEntityMixin extends BlockEntity implements LecternAccess {
+public abstract class LecternBlockEntityMixin extends BlockEntity {
     private final static String NBT_TAG = "TomeReader";
 
     public int ticks;
@@ -129,100 +123,4 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Lec
         return Component.translatable(fallbackKey, descriptionKey, descriptionLevelKey).getString();
     }
 
-    @Inject(method = "saveAdditional", at = @At("TAIL"))
-    private void writeLecternNbt(CompoundTag nbt, HolderLookup.Provider registryLookup, CallbackInfo ci) {
-        nbt.putBoolean(NBT_TAG, isTomeReaderLectern);
-    }
-
-    @Inject(method = "loadAdditional", at = @At("TAIL"))
-    private void readLecternNbt(CompoundTag nbt, HolderLookup.Provider registryLookup, CallbackInfo ci) {
-        this.isTomeReaderLectern = nbt.getBoolean(NBT_TAG).get();
-    }
-
-    // --- Lectern Access interface
-
-    @Override
-    public int getTicks() {
-        return ticks;
-    }
-
-    @Override
-    public float getNextPageAngle() {
-        return nextPageAngle;
-    }
-
-    @Override
-    public float getPageAngle() {
-        return pageAngle;
-    }
-
-    @Override
-    public float getFlipRandom() {
-        return flipRandom;
-    }
-
-    @Override
-    public float getFlipTurn() {
-        return flipTurn;
-    }
-
-    @Override
-    public float getBookRotation() {
-        return bookRotation;
-    }
-
-    @Override
-    public float getTargetBookRotation() {
-        return targetBookRotation;
-    }
-
-    @Override
-    public void setTicks(int ticks) {
-        this.ticks = ticks;
-    }
-
-    @Override
-    public void setNextPageAngle(float nextPageAngle) {
-        this.nextPageAngle = nextPageAngle;
-    }
-
-    @Override
-    public void setPageAngle(float pageAngle) {
-        this.pageAngle = pageAngle;
-    }
-
-    @Override
-    public void setFlipRandom(float flipRandom) {
-        this.flipRandom = flipRandom;
-    }
-
-    @Override
-    public void setFlipTurn(float flipTurn) {
-        this.flipTurn = flipTurn;
-    }
-
-    @Override
-    public void setBookRotation(float bookRotation) {
-        this.bookRotation = bookRotation;
-    }
-
-    @Override
-    public void setLastBookRotation(float lastBookRotation) {
-        this.lastBookRotation = lastBookRotation;
-    }
-
-    @Override
-    public void setTargetBookRotation(float targetBookRotation) {
-        this.targetBookRotation = targetBookRotation;
-    }
-
-    @Override
-    public boolean isTomeReaderLectern() {
-        return isTomeReaderLectern;
-    }
-
-    @Override
-    public void setIsTomeReaderLectern(boolean val) {
-        this.isTomeReaderLectern = val;
-    }
 }
