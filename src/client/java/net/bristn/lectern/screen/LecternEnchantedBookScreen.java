@@ -1,53 +1,30 @@
 package net.bristn.lectern.screen;
 
-import net.bristn.lectern.BookModelHelper;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
-import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
-import net.minecraft.client.model.BookModel;
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.util.Tuple;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.inventory.LecternMenu;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.WritableBookContent;
-import net.minecraft.world.item.component.WrittenBookContent;
-
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Shadow;
 
 public class LecternEnchantedBookScreen extends Screen implements MenuAccess<LecternScreenHandler> {
     private final LecternScreenHandler menu;
     // private final ContainerListener listener = new 1(this);
 
-    public static final ResourceLocation BOOK_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/book.png");
+    public static final Identifier BOOK_LOCATION = Identifier.withDefaultNamespace("textures/gui/book.png");
+
+    // TODO: slot directory contains icons for the different tools & armor, but this ResourceLocation is not correct
+    // TODO: Check if supported group of enchantment has some data to tell which slots are correct and get their icons
+    public static final Identifier PICKAXE_LOCATION = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/test.png");
+    public static final Identifier test = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/sword.png");
 
     public LecternEnchantedBookScreen(LecternScreenHandler handler, Inventory inventory, Component title) {
         super(GameNarrator.NO_TITLE);
@@ -136,16 +113,28 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
     // ! -------------------------------------
 
-    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
-        this.renderTransparentBackground(guiGraphics);
+    public void renderBackground(GuiGraphics graphics, int i, int j, float f) {
+        this.renderTransparentBackground(graphics);
 
         // TODO: Check if one page is enough, or two pages
         // No matter, a custom renderer is needed for icons
 
-        var imageWidth = 192;
-        var imageHeight = 192;
-        guiGraphics.blit(BOOK_LOCATION, (this.width - imageWidth) / 2 - imageWidth / 2, 2, 0, 0, imageWidth, imageHeight);
+        var AXE_SLOT = Identifier.withDefaultNamespace("container/slot/axe");
 
-        guiGraphics.blit(BOOK_LOCATION, (this.width - imageWidth) / 2 + imageWidth / 2, 2, 0, 0, imageWidth, imageHeight);
+        // var sprite = Minecraft.getInstance().getGuiSprites().getSprite(AXE_SLOT);
+
+        // var imageWidth = 192;
+        // var imageHeight = 192;
+        // guiGraphics.blit(BOOK_LOCATION, (this.width - imageWidth) / 2, 2, 0, 0, imageWidth, imageHeight);
+
+        // guiGraphics.blit(PICKAXE_LOCATION, (this.width - 8) / 2 + 8 / 2, 2, 0, 0, 8, 8);
+        // guiGraphics.blit(BOOK_LOCATION, this.width / 2, this.height / 2, 0, 0, 192, 192);
+
+        // TODO: Icon does not render due traansparency
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_LOCATION, this.width / 2, this.height / 2, 0.0F, 0.0F, 32, 32, 32, 32);
+
+        // guiGraphics.blit(test, this.width / 2, this.height / 2, 0, 0, 32, 32);
+
+        // graphics.blit(RenderPipelines.GUI_TEXTURED, texture2, 90, 190, u, v, 14, 14, regionWidth, regionHeight, 256, 256);
     }
 }

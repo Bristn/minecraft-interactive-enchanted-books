@@ -4,7 +4,7 @@ import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 
 public class ModScreens {
@@ -16,7 +16,7 @@ public class ModScreens {
 	 * @param handler - The handler for the screen
 	 */
 	private static void registerScreen(String name, MenuType<LecternScreenHandler> handler) {
-		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
+		Identifier id = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
 		Registry.register(BuiltInRegistries.MENU, id, handler);
 	}
 

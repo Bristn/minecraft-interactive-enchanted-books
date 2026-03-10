@@ -1,5 +1,7 @@
 {
     "item.lectern-enchanted-books.test_item": "Test Item US",
-    "enchantment.lectern-enchanted-books.no-description": "Unable to find a translation for this enchantment. To add one, implement the key: %s",
-    "enchantment.minecraft.sharpness.desc": "Description text for the sharpness enchantment"
+    "enchantment.lectern-enchanted-books.no-description": "Unable to find a translation for this enchantment. To add general translation, implement the key: '%s'. To add a level specific translation, implement the key '%s'",
+    "enchantment.minecraft.sharpness.desc.level-2": "Description text for the sharpness 2 enchantment",
+    "enchantment.minecraft.sharpness.desc.level-3": "Description text for the sharpness 3 enchantment",
+    "enchantment.minecraft.sharpness.desc": "Description text for the general sharpness enchantment"
 }

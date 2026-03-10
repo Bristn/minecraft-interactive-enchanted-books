@@ -1,10 +1,9 @@
 package net.bristn.lectern.mixin;
 
 import net.bristn.lectern.LecternAccess;
-import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,15 +19,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LecternBlock.class)
 public class LecternBlockMixin {
 
-    @Inject(method = "useItemOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/LecternBlock;tryPlaceBook(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/item/ItemStack;)Z", shift = At.Shift.BEFORE))
-    private void applyTagChange(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit,
-            CallbackInfoReturnable<ItemInteractionResult> cir) {
+    // TODO: Enchanted books not placeable even though the data should be correctly implemented
+    // ! Data is not properly applied
+    // TODO: Might be because of installation errors (also missing all sounds & menu background)
 
-        boolean isEnchantedBook = stack.is(Items.ENCHANTED_BOOK);
-        boolean isBlockEntity = world.getBlockEntity(pos) != null;
-        if (isEnchantedBook && isBlockEntity) {
-            LecternAccess lecternEntity = (LecternAccess) world.getBlockEntity(pos);
-            lecternEntity.setIsTomeReaderLectern(true);
-        }
-    }
+    // @Inject(method = "useItemOn", at = @At(value = "INVOKE", target =
+    // "Lnet/minecraft/world/level/block/LecternBlock;tryPlaceBook(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/item/ItemStack;)Z",
+    // shift = At.Shift.BEFORE))
+    // private void applyTagChange(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit,
+    // CallbackInfoReturnable<InteractionResult> cir) {
+
+    // boolean isEnchantedBook = stack.is(Items.ENCHANTED_BOOK);
+    // boolean isBlockEntity = world.getBlockEntity(pos) != null;
+    // if (isEnchantedBook && isBlockEntity) {
+    // LecternAccess lecternEntity = (LecternAccess) world.getBlockEntity(pos);
+    // lecternEntity.setIsTomeReaderLectern(true);
+    // }
+    // }
 }
