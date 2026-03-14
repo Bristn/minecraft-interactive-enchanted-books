@@ -23,7 +23,8 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public class LecternScreenHandler extends AbstractContainerMenu {
 
-    public static final MenuType<LecternScreenHandler> SCREEN_HANDLER = new MenuType<>(LecternScreenHandler::new, FeatureFlags.VANILLA_SET);
+    public static final MenuType<LecternScreenHandler> SCREEN_HANDLER = new MenuType<>(LecternScreenHandler::new,
+            FeatureFlags.VANILLA_SET);
 
     private final Container inventory;
     private final Slot slot;
@@ -48,6 +49,8 @@ public class LecternScreenHandler extends AbstractContainerMenu {
      */
     public LecternScreenHandler(int id, Inventory playerInventory, Container inventory, BlockPos lecternPos) {
         super(SCREEN_HANDLER, id);
+
+        // TODO: Does not properly sync the container menu to the client!
 
         checkContainerSize(inventory, 1);
         this.inventory = inventory;
@@ -80,45 +83,6 @@ public class LecternScreenHandler extends AbstractContainerMenu {
     @Override
     public MenuType<?> getType() {
         return SCREEN_HANDLER;
-    }
-
-    @Override
-    public boolean clickMenuButton(Player player, int id) {
-        if (id == 3) {
-            if (!player.mayBuild())
-                return false;
-            ItemStack itemStack = this.inventory.removeItemNoUpdate(0);
-            this.inventory.setChanged();
-            if (!player.getInventory().add(itemStack))
-                player.drop(itemStack, false);
-            if (player.level().getBlockEntity(lecternPos) != null)
-                ((LecternAccess) player.level().getBlockEntity(lecternPos)).setIsTomeReaderLectern(false);
-            return true;
-        } else if (id == 4) {
-            ItemStack mainStack = player.getMainHandItem();
-            ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
-            if (mainStack.getItem() != Items.BOOK || mainStack.getCount() != 1 || (player.experienceLevel < 3 && !player.getAbilities().instabuild))
-                return false;
-            player.giveExperienceLevels(-3);
-            player.level().playSound(null, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1,
-                    Math.max(1F, player.getRandom().nextFloat() + 0.3F));
-
-            ItemEnchantments enchants = this.inventory.getItem(0).get(DataComponents.STORED_ENCHANTMENTS);
-            Holder<Enchantment> transferEnchant = enchants.keySet().stream().iterator().next();
-            ItemEnchantments.Mutable bookBuilder = new ItemEnchantments.Mutable(enchantedBook.getEnchantments());
-            bookBuilder.upgrade(transferEnchant, enchants.getLevel(transferEnchant));
-            enchantedBook.set(DataComponents.STORED_ENCHANTMENTS, bookBuilder.toImmutable());
-            player.setItemInHand(InteractionHand.MAIN_HAND, enchantedBook);
-
-            ItemEnchantments.Mutable stackBuilder = new ItemEnchantments.Mutable(enchants);
-            stackBuilder.removeIf(entry -> entry == transferEnchant);
-
-            this.inventory.getItem(0).set(DataComponents.STORED_ENCHANTMENTS, stackBuilder.toImmutable());
-            inventory.setChanged();
-            slot.setChanged();
-            return true;
-        }
-        return super.clickMenuButton(player, id);
     }
 
     public FormattedText getPage(int i) {

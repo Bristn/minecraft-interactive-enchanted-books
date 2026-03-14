@@ -23,10 +23,6 @@ public class ModScreens {
 	public static void registerModScreens() {
 		LecternEnchantedBooks.LOGGER.info("Register ModScreens for" + LecternEnchantedBooks.MOD_ID);
 
-		// Lectern screen
-		{
-			String name = "lectern_enchanted_book";
-			ModScreens.registerScreen(name, LecternScreenHandler.SCREEN_HANDLER);
-		}
+		ModScreens.registerScreen("lectern_enchanted_book", LecternScreenHandler.SCREEN_HANDLER);
 	}
 }

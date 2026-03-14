@@ -1,0 +1,34 @@
+[
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Tools
+  {
+    "tag": "minecraft:swords",
+    "texture": "lectern-enchanted-books:textures/gui/sword.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:axes",
+    "texture": "lectern-enchanted-books:textures/gui/axes.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:hoes",
+    "texture": "lectern-enchanted-books:textures/gui/hoe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:pickaxes",
+    "texture": "lectern-enchanted-books:textures/gui/pickaxe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:shovels",
+    "texture": "lectern-enchanted-books:textures/gui/shovel.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:spears",
+    "texture": "lectern-enchanted-books:textures/gui/spear.png",
+    "priority": 0
+  }
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Armor
+]
