@@ -5,28 +5,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public record ItemStackSyncS2CLoad(BlockPos pos, ItemStack stack) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<ItemStackSyncS2CLoad> PACKET_ID = new CustomPacketPayload.Type<>(LecternEnchantedBooks.ITEM_SYNC);
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackSyncS2CLoad> PACKET_CODEC = StreamCodec.ofMember(ItemStackSyncS2CLoad::write,
+    public static final CustomPacketPayload.Type<ItemStackSyncS2CLoad> ID = new CustomPacketPayload.Type<>(
+            Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "item_stack_sync"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackSyncS2CLoad> CODEC = StreamCodec.composite(
+            BlockPos.STREAM_CODEC, ItemStackSyncS2CLoad::pos,
+            ItemStack.OPTIONAL_STREAM_CODEC, ItemStackSyncS2CLoad::stack,
             ItemStackSyncS2CLoad::new);
-
-    public ItemStackSyncS2CLoad(RegistryFriendlyByteBuf buf) {
-        this(buf.readBlockPos(), buf.readBoolean() ? ItemStack.EMPTY : ItemStack.STREAM_CODEC.decode(buf));
-    }
-
-    public static void write(ItemStackSyncS2CLoad load, RegistryFriendlyByteBuf buf) {
-        buf.writeBlockPos(load.pos);
-        buf.writeBoolean(load.stack.isEmpty());
-        if (!load.stack.isEmpty())
-            ItemStack.STREAM_CODEC.encode(buf, load.stack);
-    }
 
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
-        return PACKET_ID;
+        return ID;
     }
-
 }

@@ -1,18 +1,19 @@
 package net.bristn.lectern.mixin.particle;
 
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.bristn.lectern.data.EnchantmentParticleLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LecternBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -34,14 +35,14 @@ public class LecternParticleMixin {
             return;
         }
 
-        BlockEntity blockEntity = world.getBlockEntity(pos);
+        var blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof LecternBlockEntity == false) {
             return;
         }
 
-        LecternBlockEntity lectern = (LecternBlockEntity) blockEntity;
-        Item bookItem = lectern.getBook().getItem();
-        if (bookItem != Items.ENCHANTED_BOOK) {
+        var lectern = (LecternBlockEntity) blockEntity;
+        Item item = lectern.getBook().getItem();
+        if (item != Items.ENCHANTED_BOOK) {
             return;
         }
 
@@ -49,28 +50,79 @@ public class LecternParticleMixin {
             return;
         }
 
-        var identifier = Identifier.fromNamespaceAndPath("minecraft", "enchant");
-        var particleOptional = BuiltInRegistries.PARTICLE_TYPE.get(identifier);
-        if (particleOptional.isPresent() == false) {
-            return;
-        }
+        // Using the custom network packet, the lectern contains the proper book
+        var stack = lectern.getBook();
+        var enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
 
-        var particle = particleOptional.get().value();
-        if (particle instanceof ParticleOptions == false) {
-            return;
-        }
+        for (var entry : enchantments.entrySet()) {
+            var enchantment = entry.getKey().value();
 
-        for (int i = 0; i < 3; i++) {
-            double xChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
-            double yChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
-            double zChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
-            double d = (double) pos.getX() + xChange + 0.5;
-            double e = (double) pos.getY() + yChange + 2.5;
-            double f = (double) pos.getZ() + zChange + 0.5;
-            double g = (xChange - 0.5);
-            double h = (yChange - 0.6);
-            double j = (zChange - 0.5);
-            world.addParticle((ParticleOptions) particle, d, e, f, g, h, j);
+            // TODO: Render multiple particles
+
+            renderEnchantmentParticle(enchantment, world, pos, random);
         }
     }
+
+    /**
+     * 
+     * @param enchantment
+     */
+    private void renderEnchantmentParticle(Enchantment enchantment, Level world, BlockPos pos, RandomSource random) {
+        var particle = getParticleForEnchantment(enchantment);
+
+        for (int i = 0; i < 3; i++) {
+            var xChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
+            var yChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
+            var zChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
+            var x = (double) pos.getX() + xChange + 0.5;
+            var y = (double) pos.getY() + yChange + 2.5;
+            var z = (double) pos.getZ() + zChange + 0.5;
+            var xSpeed = (xChange - 0.5);
+            var ySpeed = (yChange - 0.6);
+            var zSpeed = (zChange - 0.5);
+            world.addParticle((ParticleOptions) particle, x, y, z, xSpeed, ySpeed, zSpeed);
+        }
+    }
+
+    /**
+     * Determines the particle from the enchantment. Tries to read the
+     * enchantment_particle.json. If any error occurs, the default enchantment
+     * particle is returned
+     * 
+     * @param enchantment
+     * @return
+     */
+    private ParticleOptions getParticleForEnchantment(Enchantment enchantment) {
+        try {
+            var enchantmentKey = getEnchantmentIdentifier(enchantment);
+            if (enchantmentKey == null) {
+                LOGGER.info("LecternParticle: Unable to get the id key of enchantment {}", enchantment.toString());
+                return ParticleTypes.ENCHANT;
+            }
+
+            var enchantmentId = Identifier.parse(enchantmentKey);
+            var enchantmentParticles = EnchantmentParticleLoader.getMap();
+            if (enchantmentParticles.containsKey(enchantmentId) == false) {
+                LOGGER.info("LecternParticle: Enchantment {} is not registered in th json", enchantment.toString());
+                return ParticleTypes.ENCHANT;
+            }
+
+            var enchantmentParticle = enchantmentParticles.get(enchantmentId);
+            return enchantmentParticle.particle;
+        } catch (Exception e) {
+            LOGGER.info("LecternParticle: An error occurred getting the particle for {}", enchantment.toString());
+            e.printStackTrace();
+            return ParticleTypes.ENCHANT;
+        }
+    }
+
+    private String getEnchantmentIdentifier(Enchantment enchantment) {
+        var keyContent = enchantment.description().getContents();
+        if (keyContent instanceof TranslatableContents translatable) {
+            return translatable.getKey();
+        }
+
+        return null;
+    }
+
 }

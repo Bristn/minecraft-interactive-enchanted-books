@@ -1,6 +1,216 @@
 [
   {
-    "enchantment": "minecraft:",
+    "enchantment": "enchantment.minecraft.aqua_affinity",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.bane_of_arthropods",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.binding_curse",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.blast_protection",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.breach",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.channeling",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.density",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.depth_strider",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.efficiency",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.feather_falling",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.fire_aspect",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.fire_protection",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.flame",
+    "particle": "lectern-enchanted-books:particle.flame",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.fortune",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.frost_walker",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.impaling",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.infinity",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.knockback",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.looting",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.loyalty",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.luck_of_the_sea",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.lunge",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.lure",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.mending",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.multishot",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.piercing",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.power",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.projectile_protection",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.protection",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.punch",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.quick_charge",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.respiration",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.riptide",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.sharpness",
+    "particle": "lectern-enchanted-books:sparkle_particle",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.silk_touch",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.smite",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.soul_speed",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.sweeping_edge",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.swift_sneak",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.thorns",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.unbreaking",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.vanishing_curse",
+    "particle": "minecraft:enchant",
+    "priority": 0
+  },
+  {
+    "enchantment": "enchantment.minecraft.wind_burst",
     "particle": "minecraft:enchant",
     "priority": 0
   }

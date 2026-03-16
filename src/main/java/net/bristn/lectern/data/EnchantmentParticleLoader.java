@@ -17,13 +17,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 
 import org.slf4j.Logger;
 
@@ -31,8 +30,8 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
     private static final String FILE_NAME = "enchantment_particle.jsonc";
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final List<ItemTagTextureEntry> DATA = new ArrayList<>();
-    private static final HashMap<TagKey<Item>, ItemTagTextureEntry> DATA_BY_TAG = new HashMap<>();
+    private static final List<EnchantmentParticleEntry> DATA = new ArrayList<>();
+    private static final HashMap<Identifier, EnchantmentParticleEntry> DATA_BY_TAG = new HashMap<>();
 
     @Override
     public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor,
@@ -157,23 +156,32 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
         DATA.clear();
         DATA_BY_TAG.clear();
         for (var entry : flatMap.values()) {
-            var textureIdentifier = Identifier.tryParse(entry.particle());
-            var tagIdentifier = Identifier.tryParse(entry.particle());
+            var enchantmentIdentifier = Identifier.tryParse(entry.enchantment());
+            var particleIdentifier = Identifier.tryParse(entry.particle());
 
-            var tagKey = TagKey.create(Registries.ITEM, tagIdentifier);
-            var data = new ItemTagTextureEntry(tagKey, textureIdentifier);
+            var particleOptional = BuiltInRegistries.PARTICLE_TYPE.get(particleIdentifier);
+            if (particleOptional.isPresent() == false) {
+                continue;
+            }
+
+            var particle = particleOptional.get().value();
+            if (particle instanceof ParticleOptions == false) {
+                continue;
+            }
+
+            var data = new EnchantmentParticleEntry(enchantmentIdentifier, (ParticleOptions) particle);
             DATA.add(data);
-            DATA_BY_TAG.put(tagKey, data);
+            DATA_BY_TAG.put(enchantmentIdentifier, data);
         }
 
         LOGGER.info("EnchantmentParticleLoader: Loaded a total of {} unique entries", DATA.size());
     }
 
-    public static List<ItemTagTextureEntry> getList() {
+    public static List<EnchantmentParticleEntry> getList() {
         return Collections.unmodifiableList(DATA);
     }
 
-    public static Map<TagKey<Item>, ItemTagTextureEntry> getMap() {
+    public static Map<Identifier, EnchantmentParticleEntry> getMap() {
         return Collections.unmodifiableMap(DATA_BY_TAG);
     }
 }

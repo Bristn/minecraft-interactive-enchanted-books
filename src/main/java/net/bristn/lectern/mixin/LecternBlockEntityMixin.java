@@ -26,10 +26,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -50,13 +52,13 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
     public boolean isTomeReaderLectern;
 
     @Shadow
+    ItemStack book;
+
+    @Shadow
     Container bookAccess;
 
     @Shadow
     ContainerData dataAccess;
-
-    @Shadow
-    ItemStack book;
 
     public LecternBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -77,7 +79,6 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
             CallbackInfoReturnable<AbstractContainerMenu> originalMethod) {
 
         var stack = this.book;
-        LOGGER.info(stack.toString());
 
         var enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
         var entrySet = enchantments.entrySet();
@@ -105,9 +106,8 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
 
         Item bookItem = this.book.getItem();
         if (bookItem == Items.ENCHANTED_BOOK) {
-            // container.setItem(0, stack);
             originalMethod
-                    .setReturnValue(new LecternScreenHandler(id, playerInventory, this.bookAccess, this.worldPosition));
+                    .setReturnValue(new LecternScreenHandler(id, this.bookAccess, this.dataAccess));
         }
     }
 

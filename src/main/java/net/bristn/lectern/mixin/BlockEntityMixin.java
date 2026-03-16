@@ -2,12 +2,16 @@ package net.bristn.lectern.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 
+import net.bristn.lectern.payloads.ItemStackSyncS2CLoad;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
@@ -17,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockEntity.class)
@@ -32,33 +37,33 @@ public abstract class BlockEntityMixin {
     @Shadow
     public abstract CompoundTag saveWithoutMetadata(HolderLookup.Provider registryLookup);
 
-    // @Inject(method = "setChanged()V", at = @At("TAIL"))
-    // private void addPacketToMarkDirty(CallbackInfo ci) {
-    // BlockEntity blockEntity = (BlockEntity) (Object) this;
-    // boolean isLectern = blockEntity instanceof LecternBlockEntity;
-    // if (isLectern == false) {
-    // return;
-    // }
+    /**
+     * The default networking does not send the full book item to the clients.
+     * Update the method to send a custom packet, which internally sets the book on
+     * the client side
+     * 
+     * @param ci
+     */
+    @Inject(method = "setChanged()V", at = @At("TAIL"))
+    private void addPacketToMarkDirty(CallbackInfo ci) {
+        var blockEntity = (BlockEntity) (Object) this;
+        if (blockEntity instanceof LecternBlockEntity == false) {
+            return;
+        }
 
-    // // Only continue if this is the server world
-    // Level world = this.getLevel();
-    // boolean isClient = world.isClientSide();
-    // if (world == null || isClient == true) {
-    // return;
-    // }
+        // Only continue if this is the server world
+        var level = this.getLevel();
+        if (level == null || level.isClientSide() == true) {
+            return;
+        }
 
-    // ServerLevel serverWorld = (ServerLevel) world;
-    // LecternBlockEntity lectern = (LecternBlockEntity) blockEntity;
-    // ItemStackSyncS2CLoad payload = new ItemStackSyncS2CLoad(getBlockPos(),
-    // lectern.getBook());
-
-    // // Send the packet to the players
-    // Collection<ServerPlayer> players = PlayerLookup.tracking(serverWorld,
-    // getBlockPos());
-    // for (ServerPlayer player : players) {
-    // ServerPlayNetworking.send(player, payload);
-    // }
-    // }
+        // Send a custom network packet to properly save the book of the lectern
+        var lectern = (LecternBlockEntity) blockEntity;
+        var payload = new ItemStackSyncS2CLoad(lectern.getBlockPos(), lectern.getBook());
+        for (var player : PlayerLookup.level((ServerLevel) level)) {
+            ServerPlayNetworking.send(player, payload);
+        }
+    }
 
     /**
      * Handles sending the book item of the lectern to the player. Otherwise the
@@ -70,9 +75,8 @@ public abstract class BlockEntityMixin {
     @Inject(method = "getUpdateTag", at = @At("HEAD"), cancellable = true)
     private void addInitialNbt(CallbackInfoReturnable<CompoundTag> cir,
             @Local(argsOnly = true) HolderLookup.Provider registryLookup) {
-        BlockEntity blockEntity = (BlockEntity) (Object) this;
-        boolean isLectern = blockEntity instanceof LecternBlockEntity;
-        if (isLectern == false) {
+        var blockEntity = (BlockEntity) (Object) this;
+        if (blockEntity instanceof LecternBlockEntity == false) {
             return;
         }
 
@@ -81,9 +85,8 @@ public abstract class BlockEntityMixin {
 
     @Inject(method = "getUpdatePacket", at = @At("HEAD"), cancellable = true)
     private void addLecternUpdatePacket(CallbackInfoReturnable<Packet<ClientGamePacketListener>> cir) {
-        BlockEntity blockEntity = (BlockEntity) (Object) this;
-        boolean isLectern = blockEntity instanceof LecternBlockEntity;
-        if (isLectern == false) {
+        var blockEntity = (BlockEntity) (Object) this;
+        if (blockEntity instanceof LecternBlockEntity == false) {
             return;
         }
 

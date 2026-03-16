@@ -1,16 +1,13 @@
 package net.bristn.lectern.data;
 
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.Identifier;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 
 public class EnchantmentParticleEntry {
-    public final TagKey<Item> enchantment;
-    public final Identifier particle;
+    public final Identifier enchantment;
+    public final ParticleOptions particle;
 
-    // TODO: change data types to correct ones
-
-    public EnchantmentParticleEntry(TagKey<Item> enchantment, Identifier particle) {
+    public EnchantmentParticleEntry(Identifier enchantment, ParticleOptions particle) {
         this.enchantment = enchantment;
         this.particle = particle;
     }

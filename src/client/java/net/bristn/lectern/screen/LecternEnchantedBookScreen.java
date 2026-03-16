@@ -4,25 +4,19 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 
 public class LecternEnchantedBookScreen extends Screen implements MenuAccess<LecternScreenHandler> {
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
@@ -43,9 +37,12 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         this.menu = handler;
         // this.book = handler.getBook();
 
-        // var test = handler.getBook();
+        // var test = handler.getLectern().getItem(0);
+        var a = handler.getSlot(0).getItem();
         // LOGGER.info("----- Screen book " + this.book.toString());
         // LOGGER.info("----- Screen book " + test.toString());
+        LOGGER.info("----- Screen book " + a.toString());
+
     }
 
     public LecternScreenHandler getMenu() {
