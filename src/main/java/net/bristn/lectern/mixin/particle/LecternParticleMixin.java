@@ -1,7 +1,7 @@
 package net.bristn.lectern.mixin.particle;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.bristn.lectern.data.EnchantmentParticleLoader;
+import net.bristn.lectern.resources.loader.EnchantmentParticleLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;

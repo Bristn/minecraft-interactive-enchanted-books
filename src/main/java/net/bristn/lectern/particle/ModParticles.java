@@ -9,13 +9,13 @@ import net.minecraft.resources.Identifier;
 
 public class ModParticles {
 
-    public static final SimpleParticleType SPARKLE_PARTICLE = registerParticle("sparkle_particle",
+    public static final SimpleParticleType SPARKLE_PARTICLE = register("sparkle_particle",
             FabricParticleTypes.simple());
 
     public static void registerModParticles() {
     }
 
-    private static SimpleParticleType registerParticle(String name, SimpleParticleType particle) {
+    private static SimpleParticleType register(String name, SimpleParticleType particle) {
         var identifier = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
         return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, particle);
     }

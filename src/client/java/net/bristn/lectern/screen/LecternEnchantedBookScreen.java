@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class LecternEnchantedBookScreen extends Screen implements MenuAccess<LecternScreenHandler> {
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
@@ -38,7 +39,7 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         // this.book = handler.getBook();
 
         // var test = handler.getLectern().getItem(0);
-        var a = handler.getSlot(0).getItem();
+        var a = handler.getBook();
         // LOGGER.info("----- Screen book " + this.book.toString());
         // LOGGER.info("----- Screen book " + test.toString());
         LOGGER.info("----- Screen book " + a.toString());

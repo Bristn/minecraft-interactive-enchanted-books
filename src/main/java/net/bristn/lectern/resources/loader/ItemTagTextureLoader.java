@@ -1,5 +1,5 @@
 
-package net.bristn.lectern.data;
+package net.bristn.lectern.resources.loader;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +17,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.bristn.lectern.resources.ItemTagTextureEntry;
+import net.bristn.lectern.resources.ItemTagTextureJsonEntry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;

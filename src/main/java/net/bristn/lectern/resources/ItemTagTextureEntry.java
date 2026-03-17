@@ -1,4 +1,4 @@
-package net.bristn.lectern.data;
+package net.bristn.lectern.resources;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;

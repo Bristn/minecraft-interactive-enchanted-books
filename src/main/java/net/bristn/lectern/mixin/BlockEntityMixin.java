@@ -2,7 +2,7 @@ package net.bristn.lectern.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 
-import net.bristn.lectern.payloads.ItemStackSyncS2CLoad;
+import net.bristn.lectern.payloads.SyncLecternItemPayload;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
@@ -59,7 +59,7 @@ public abstract class BlockEntityMixin {
 
         // Send a custom network packet to properly save the book of the lectern
         var lectern = (LecternBlockEntity) blockEntity;
-        var payload = new ItemStackSyncS2CLoad(lectern.getBlockPos(), lectern.getBook());
+        var payload = new SyncLecternItemPayload(lectern.getBlockPos(), lectern.getBook());
         for (var player : PlayerLookup.level((ServerLevel) level)) {
             ServerPlayNetworking.send(player, payload);
         }

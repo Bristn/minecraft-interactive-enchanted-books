@@ -1,16 +1,12 @@
 package net.bristn.lectern;
 
-import net.bristn.lectern.data.EnchantmentParticleLoader;
-import net.bristn.lectern.data.ItemTagTextureLoader;
 import net.bristn.lectern.item.ModItems;
 import net.bristn.lectern.particle.ModParticles;
-import net.bristn.lectern.payloads.ItemStackSyncS2CLoad;
+import net.bristn.lectern.payloads.ModPayloads;
+import net.bristn.lectern.resources.loader.ModResourceLoaders;
 import net.bristn.lectern.screen.ModScreens;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,18 +21,7 @@ public class LecternEnchantedBooks implements ModInitializer {
 		ModItems.registerModItems();
 		ModScreens.registerModScreens();
 		ModParticles.registerModParticles();
-
-		var textureLoader = Identifier.fromNamespaceAndPath(MOD_ID, "item_tag_texture_loader");
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(
-				textureLoader,
-				new ItemTagTextureLoader());
-
-		var particleLoader = Identifier.fromNamespaceAndPath(MOD_ID, "enchantment_particle_loader");
-		ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(
-				particleLoader,
-				new EnchantmentParticleLoader());
-
-		PayloadTypeRegistry.clientboundPlay().register(ItemStackSyncS2CLoad.ID, ItemStackSyncS2CLoad.CODEC);
+		ModPayloads.registerModPayloads();
+		ModResourceLoaders.registerModResourceLoaders();
 	}
-
 }

@@ -1,10 +1,11 @@
-package net.bristn.lectern.data;
+package net.bristn.lectern.resources;
 
 import java.util.HashSet;
 
 import org.slf4j.Logger;
 
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.bristn.lectern.resources.loader.ItemTagTextureLoader;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;

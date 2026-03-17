@@ -1,13 +1,11 @@
 package net.bristn.lectern.mixin;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.bristn.lectern.data.TestDataEntry;
-import net.bristn.lectern.screen.handlers.LecternScreenHandler;
+import net.bristn.lectern.payloads.OpenLecternPayload;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,25 +14,19 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LecternBlockEntity.class)
@@ -78,36 +70,11 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
     private void openLectern(int id, Inventory playerInventory, Player player,
             CallbackInfoReturnable<AbstractContainerMenu> originalMethod) {
 
-        var stack = this.book;
-
-        var enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
-        var entrySet = enchantments.entrySet();
-        for (var entry : entrySet) {
-            var enchantmentLevel = entry.getIntValue();
-            var enchantment = entry.getKey().value();
-            var definition = enchantment.definition();
-
-            var exclusive = enchantment.exclusiveSet();
-            var supported = definition.supportedItems();
-
-            TestDataEntry.getSupportedItemTextures(supported);
-
-            // Get the translated description
-            // var description = getEnchantmentDescription(enchantment, enchantmentLevel);
-
-            // Determine the icons for the supported items
-
-            for (var entry2 : exclusive) {
-                // LecternEnchantedBooks.LOGGER.info(entry2.toString());
-            }
-
-            break;
-        }
-
-        Item bookItem = this.book.getItem();
-        if (bookItem == Items.ENCHANTED_BOOK) {
-            originalMethod
-                    .setReturnValue(new LecternScreenHandler(id, this.bookAccess, this.dataAccess));
+        if (player instanceof ServerPlayer serverPlayer) {
+            var lectern = (LecternBlockEntity) (Object) this;
+            var payload = new OpenLecternPayload(lectern.getBlockPos(), lectern.getBook());
+            ServerPlayNetworking.send(serverPlayer, payload);
+            originalMethod.setReturnValue(null);
         }
     }
 

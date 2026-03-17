@@ -1,4 +1,4 @@
-package net.bristn.lectern.data;
+package net.bristn.lectern.resources;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
