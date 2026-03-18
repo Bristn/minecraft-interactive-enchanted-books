@@ -1,5 +1,9 @@
 package net.bristn.lectern.screen.handlers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.bristn.lectern.screen.data.LecternScreenData;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,10 +16,11 @@ import net.minecraft.world.item.ItemStack;
 public class LecternScreenHandler extends AbstractContainerMenu {
 
     public static final MenuType<LecternScreenHandler> SCREEN_HANDLER = new MenuType<>(
-            ((containerId, inventory) -> new LecternScreenHandler(containerId, inventory, ItemStack.EMPTY)),
+            ((id, inv) -> new LecternScreenHandler(id, inv, ItemStack.EMPTY, new ArrayList<LecternScreenData>())),
             FeatureFlags.VANILLA_SET);
 
     private final SimpleContainer container;
+    private final List<LecternScreenData> pages;
 
     /**
      * Single constructor for both client and server. Using code like in LecternView
@@ -27,10 +32,11 @@ public class LecternScreenHandler extends AbstractContainerMenu {
      * @param playerInv
      * @param book
      */
-    public LecternScreenHandler(int containerId, Inventory playerInv, ItemStack book) {
+    public LecternScreenHandler(int containerId, Inventory playerInv, ItemStack book, List<LecternScreenData> pages) {
         super(SCREEN_HANDLER, containerId);
         this.container = new SimpleContainer(1);
         this.container.setItem(0, book);
+        this.pages = pages;
         this.addSlot(new Slot(container, 0, 80, 40));
     }
 
@@ -44,6 +50,10 @@ public class LecternScreenHandler extends AbstractContainerMenu {
         return true;
     }
 
+    public int getPage() {
+        return 0;
+    }
+
     /**
      * Getter to determine the enchanted book
      * 
@@ -51,5 +61,13 @@ public class LecternScreenHandler extends AbstractContainerMenu {
      */
     public ItemStack getBook() {
         return container.getItem(0);
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public List<LecternScreenData> getPages() {
+        return pages;
     }
 }

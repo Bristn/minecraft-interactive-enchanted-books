@@ -7,7 +7,7 @@
   },
   {
     "tag": "minecraft:axes",
-    "texture": "lectern-enchanted-books:textures/gui/axes.png",
+    "texture": "lectern-enchanted-books:textures/gui/axe.png",
     "priority": 0
   },
   {
@@ -29,6 +29,72 @@
     "tag": "minecraft:spears",
     "texture": "lectern-enchanted-books:textures/gui/spear.png",
     "priority": 0
-  }
+  },
+  // ! Special namespace
+  {
+    "tag": "c:tools/mace",
+    "texture": "lectern-enchanted-books:textures/gui/mace.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/shield",
+    "texture": "lectern-enchanted-books:textures/gui/shield.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/bow",
+    "texture": "lectern-enchanted-books:textures/gui/bow.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/crossbow",
+    "texture": "lectern-enchanted-books:textures/gui/crossbow.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/trident",
+    "texture": "lectern-enchanted-books:textures/gui/trident.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/igniter",
+    "texture": "lectern-enchanted-books:textures/gui/flint_and_steel.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/shear",
+    "texture": "lectern-enchanted-books:textures/gui/shears.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/brush",
+    "texture": "lectern-enchanted-books:textures/gui/brush.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/fishing_rod",
+    "texture": "lectern-enchanted-books:textures/gui/fishing_rod.png",
+    "priority": 0
+  },
   // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Armor
+  {
+    "tag": "minecraft:head_armor",
+    "texture": "lectern-enchanted-books:textures/gui/helmet.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:chest_armor",
+    "texture": "lectern-enchanted-books:textures/gui/chestplate.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:leg_armor",
+    "texture": "lectern-enchanted-books:textures/gui/leggings.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:foot_armor",
+    "texture": "lectern-enchanted-books:textures/gui/boots.png",
+    "priority": 0
+  }
 ]

@@ -57,8 +57,13 @@ public abstract class BlockEntityMixin {
             return;
         }
 
-        // Send a custom network packet to properly save the book of the lectern
+        // Prevent errors if the book is empty
         var lectern = (LecternBlockEntity) blockEntity;
+        if (lectern.hasBook() == false) {
+            return;
+        }
+
+        // Send a custom network packet to properly save the book of the lectern
         var payload = new SyncLecternItemPayload(lectern.getBlockPos(), lectern.getBook());
         for (var player : PlayerLookup.level((ServerLevel) level)) {
             ServerPlayNetworking.send(player, payload);

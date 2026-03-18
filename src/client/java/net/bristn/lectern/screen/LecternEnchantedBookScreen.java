@@ -5,19 +5,19 @@ import java.util.List;
 import org.slf4j.Logger;
 
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.bristn.lectern.screen.data.LecternScreenSupportedData;
+import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 
 public class LecternEnchantedBookScreen extends Screen implements MenuAccess<LecternScreenHandler> {
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
@@ -25,30 +25,17 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
     private final LecternScreenHandler menu;
 
-    // TODO: slot directory contains icons for the different tools & armor, but this
-    // ResourceLocation is not correct
-    // TODO: Check if supported group of enchantment has some data to tell which
-    // slots are correct and get their icons
-    public static final Identifier PICKAXE_LOCATION = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID,
-            "textures/gui/test.png");
-
-    public LecternEnchantedBookScreen(LecternScreenHandler handler, Inventory inventory, Component title) {
+    public LecternEnchantedBookScreen(LecternScreenHandler menu, Inventory inventory, Component title) {
         super(GameNarrator.NO_TITLE);
 
-        this.menu = handler;
-        // this.book = handler.getBook();
-
-        // var test = handler.getLectern().getItem(0);
-        var a = handler.getBook();
-        // LOGGER.info("----- Screen book " + this.book.toString());
-        // LOGGER.info("----- Screen book " + test.toString());
-        LOGGER.info("----- Screen book " + a.toString());
-
+        this.menu = menu;
     }
 
     public LecternScreenHandler getMenu() {
         return this.menu;
     }
+
+    // TODO: Render the page data
 
     // ! -------------------------------------
 
@@ -77,34 +64,101 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         // items
         // -> Use data to get the icons of every supported item
 
+        var pages = this.menu.getPages();
+        var pageIndex = this.menu.getPage();
+        var page = pages.get(pageIndex);
+
+        //
+        var supported = page.supported();
+        renderSupportedItems(graphics, mouseX, mouseY, supported);
+    }
+
+    /**
+     * 
+     * @param graphics
+     * @param mouseX
+     * @param mouseY
+     * @param supported
+     */
+    private void renderSupportedItems(GuiGraphics graphics, int mouseX, int mouseY,
+            LecternScreenSupportedData supported) {
         var iconX = this.width / 2;
         var iconY = this.height / 2;
 
-        // TODO: Draw box around the icons
-        this.drawSupportedIcon(graphics, iconX, iconY);
+        var iconSize = 16;
+        var iconPadding = 8;
 
-    }
+        var iconsPerRow = 5;
 
-    private void drawSupportedIcon(final GuiGraphics graphics, int x, int y) {
-        // var border = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID,
-        // "textures/gui/border.png");
-        // graphics.blit(RenderPipelines.GUI_TEXTURED, border, x - 4, y - 4, 0.0F, 0.0F,
-        // 24, 24, 24, 24);
+        var icons = supported.icons().size();
+        for (var i = 0; i < icons; i++) {
+            var col = i % iconsPerRow;
+            var row = (int) (Math.floor(i / iconsPerRow));
 
-        var icon = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/sword.png");
-        graphics.blit(RenderPipelines.GUI_TEXTURED, icon, x, y, 0.0F, 0.0F, 16, 16, 16, 16);
-
-        // TODO: Draw the tooltip if the mouse is over the image (manually compare pos)
-        if (x > 500) {
-            List<Component> tooltip = List.of(
-                    Component.literal("My Image").withStyle(ChatFormatting.GOLD),
-                    Component.literal("This is a description!").withStyle(ChatFormatting.GRAY));
-            graphics.setComponentTooltipForNextFrame(font, tooltip, x, y);
+            var iconData = supported.icons().get(i);
+            var x = iconX + iconSize * col + iconPadding * (col - 1);
+            var y = iconY + iconSize * row + iconPadding * (row - 1);
+            this.drawSupportedIcon(graphics, x, y, mouseX, mouseY, iconData);
         }
 
+        // Draw the tooltips after the icons to prevent layering issues
+        for (var i = 0; i < icons; i++) {
+            var col = i % iconsPerRow;
+            var row = (int) (Math.floor(i / iconsPerRow));
+
+            var iconData = supported.icons().get(i);
+            var x = iconX + iconSize * col + iconPadding * (col - 1);
+            var y = iconY + iconSize * row + iconPadding * (row - 1);
+            this.drawSupportedIconTooltip(graphics, x, y, mouseX, mouseY, iconData);
+        }
     }
 
-    // ----- ----- ----- Getters
+    /**
+     * Draws the given supported icon at the given position. Additionally adds a
+     * tooltip when hovering the icon
+     * 
+     * @param graphics
+     * @param x
+     * @param y
+     * @param mouseX
+     * @param mouseY
+     * @param data
+     */
+    private void drawSupportedIcon(GuiGraphics graphics, int x, int y, int mouseX, int mouseY,
+            LecternScreenSupportedIconData data) {
+
+        // Draw the icon itself
+        var size = 16;
+        var icon = data.texture();
+        graphics.blit(RenderPipelines.GUI_TEXTURED, icon, x, y, 0.0F, 0.0F, size, size, size, size);
+    }
+
+    /**
+     * 
+     * 
+     * @param graphics
+     * @param x
+     * @param y
+     * @param mouseX
+     * @param mouseY
+     * @param data
+     */
+    private void drawSupportedIconTooltip(GuiGraphics graphics, int x, int y, int mouseX, int mouseY,
+            LecternScreenSupportedIconData data) {
+
+        // Draw the icon itself
+        var size = 16;
+
+        // Draw the tooltip if the mouse is hovering above
+        var mouseInX = mouseX > x && mouseX < (x + size);
+        var mouseInY = mouseY > y && mouseY < (y + size);
+        if (mouseInX == false || mouseInY == false) {
+            return;
+        }
+
+        var tooltip = new LecternScreenTooltipComponent(data.tooltipTitle(), data.tooltipIcons());
+        graphics.renderTooltip(font, List.of(tooltip), x, y, DefaultTooltipPositioner.INSTANCE, null);
+    }
 
     private int getBackgroundLeft() {
         return (this.width - 192) / 2;
