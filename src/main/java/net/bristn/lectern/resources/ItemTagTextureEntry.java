@@ -7,9 +7,11 @@ import net.minecraft.world.item.Item;
 public class ItemTagTextureEntry {
     public final TagKey<Item> tagKey;
     public final Identifier texture;
+    public final int order;
 
-    public ItemTagTextureEntry(TagKey<Item> tagKey, Identifier texture) {
+    public ItemTagTextureEntry(TagKey<Item> tagKey, Identifier texture, int order) {
         this.tagKey = tagKey;
         this.texture = texture;
+        this.order = order;
     }
 }

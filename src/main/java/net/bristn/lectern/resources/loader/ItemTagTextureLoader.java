@@ -102,12 +102,17 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
 
         // Convert each array entry to the Java class
         var result = new HashMap<Identifier, List<ItemTagTextureJsonEntry>>();
-        for (var jsonElement : array) {
+        for (var i = 0; i < array.size(); i++) {
+            var jsonElement = array.get(i);
 
+            // TODO: Properly determine order. Allow other mods to insert icons at any point
+            var order = i;
             var data = ItemTagTextureJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonElement);
             data.ifSuccess(entry -> {
                 result.putIfAbsent(resourceId, new ArrayList<ItemTagTextureJsonEntry>());
-                result.get(resourceId).add(entry);
+
+                var ordered = entry.withOrder(order);
+                result.get(resourceId).add(ordered);
             });
 
             data.ifError(error -> {
@@ -161,7 +166,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
             var tagIdentifier = Identifier.tryParse(entry.tag());
 
             var tagKey = TagKey.create(Registries.ITEM, tagIdentifier);
-            var data = new ItemTagTextureEntry(tagKey, textureIdentifier);
+            var data = new ItemTagTextureEntry(tagKey, textureIdentifier, entry.order());
             DATA.add(data);
             DATA_BY_TAG.put(tagKey, data);
         }

@@ -1,6 +1,7 @@
 package net.bristn.lectern.payloads;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -138,7 +139,9 @@ public class OpenLecternPayloadListener {
         var supportedTags = ItemTagTextureLoader.getMap();
 
         // Iterate all supported items of the enchantment and populate the collections
-        var usedTags = new HashMap<TagKey<Item>, HashSet<Item>>();
+        // The first map is used to keep track of the icon ordering that is determined
+        // in the JSON loader. Format [order -> [tag -> entry]]
+        var usedTagsByOrder = new HashMap<Integer, HashMap<TagKey<Item>, HashSet<Item>>>();
         var missingItems = new HashSet<Item>();
         for (var holder : supportedItems) {
             var item = holder.value();
@@ -150,9 +153,13 @@ public class OpenLecternPayloadListener {
             var tags = itemTags.toList();
             for (var tag : tags) {
                 if (supportedTags.containsKey(tag)) {
-                    var map = usedTags.getOrDefault(tag, new HashSet<>());
-                    map.add(item);
-                    usedTags.put(tag, map);
+                    var order = supportedTags.get(tag).order;
+                    var orderMap = usedTagsByOrder.getOrDefault(order, new HashMap<>());
+                    var itemMap = orderMap.getOrDefault(tag, new HashSet<>());
+                    itemMap.add(item);
+
+                    orderMap.put(tag, itemMap);
+                    usedTagsByOrder.put(order, orderMap);
                     hasValidTag = true;
                 }
             }
@@ -176,22 +183,29 @@ public class OpenLecternPayloadListener {
 
         // Get the screen icons from the used tags
         var screenIcons = new ArrayList<LecternScreenSupportedIconData>();
-        for (var usedTag : usedTags.entrySet()) {
-            var tag = usedTag.getKey();
-            var items = usedTag.getValue();
-            var iconTexture = supportedTags.get(tag).texture;
+        var orderedList = new ArrayList<Integer>(usedTagsByOrder.keySet());
+        Collections.sort(orderedList);
 
-            // Determine the tooltip title (The name of the item tag)
-            var tagName = tag.getName().getString();
+        for (var order : orderedList) {
+            var groupMap = usedTagsByOrder.get(order);
 
-            // Keep track of the item icons
-            var icons = new ArrayList<Identifier>();
-            for (var item : items) {
-                var itemTexture = getItemTexture(item);
-                icons.add(itemTexture);
+            for (var tagEntry : groupMap.entrySet()) {
+                var tag = tagEntry.getKey();
+                var items = tagEntry.getValue();
+                var iconTexture = supportedTags.get(tag).texture;
+
+                // Determine the tooltip title (The name of the item tag)
+                var tagName = tag.getName().getString();
+
+                // Keep track of the item icons
+                var icons = new ArrayList<Identifier>();
+                for (var item : items) {
+                    var itemTexture = getItemTexture(item);
+                    icons.add(itemTexture);
+                }
+
+                screenIcons.add(new LecternScreenSupportedIconData(tagName, icons, iconTexture));
             }
-
-            screenIcons.add(new LecternScreenSupportedIconData(tagName, icons, iconTexture));
         }
 
         // Get the display names of the missing items
@@ -206,7 +220,10 @@ public class OpenLecternPayloadListener {
             missingItemTextures.add(itemTexture);
         }
 
-        screenIcons.add(new LecternScreenSupportedIconData("Misc", missingItemTextures, missingItemIcon));
+        if (missingItems.size() != 0) {
+            screenIcons.add(new LecternScreenSupportedIconData("Misc", missingItemTextures, missingItemIcon));
+        }
+
         return new LecternScreenSupportedData(screenIcons);
     }
 

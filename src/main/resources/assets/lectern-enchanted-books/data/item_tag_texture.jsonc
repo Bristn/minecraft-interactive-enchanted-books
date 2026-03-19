@@ -1,20 +1,28 @@
 [
+  // The ordering of the entries dictates the ordering of the supported icons in the UI
+
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Armor
+  {
+    "tag": "minecraft:head_armor",
+    "texture": "lectern-enchanted-books:textures/gui/helmet.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:chest_armor",
+    "texture": "lectern-enchanted-books:textures/gui/chestplate.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:leg_armor",
+    "texture": "lectern-enchanted-books:textures/gui/leggings.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:foot_armor",
+    "texture": "lectern-enchanted-books:textures/gui/boots.png",
+    "priority": 0
+  },
   // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Tools
-  {
-    "tag": "minecraft:swords",
-    "texture": "lectern-enchanted-books:textures/gui/sword.png",
-    "priority": 0
-  },
-  {
-    "tag": "minecraft:axes",
-    "texture": "lectern-enchanted-books:textures/gui/axe.png",
-    "priority": 0
-  },
-  {
-    "tag": "minecraft:hoes",
-    "texture": "lectern-enchanted-books:textures/gui/hoe.png",
-    "priority": 0
-  },
   {
     "tag": "minecraft:pickaxes",
     "texture": "lectern-enchanted-books:textures/gui/pickaxe.png",
@@ -26,21 +34,26 @@
     "priority": 0
   },
   {
+    "tag": "minecraft:hoes",
+    "texture": "lectern-enchanted-books:textures/gui/hoe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:axes",
+    "texture": "lectern-enchanted-books:textures/gui/axe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:swords",
+    "texture": "lectern-enchanted-books:textures/gui/sword.png",
+    "priority": 0
+  },
+  {
     "tag": "minecraft:spears",
     "texture": "lectern-enchanted-books:textures/gui/spear.png",
     "priority": 0
   },
-  // ! Special namespace
-  {
-    "tag": "c:tools/mace",
-    "texture": "lectern-enchanted-books:textures/gui/mace.png",
-    "priority": 0
-  },
-  {
-    "tag": "c:tools/shield",
-    "texture": "lectern-enchanted-books:textures/gui/shield.png",
-    "priority": 0
-  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Ranged
   {
     "tag": "c:tools/bow",
     "texture": "lectern-enchanted-books:textures/gui/bow.png",
@@ -51,9 +64,21 @@
     "texture": "lectern-enchanted-books:textures/gui/crossbow.png",
     "priority": 0
   },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Special
   {
     "tag": "c:tools/trident",
     "texture": "lectern-enchanted-books:textures/gui/trident.png",
+    "priority": 0
+  },
+  {
+    "tag": "c:tools/mace",
+    "texture": "lectern-enchanted-books:textures/gui/mace.png",
+    "priority": 0
+  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Utility
+  {
+    "tag": "c:tools/shield",
+    "texture": "lectern-enchanted-books:textures/gui/shield.png",
     "priority": 0
   },
   {
@@ -74,27 +99,6 @@
   {
     "tag": "c:tools/fishing_rod",
     "texture": "lectern-enchanted-books:textures/gui/fishing_rod.png",
-    "priority": 0
-  },
-  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Armor
-  {
-    "tag": "minecraft:head_armor",
-    "texture": "lectern-enchanted-books:textures/gui/helmet.png",
-    "priority": 0
-  },
-  {
-    "tag": "minecraft:chest_armor",
-    "texture": "lectern-enchanted-books:textures/gui/chestplate.png",
-    "priority": 0
-  },
-  {
-    "tag": "minecraft:leg_armor",
-    "texture": "lectern-enchanted-books:textures/gui/leggings.png",
-    "priority": 0
-  },
-  {
-    "tag": "minecraft:foot_armor",
-    "texture": "lectern-enchanted-books:textures/gui/boots.png",
     "priority": 0
   }
 ]
