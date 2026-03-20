@@ -60,10 +60,6 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
         collector.accept(TextAlignment.RIGHT, left + 148, top + 16, Component.literal("Test content"));
 
-        // TODO: Check if there are data tags defining the different lists of supported
-        // items
-        // -> Use data to get the icons of every supported item
-
         var pages = this.menu.getPages();
         var pageIndex = this.menu.getPage();
         var page = pages.get(pageIndex);
@@ -82,8 +78,8 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
      */
     private void renderSupportedItems(GuiGraphics graphics, int mouseX, int mouseY,
             LecternScreenSupportedData supported) {
-        var iconX = this.width / 2;
-        var iconY = this.height / 2;
+        var iconX = this.width / 2 - 52;
+        var iconY = this.height / 2 - 65;
 
         var iconSize = 16;
         var iconPadding = 8;
@@ -156,7 +152,7 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
             return;
         }
 
-        var tooltip = new LecternScreenTooltipComponent(data.tooltipTitle(), data.tooltipIcons());
+        var tooltip = new LecternScreenTooltipComponent(data.tooltipTitle(), data.tooltipItems());
         graphics.renderTooltip(font, List.of(tooltip), x, y, DefaultTooltipPositioner.INSTANCE, null);
     }
 

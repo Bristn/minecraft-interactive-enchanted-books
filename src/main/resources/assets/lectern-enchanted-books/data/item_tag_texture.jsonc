@@ -8,6 +8,11 @@
     "priority": 0
   },
   {
+    "tag": "lectern-enchanted-books:elytras",
+    "texture": "lectern-enchanted-books:textures/gui/elytra.png",
+    "priority": 0
+  },
+  {
     "tag": "minecraft:chest_armor",
     "texture": "lectern-enchanted-books:textures/gui/chestplate.png",
     "priority": 0
@@ -55,49 +60,54 @@
   },
   // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Ranged
   {
-    "tag": "c:tools/bow",
+    "tag": "lectern-enchanted-books:bows",
     "texture": "lectern-enchanted-books:textures/gui/bow.png",
     "priority": 0
   },
   {
-    "tag": "c:tools/crossbow",
+    "tag": "lectern-enchanted-books:crossbows",
     "texture": "lectern-enchanted-books:textures/gui/crossbow.png",
     "priority": 0
   },
   // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Special
   {
-    "tag": "c:tools/trident",
+    "tag": "lectern-enchanted-books:tridents",
     "texture": "lectern-enchanted-books:textures/gui/trident.png",
     "priority": 0
   },
   {
-    "tag": "c:tools/mace",
+    "tag": "lectern-enchanted-books:maces",
     "texture": "lectern-enchanted-books:textures/gui/mace.png",
     "priority": 0
   },
   // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Utility
   {
-    "tag": "c:tools/shield",
+    "tag": "lectern-enchanted-books:shields",
     "texture": "lectern-enchanted-books:textures/gui/shield.png",
     "priority": 0
   },
   {
-    "tag": "c:tools/igniter",
+    "tag": "lectern-enchanted-books:skulls",
+    "texture": "lectern-enchanted-books:textures/gui/carved_pumpkin.png",
+    "priority": 0
+  },
+  {
+    "tag": "lectern-enchanted-books:igniters",
     "texture": "lectern-enchanted-books:textures/gui/flint_and_steel.png",
     "priority": 0
   },
   {
-    "tag": "c:tools/shear",
+    "tag": "lectern-enchanted-books:shears",
     "texture": "lectern-enchanted-books:textures/gui/shears.png",
     "priority": 0
   },
   {
-    "tag": "c:tools/brush",
+    "tag": "lectern-enchanted-books:brushes",
     "texture": "lectern-enchanted-books:textures/gui/brush.png",
     "priority": 0
   },
   {
-    "tag": "c:tools/fishing_rod",
+    "tag": "lectern-enchanted-books:fishing_rods",
     "texture": "lectern-enchanted-books:textures/gui/fishing_rod.png",
     "priority": 0
   }

@@ -17,7 +17,6 @@ import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
@@ -142,7 +141,7 @@ public class OpenLecternPayloadListener {
         // The first map is used to keep track of the icon ordering that is determined
         // in the JSON loader. Format [order -> [tag -> entry]]
         var usedTagsByOrder = new HashMap<Integer, HashMap<TagKey<Item>, HashSet<Item>>>();
-        var missingItems = new HashSet<Item>();
+        var missingItemMap = new HashSet<Item>();
         for (var holder : supportedItems) {
             var item = holder.value();
             var itemStack = item.getDefaultInstance();
@@ -166,7 +165,7 @@ public class OpenLecternPayloadListener {
 
             // If the item has no valid tag (no texture), show this to the user
             if (hasValidTag == false) {
-                missingItems.add(item);
+                missingItemMap.add(item);
                 LOGGER.warn("Unable to get icon for {}  ", itemStack.getItemName().getString());
 
                 for (var tag : tags) {
@@ -191,44 +190,36 @@ public class OpenLecternPayloadListener {
 
             for (var tagEntry : groupMap.entrySet()) {
                 var tag = tagEntry.getKey();
-                var items = tagEntry.getValue();
+                var items = new ArrayList<>(tagEntry.getValue());
                 var iconTexture = supportedTags.get(tag).texture;
 
                 // Determine the tooltip title (The name of the item tag)
-                var tagName = tag.getName().getString();
+                var tagKey = tag.getTranslationKey();
+                var tagName = Component.translatable(tagKey).getString();
 
-                // Keep track of the item icons
-                var icons = new ArrayList<Identifier>();
-                for (var item : items) {
-                    var itemTexture = getItemTexture(item);
-                    icons.add(itemTexture);
-                }
-
-                screenIcons.add(new LecternScreenSupportedIconData(tagName, icons, iconTexture));
+                // Sort the items to ensure tools & armor has the same ordering
+                items.sort((a, b) -> a.toString().compareTo(b.toString()));
+                screenIcons.add(new LecternScreenSupportedIconData(tagName, items, iconTexture));
             }
         }
 
         // Get the display names of the missing items
         var missingItemNames = new ArrayList<Component>();
-        var missingItemTextures = new ArrayList<Identifier>();
+        var missingItemItems = new ArrayList<Item>();
         var missingItemIcon = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/missing.png");
-        for (var item : missingItems) {
+        for (var item : missingItemMap) {
             var itemName = item.toString();
             missingItemNames.add(Component.translatable(itemName));
-
-            var itemTexture = getItemTexture(item);
-            missingItemTextures.add(itemTexture);
+            missingItemItems.add(item);
         }
 
-        if (missingItems.size() != 0) {
-            screenIcons.add(new LecternScreenSupportedIconData("Misc", missingItemTextures, missingItemIcon));
+        if (missingItemMap.size() != 0) {
+            var tagName = Component.translatable("tag.item.lectern-enchanted-books.other").getString();
+            missingItemItems.sort((a, b) -> a.toString().compareTo(b.toString()));
+            screenIcons.add(new LecternScreenSupportedIconData(tagName, missingItemItems, missingItemIcon));
         }
 
         return new LecternScreenSupportedData(screenIcons);
     }
 
-    private static Identifier getItemTexture(Item item) {
-        var itemId = BuiltInRegistries.ITEM.getKey(item);
-        return Identifier.fromNamespaceAndPath(itemId.getNamespace(), "textures/item/" + itemId.getPath() + ".png");
-    }
 }

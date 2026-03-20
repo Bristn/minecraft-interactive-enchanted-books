@@ -18,6 +18,5 @@ public class LecternEnchantedBooksClient implements ClientModInitializer {
         MenuScreens.register(LecternScreenHandler.SCREEN_HANDLER, LecternEnchantedBookScreen::new);
 
         ModPayloadListeners.registerModPayloadListeners();
-
     }
 }
