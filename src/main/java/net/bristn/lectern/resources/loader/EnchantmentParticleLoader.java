@@ -18,7 +18,9 @@ import com.google.gson.JsonArray;
 
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.EnchantmentParticleEntry;
-import net.bristn.lectern.resources.EnchantmentParticleJsonEntry;
+import net.bristn.lectern.resources.EnchantmentTranslationEntry;
+import net.bristn.lectern.resources.json.EnchantmentParticleJsonEntry;
+import net.bristn.lectern.resources.json.EnchantmentTranslationJsonEntry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -36,8 +38,8 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
     private static final HashMap<Identifier, EnchantmentParticleEntry> DATA_BY_TAG = new HashMap<>();
 
     @Override
-    public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor,
-            PreparationBarrier preparationBarrier, Executor reloadExecutor) {
+    public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor, PreparationBarrier preparationBarrier,
+            Executor reloadExecutor) {
 
         var manager = currentReload.resourceManager();
         var prepareFuture = CompletableFuture.supplyAsync(() -> loadAllResources(manager), taskExecutor);
@@ -91,8 +93,7 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
      * @return
      * @throws IOException
      */
-    private HashMap<Identifier, List<EnchantmentParticleJsonEntry>> loadResource(Identifier resourceId,
-            Resource resource)
+    private HashMap<Identifier, List<EnchantmentParticleJsonEntry>> loadResource(Identifier resourceId, Resource resource)
             throws IOException {
 
         // Read the json file. The root of the file is a json array
@@ -103,11 +104,25 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
         // Convert each array entry to the Java class
         var result = new HashMap<Identifier, List<EnchantmentParticleJsonEntry>>();
         for (var jsonElement : array) {
+            var jsonObject = jsonElement.getAsJsonObject();
 
-            var data = EnchantmentParticleJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonElement);
+            // Read the optional translation parameters from the json object
+            var parameters = new ArrayList<EnchantmentTranslationJsonEntry>();
+            if (jsonObject.has("parameters") == true) {
+                var parametersJson = jsonObject.get("parameters").getAsJsonArray();
+                for (var parameter : parametersJson) {
+                    var data = EnchantmentTranslationJsonEntry.CODEC.parse(JsonOps.INSTANCE, parameter);
+                    data.ifSuccess(entry -> {
+                        parameters.add(entry);
+                    });
+                }
+            }
+
+            // Parse the main json object
+            var data = EnchantmentParticleJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonObject);
             data.ifSuccess(entry -> {
                 result.putIfAbsent(resourceId, new ArrayList<EnchantmentParticleJsonEntry>());
-                result.get(resourceId).add(entry);
+                result.get(resourceId).add(entry.withParameters(parameters));
             });
 
             data.ifError(error -> {
@@ -148,8 +163,8 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
                     var enchantment = existingEntry.enchantment();
                     var oldParticle = existingEntry.particle();
                     var newParticle = entry.particle();
-                    LOGGER.info("EnchantmentParticleLoader: Overwriting {} particle {} with {}", enchantment,
-                            oldParticle, newParticle);
+                    LOGGER.info("EnchantmentParticleLoader: Overwriting {} particle {} with {}", enchantment, oldParticle,
+                            newParticle);
                 }
             }
         }
@@ -171,7 +186,8 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
                 continue;
             }
 
-            var data = new EnchantmentParticleEntry(enchantmentIdentifier, (ParticleOptions) particle);
+            var parameters = EnchantmentTranslationEntry.fromJsonList(entry.parameters());
+            var data = new EnchantmentParticleEntry(enchantmentIdentifier, (ParticleOptions) particle, parameters);
             DATA.add(data);
             DATA_BY_TAG.put(enchantmentIdentifier, data);
         }

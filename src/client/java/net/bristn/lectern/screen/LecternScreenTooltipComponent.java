@@ -23,8 +23,6 @@ public class LecternScreenTooltipComponent implements ClientTooltipComponent, To
     public LecternScreenTooltipComponent(String title, List<Item> items) {
         this.items = items;
         this.title = title;
-
-        // TODO: Sort items by identifier
     }
 
     @Override
@@ -50,8 +48,7 @@ public class LecternScreenTooltipComponent implements ClientTooltipComponent, To
             var col = i % LecternScreenTooltipComponent.ICONS_PER_ROW;
             var row = (int) (Math.floor(i / LecternScreenTooltipComponent.ICONS_PER_ROW));
 
-            graphics.renderItem(new ItemStack(items.get(i)),
-                    x + col * (SIZE + PADDING) + PADDING / 2,
+            graphics.renderItem(new ItemStack(items.get(i)), x + col * (SIZE + PADDING) + PADDING / 2,
                     y + row * (SIZE + PADDING) + PADDING / 2);
         }
     }

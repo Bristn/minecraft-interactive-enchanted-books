@@ -22,8 +22,8 @@
     "tag.item.lectern-enchanted-books.brushes": "Brushes",
     "tag.item.lectern-enchanted-books.fishing_rods": "Fishing rods",
     "tag.item.lectern-enchanted-books.other": "Other",
-    "enchantment.lectern-enchanted-books.no-description": "Unable to find a translation for this enchantment. To add general translation, implement the key: '%s'. To add a level specific translation, implement the key '%s'",
-    "enchantment.minecraft.sharpness.desc.level-2": "Description text for the sharpness 2 enchantment",
-    "enchantment.minecraft.sharpness.desc.level-3": "Description text for the sharpness 3 enchantment",
-    "enchantment.minecraft.sharpness.desc": "Description text for the general sharpness enchantment"
+    "enchantment.lectern-enchanted-books.no-description": "Unknown translation",
+    "enchantment.minecraft.sharpness.desc": "Increases weapon damage",
+    "enchantment.minecraft.sharpness.desc.level-x": "Increases weapon damage by {damage} heart(s)",
+    "enchantment.minecraft.sharpness.desc.level-5": "Increases weapon damage by 311 hearts"
 }

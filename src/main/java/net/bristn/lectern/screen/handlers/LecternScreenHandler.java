@@ -3,7 +3,7 @@ package net.bristn.lectern.screen.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.bristn.lectern.screen.data.LecternScreenData;
+import net.bristn.lectern.screen.data.LecternScreenPageData;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -16,11 +16,11 @@ import net.minecraft.world.item.ItemStack;
 public class LecternScreenHandler extends AbstractContainerMenu {
 
     public static final MenuType<LecternScreenHandler> SCREEN_HANDLER = new MenuType<>(
-            ((id, inv) -> new LecternScreenHandler(id, inv, ItemStack.EMPTY, new ArrayList<LecternScreenData>())),
+            ((id, inv) -> new LecternScreenHandler(id, inv, ItemStack.EMPTY, new ArrayList<LecternScreenPageData>())),
             FeatureFlags.VANILLA_SET);
 
     private final SimpleContainer container;
-    private final List<LecternScreenData> pages;
+    private final List<LecternScreenPageData> pages;
 
     /**
      * Single constructor for both client and server. Using code like in LecternView
@@ -32,7 +32,8 @@ public class LecternScreenHandler extends AbstractContainerMenu {
      * @param playerInv
      * @param book
      */
-    public LecternScreenHandler(int containerId, Inventory playerInv, ItemStack book, List<LecternScreenData> pages) {
+    public LecternScreenHandler(int containerId, Inventory playerInv, ItemStack book,
+            List<LecternScreenPageData> pages) {
         super(SCREEN_HANDLER, containerId);
         this.container = new SimpleContainer(1);
         this.container.setItem(0, book);
@@ -67,7 +68,7 @@ public class LecternScreenHandler extends AbstractContainerMenu {
      * 
      * @return
      */
-    public List<LecternScreenData> getPages() {
+    public List<LecternScreenPageData> getPages() {
         return pages;
     }
 }

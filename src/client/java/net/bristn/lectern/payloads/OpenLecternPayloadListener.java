@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.loader.ItemTagTextureLoader;
 import net.bristn.lectern.screen.LecternEnchantedBookScreen;
-import net.bristn.lectern.screen.data.LecternScreenData;
+import net.bristn.lectern.screen.data.LecternScreenPageData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
@@ -31,9 +31,9 @@ public class OpenLecternPayloadListener {
     private static final String FALLBACK_DESCRIPTION = "enchantment.lectern-enchanted-books.no-description";
 
     /**
-     * Use a custom payload to open the lectern screen with the correct item.
-     * The tested code using mojangs default "createMenu" method did not sync the
-     * book. Therefore use custom payload and open the menu on the client
+     * Use a custom payload to open the lectern screen with the correct item. The
+     * tested code using mojangs default "createMenu" method did not sync the book.
+     * Therefore use custom payload and open the menu on the client
      * 
      * @param payload
      * @param context
@@ -51,8 +51,8 @@ public class OpenLecternPayloadListener {
         });
     }
 
-    private static List<LecternScreenData> getScreenPages(ItemStack book) {
-        var pages = new ArrayList<LecternScreenData>();
+    private static List<LecternScreenPageData> getScreenPages(ItemStack book) {
+        var pages = new ArrayList<LecternScreenPageData>();
 
         var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
         for (var entry : itemEnchants.entrySet()) {
@@ -60,22 +60,53 @@ public class OpenLecternPayloadListener {
             var enchantmentLevel = entry.getIntValue();
 
             // Determine the individual parts of each single enchantment page
-            var descriptions = new ArrayList<Component>();
-            descriptions.add(getEnchantmentDescription(enchantment, enchantmentLevel));
+            var descriptions = new ArrayList<String>();
+            descriptions.addAll(getEnchantmentDescription(enchantment, enchantmentLevel));
             var supported = getSupportedItemData(enchantment.getSupportedItems());
 
-            var title = Component.literal("TODO: Title");
-            var exclusive = new ArrayList<Component>();
-            exclusive.add(Component.literal("TODO: Exclusive"));
+            // Determine the title use for the page
+            var title = getEnchantmentName(enchantment);
+            var level = getRomanNumber(enchantmentLevel);
+
+            // Determine the list of mutually exclusive enchantments
+            var exclusive = new ArrayList<String>();
+            for (var exclusiveEnchant : enchantment.exclusiveSet()) {
+                if (enchantment != exclusiveEnchant.value()) {
+                    exclusive.add(getEnchantmentName(exclusiveEnchant.value()));
+                }
+            }
 
             // Construct the page data
-            var page = new LecternScreenData(supported, title, descriptions, exclusive);
+            var page = new LecternScreenPageData(supported, title, level, descriptions, exclusive);
             pages.add(page);
         }
 
         // TODO: Insert title page (All enchantments without exclusive set)
 
         return pages;
+    }
+
+    private static String getEnchantmentName(Enchantment enchantment) {
+        var keyContent = enchantment.description().getContents();
+        if (keyContent instanceof TranslatableContents translatable) {
+            return Component.translatable(translatable.getKey()).getString();
+        }
+
+        return "";
+    }
+
+    /**
+     * 
+     * Source:
+     * https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
+     * 
+     * @param number
+     * @return
+     */
+    private static String getRomanNumber(int number) {
+        return "I".repeat(number).replace("IIIII", "V").replace("IIII", "IV").replace("VV", "X").replace("VIV", "IX")
+                .replace("XXXXX", "L").replace("XXXX", "XL").replace("LL", "C").replace("LXL", "XC").replace("CCCCC", "D")
+                .replace("CCCC", "CD").replace("DD", "M").replace("DCD", "CM");
     }
 
     /**
@@ -96,9 +127,12 @@ public class OpenLecternPayloadListener {
      * @param enchantmentLevel
      * @return
      */
-    private static Component getEnchantmentDescription(Enchantment enchantment, int enchantmentLevel) {
+    private static List<String> getEnchantmentDescription(Enchantment enchantment, int enchantmentLevel) {
+        var result = new ArrayList<String>();
         var descriptionKey = "n/a";
         var descriptionLevelKey = "n/a";
+        var descriptionParamKey = "n/a";
+        var parameters = EnchantmentValueHelper.getTranslationParameters(enchantment, enchantmentLevel);
 
         // Try to read the translation key from the description contents
         var keyContent = enchantment.description().getContents();
@@ -108,21 +142,40 @@ public class OpenLecternPayloadListener {
 
             // If there is a translation for the specific level, use it immediately
             if (descriptionLevelKey.equals(levelTranslation) == false) {
-                return Component.translatable(descriptionLevelKey);
+                result.add(levelTranslation);
+                return result;
+            }
+
+            // If there is no specific level, check if there is a generic level translation
+            descriptionParamKey = translatable.getKey() + ".desc.level-x";
+            var paramTranslation = Component.translatable(descriptionParamKey).getString();
+            if (descriptionParamKey.equals(paramTranslation) == false) {
+                for (var parameter : parameters.entrySet()) {
+                    var placeholder = "{" + parameter.getKey() + "}";
+                    var value = parameter.getValue().toString();
+                    paramTranslation = paramTranslation.replace(placeholder, value);
+                }
+
+                result.add(paramTranslation);
+                return result;
             }
 
             // Otherwise check if there is a general enchantment description
             descriptionKey = translatable.getKey() + ".desc";
             var translation = Component.translatable(descriptionKey).getString();
             if (descriptionKey.equals(translation) == false) {
-                return Component.translatable(descriptionKey);
+                result.add(translation);
+                return result;
             }
         }
 
         // If no translation has been found, use a fallback translation that is shipped
         // with the mod. Uses the other keys to inform the user which keys can be
         // implemented
-        return Component.translatable(FALLBACK_DESCRIPTION, descriptionKey, descriptionLevelKey);
+        result.add(Component.translatable(FALLBACK_DESCRIPTION).getString());
+        result.add(descriptionKey);
+        result.add(descriptionLevelKey);
+        return result;
     }
 
     /**
@@ -169,14 +222,8 @@ public class OpenLecternPayloadListener {
                 LOGGER.warn("Unable to get icon for {}  ", itemStack.getItemName().getString());
 
                 for (var tag : tags) {
-                    LOGGER.warn(tag.location().getNamespace());
                     LOGGER.warn(tag.location().toString());
                 }
-
-                // TODO: Manually add Tags to certain items? (These items don't have a unique
-                // enough tag)
-                // - Elytra
-                // - Carrot on a stick, Warped fungus on a stick
             }
         }
 

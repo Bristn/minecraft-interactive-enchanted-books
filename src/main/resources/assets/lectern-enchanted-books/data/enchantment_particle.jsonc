@@ -167,7 +167,8 @@
   {
     "enchantment": "enchantment.minecraft.sharpness",
     "particle": "lectern-enchanted-books:sparkle_particle",
-    "priority": 0
+    "priority": 0,
+    "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.silk_touch",

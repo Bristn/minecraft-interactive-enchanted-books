@@ -18,7 +18,7 @@ import com.google.gson.JsonArray;
 
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.ItemTagTextureEntry;
-import net.bristn.lectern.resources.ItemTagTextureJsonEntry;
+import net.bristn.lectern.resources.json.ItemTagTextureJsonEntry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
@@ -37,8 +37,8 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
     private static final HashMap<TagKey<Item>, ItemTagTextureEntry> DATA_BY_TAG = new HashMap<>();
 
     @Override
-    public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor,
-            PreparationBarrier preparationBarrier, Executor reloadExecutor) {
+    public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor, PreparationBarrier preparationBarrier,
+            Executor reloadExecutor) {
 
         var manager = currentReload.resourceManager();
         var prepareFuture = CompletableFuture.supplyAsync(() -> loadAllResources(manager), taskExecutor);
