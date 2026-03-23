@@ -2,8 +2,8 @@ package net.bristn.lectern;
 
 import org.slf4j.Logger;
 
-import net.bristn.lectern.resources.EnchantmentParticleEntry;
-import net.bristn.lectern.resources.loader.EnchantmentParticleLoader;
+import net.bristn.lectern.resources.EnchantmentDataEntry;
+import net.bristn.lectern.resources.loader.EnchantmentDataLoader;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -16,7 +16,7 @@ public class EnchantmentUtility {
      * enchantment_particle.json. If any error occurs, the default enchantment
      * particle is returned
      */
-    public static EnchantmentParticleEntry getParticleForEnchantment(Enchantment enchantment) {
+    public static EnchantmentDataEntry getParticleForEnchantment(Enchantment enchantment) {
         try {
             var enchantmentKey = EnchantmentUtility.getEnchantmentIdentifier(enchantment);
             if (enchantmentKey == null) {
@@ -25,7 +25,7 @@ public class EnchantmentUtility {
             }
 
             var enchantmentId = Identifier.parse(enchantmentKey);
-            var enchantmentParticles = EnchantmentParticleLoader.getMap();
+            var enchantmentParticles = EnchantmentDataLoader.getMap();
             if (enchantmentParticles.containsKey(enchantmentId) == false) {
                 LOGGER.info("EnchantmentUtility: Enchantment {} is not registered in th json", enchantment.toString());
                 return null;

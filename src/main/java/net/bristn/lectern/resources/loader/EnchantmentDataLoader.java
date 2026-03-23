@@ -17,9 +17,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.bristn.lectern.resources.EnchantmentParticleEntry;
+import net.bristn.lectern.resources.EnchantmentDataEntry;
 import net.bristn.lectern.resources.EnchantmentTranslationEntry;
-import net.bristn.lectern.resources.json.EnchantmentParticleJsonEntry;
+import net.bristn.lectern.resources.json.EnchantmentDataJsonEntry;
 import net.bristn.lectern.resources.json.EnchantmentTranslationJsonEntry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,12 +30,12 @@ import net.minecraft.server.packs.resources.ResourceManager;
 
 import org.slf4j.Logger;
 
-public class EnchantmentParticleLoader implements PreparableReloadListener {
+public class EnchantmentDataLoader implements PreparableReloadListener {
     private static final String FILE_NAME = "enchantment_particle.jsonc";
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final List<EnchantmentParticleEntry> DATA = new ArrayList<>();
-    private static final HashMap<Identifier, EnchantmentParticleEntry> DATA_BY_TAG = new HashMap<>();
+    private static final List<EnchantmentDataEntry> DATA = new ArrayList<>();
+    private static final HashMap<Identifier, EnchantmentDataEntry> DATA_BY_TAG = new HashMap<>();
 
     @Override
     public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor, PreparationBarrier preparationBarrier,
@@ -53,7 +53,7 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
      * @param manager
      * @return
      */
-    private Map<Identifier, List<EnchantmentParticleJsonEntry>> loadAllResources(ResourceManager manager) {
+    private Map<Identifier, List<EnchantmentDataJsonEntry>> loadAllResources(ResourceManager manager) {
         LOGGER.info("EnchantmentParticleLoader: Loading data from item_tag_texture.json");
 
         // Filter out any resource with the given file name
@@ -68,7 +68,7 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
         });
 
         // Read each found json file & convert its content
-        var result = new HashMap<Identifier, List<EnchantmentParticleJsonEntry>>();
+        var result = new HashMap<Identifier, List<EnchantmentDataJsonEntry>>();
         for (var resourceEntry : modResources.entrySet()) {
             var resourceId = resourceEntry.getKey();
             var resource = resourceEntry.getValue();
@@ -93,7 +93,7 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
      * @return
      * @throws IOException
      */
-    private HashMap<Identifier, List<EnchantmentParticleJsonEntry>> loadResource(Identifier resourceId, Resource resource)
+    private HashMap<Identifier, List<EnchantmentDataJsonEntry>> loadResource(Identifier resourceId, Resource resource)
             throws IOException {
 
         // Read the json file. The root of the file is a json array
@@ -102,7 +102,7 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
         var array = GSON.fromJson(reader, JsonArray.class);
 
         // Convert each array entry to the Java class
-        var result = new HashMap<Identifier, List<EnchantmentParticleJsonEntry>>();
+        var result = new HashMap<Identifier, List<EnchantmentDataJsonEntry>>();
         for (var jsonElement : array) {
             var jsonObject = jsonElement.getAsJsonObject();
 
@@ -115,13 +115,14 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
                     data.ifSuccess(entry -> {
                         parameters.add(entry);
                     });
+
                 }
             }
 
             // Parse the main json object
-            var data = EnchantmentParticleJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonObject);
+            var data = EnchantmentDataJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonObject);
             data.ifSuccess(entry -> {
-                result.putIfAbsent(resourceId, new ArrayList<EnchantmentParticleJsonEntry>());
+                result.putIfAbsent(resourceId, new ArrayList<EnchantmentDataJsonEntry>());
                 result.get(resourceId).add(entry.withParameters(parameters));
             });
 
@@ -140,10 +141,10 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
      * 
      * @param prepared
      */
-    private void apply(Map<Identifier, List<EnchantmentParticleJsonEntry>> prepared) {
+    private void apply(Map<Identifier, List<EnchantmentDataJsonEntry>> prepared) {
 
         // Merge all the different mod setting into one flat map
-        var flatMap = new HashMap<String, EnchantmentParticleJsonEntry>();
+        var flatMap = new HashMap<String, EnchantmentDataJsonEntry>();
         for (var entriesPerMod : prepared.entrySet()) {
             for (var entry : entriesPerMod.getValue()) {
                 var enchantmentName = entry.enchantment();
@@ -187,7 +188,7 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
             }
 
             var parameters = EnchantmentTranslationEntry.fromJsonList(entry.parameters());
-            var data = new EnchantmentParticleEntry(enchantmentIdentifier, (ParticleOptions) particle, parameters);
+            var data = new EnchantmentDataEntry(enchantmentIdentifier, (ParticleOptions) particle, parameters);
             DATA.add(data);
             DATA_BY_TAG.put(enchantmentIdentifier, data);
         }
@@ -195,11 +196,11 @@ public class EnchantmentParticleLoader implements PreparableReloadListener {
         LOGGER.info("EnchantmentParticleLoader: Loaded a total of {} unique entries", DATA.size());
     }
 
-    public static List<EnchantmentParticleEntry> getList() {
+    public static List<EnchantmentDataEntry> getList() {
         return Collections.unmodifiableList(DATA);
     }
 
-    public static Map<Identifier, EnchantmentParticleEntry> getMap() {
+    public static Map<Identifier, EnchantmentDataEntry> getMap() {
         return Collections.unmodifiableMap(DATA_BY_TAG);
     }
 }

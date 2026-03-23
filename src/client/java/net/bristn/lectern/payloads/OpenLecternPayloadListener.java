@@ -150,6 +150,9 @@ public class OpenLecternPayloadListener {
             descriptionParamKey = translatable.getKey() + ".desc.level-x";
             var paramTranslation = Component.translatable(descriptionParamKey).getString();
             if (descriptionParamKey.equals(paramTranslation) == false) {
+
+                // If there is a generic level description, apply the value formatters to get
+                // the proper attribute values
                 for (var parameter : parameters.entrySet()) {
                     var placeholder = "{" + parameter.getKey() + "}";
                     var value = parameter.getValue().toString();

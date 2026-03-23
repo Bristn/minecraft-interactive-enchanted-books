@@ -10,7 +10,7 @@ public class ModResourceLoaders {
 
     public static void registerModResourceLoaders() {
         register("item_tag_texture_loader", new ItemTagTextureLoader());
-        register("enchantment_particle_loader", new EnchantmentParticleLoader());
+        register("enchantment_particle_loader", new EnchantmentDataLoader());
     }
 
     private static void register(String name, PreparableReloadListener listener) {

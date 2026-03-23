@@ -6,6 +6,7 @@ import net.bristn.lectern.payloads.ModPayloads;
 import net.bristn.lectern.resources.loader.ModResourceLoaders;
 import net.bristn.lectern.screen.ModScreens;
 import net.bristn.lectern.tag.ModItemTags;
+import net.bristn.lectern.transformers.ModTransformers;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
@@ -13,17 +14,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LecternEnchantedBooks implements ModInitializer {
-	public static final String MOD_ID = "lectern-enchanted-books";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final Identifier ITEM_SYNC = Identifier.fromNamespaceAndPath(MOD_ID, "item_sync");
+    public static final String MOD_ID = "lectern-enchanted-books";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Identifier ITEM_SYNC = Identifier.fromNamespaceAndPath(MOD_ID, "item_sync");
 
-	@Override
-	public void onInitialize() {
-		ModItems.registerModItems();
-		ModScreens.registerModScreens();
-		ModParticles.registerModParticles();
-		ModPayloads.registerModPayloads();
-		ModResourceLoaders.registerModResourceLoaders();
-		ModItemTags.registerModItemTags();
-	}
+    @Override
+    public void onInitialize() {
+        ModItems.registerModItems();
+        ModScreens.registerModScreens();
+        ModParticles.registerModParticles();
+        ModPayloads.registerModPayloads();
+        ModResourceLoaders.registerModResourceLoaders();
+        ModItemTags.registerModItemTags();
+        ModTransformers.registerModTransformers();
+    }
 }

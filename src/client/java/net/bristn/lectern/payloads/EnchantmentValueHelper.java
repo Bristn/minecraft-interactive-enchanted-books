@@ -11,6 +11,7 @@ import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
+import net.minecraft.world.item.enchantment.LevelBasedValue.Fraction;
 import net.minecraft.world.item.enchantment.effects.AddValue;
 import net.minecraft.world.item.enchantment.effects.ApplyEntityImpulse;
 import net.minecraft.world.item.enchantment.effects.ApplyExhaustion;
@@ -52,7 +53,12 @@ public class EnchantmentValueHelper {
         for (var i = 0; i < values.size(); i++) {
             if (i <= translations.parameters.size() - 1) {
                 var parameters = translations.parameters.get(i);
-                result.put(parameters.name, values.get(i));
+                var value = parameters.transformer.apply(values.get(i));
+                result.put(parameters.name, value);
+
+                // LOGGER.info("Original value: " + values.get(i));
+                // LOGGER.info("transformed value: " +
+                // parameters.transformer.transform(values.get(i)));
             }
         }
 
@@ -152,6 +158,10 @@ public class EnchantmentValueHelper {
 
         case EnchantmentAttributeEffect value:
             result.add(value.amount().calculate(enchantmentLevel));
+            break;
+
+        case Fraction value:
+            result.add(value.calculate(enchantmentLevel));
             break;
 
         case EntityEffects value:
