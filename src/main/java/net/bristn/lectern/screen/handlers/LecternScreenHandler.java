@@ -24,16 +24,14 @@ public class LecternScreenHandler extends AbstractContainerMenu {
 
     /**
      * Single constructor for both client and server. Using code like in LecternView
-     * did not sync the
-     * ItemSTack to the client. Therefore manually open this menu on the client
-     * using a custom payload that contains the enchanted book item
+     * did not sync the ItemSTack to the client. Therefore manually open this menu
+     * on the client using a custom payload that contains the enchanted book item
      * 
      * @param containerId
      * @param playerInv
      * @param book
      */
-    public LecternScreenHandler(int containerId, Inventory playerInv, ItemStack book,
-            List<LecternScreenPageData> pages) {
+    public LecternScreenHandler(int containerId, Inventory playerInv, ItemStack book, List<LecternScreenPageData> pages) {
         super(SCREEN_HANDLER, containerId);
         this.container = new SimpleContainer(1);
         this.container.setItem(0, book);
@@ -49,10 +47,6 @@ public class LecternScreenHandler extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return true;
-    }
-
-    public int getPage() {
-        return 0;
     }
 
     /**

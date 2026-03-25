@@ -1,5 +1,9 @@
 {
     "item.lectern-enchanted-books.test_item": "Test Item US",
+    "gui.lectern-enchanted-books.title": "Enchanted book",
+    "gui.lectern-enchanted-books.enchantments": "Contents",
+    "gui.lectern-enchanted-books.applicable": "Applicable to",
+    "gui.lectern-enchanted-books.incompatible": "Incompatible with",
     "tag.item.lectern-enchanted-books.skulls": "Skulls",
     "tag.item.minecraft.head_armor": "Helmets",
     "tag.item.lectern-enchanted-books.elytras": "Elytras",

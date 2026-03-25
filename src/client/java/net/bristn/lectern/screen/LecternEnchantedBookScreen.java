@@ -13,10 +13,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 
 public class LecternEnchantedBookScreen extends Screen implements MenuAccess<LecternScreenHandler> {
@@ -33,11 +37,32 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
             "textures/gui/book.png");
 
     private final LecternScreenHandler menu;
+    private final int totalPageCount;
+    private PageButton forwardButton;
+    private PageButton backButton;
+    private int currentPage;
 
     public LecternEnchantedBookScreen(LecternScreenHandler menu, Inventory inventory, Component title) {
         super(GameNarrator.NO_TITLE);
 
         this.menu = menu;
+        this.totalPageCount = menu.getPages().size();
+        this.currentPage = 0;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        var borderPadding = 25;
+        var buttonWidth = 24;
+
+        var y = 159;
+        var left = width / 2 - BACKGROUND_WIDTH / 2 + borderPadding;
+        var right = width / 2 + BACKGROUND_WIDTH / 2 - borderPadding - buttonWidth;
+        this.forwardButton = this.addRenderableWidget(new PageButton(right, y, true, button -> this.pageForward(), true));
+        this.backButton = this.addRenderableWidget(new PageButton(left, y, false, button -> this.pageBack(), true));
+        this.updateButtonVisibility();
     }
 
     public LecternScreenHandler getMenu() {
@@ -48,7 +73,6 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         this.renderTransparentBackground(graphics);
 
         graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_LOCATION, width / 2 - 256, 2, 0.0F, 0.0F, 512, 192, 512, 256);
-
     }
 
     @Override
@@ -57,13 +81,11 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
 
         // Determine the current page data
         var pages = this.menu.getPages();
-        var pageIndex = this.menu.getPage();
-        var page = pages.get(pageIndex);
+        var page = pages.get(this.currentPage);
 
         // Render the different interface areas
-        var y = renderOverview(graphics, mouseX, mouseY, page);
-        renderMutuallyExclusive(graphics, mouseX, mouseY, page, y);
-        renderSupportedItems(graphics, mouseX, mouseY, page);
+        renderLeftPage(graphics, mouseX, mouseY, page);
+        renderRightPage(graphics, mouseX, mouseY, page);
     }
 
     /**
@@ -71,19 +93,29 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
      * position below all texts. Used to dynamically draw the exclusive set
      * afterwards
      */
-    private int renderOverview(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page) {
+    private int renderLeftPage(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page) {
         var x = this.width / 2 - LEFT_TEXT_OFFSET;
         var y = TOP_TEXT_OFFSET;
 
+        var centerX = x + TEXT_LINE_WIDTH / 2;
+
         // Draw the title
-        var title = page.name() + " " + page.level();
         var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
-        y = renderTextLines(collector, x + TEXT_LINE_WIDTH / 2, y, title, ChatFormatting.AQUA, TextAlignment.CENTER);
+        y = renderTextLines(collector, centerX, y, page.title(), ChatFormatting.AQUA, TextAlignment.CENTER);
         y += TEXT_LINE_HEIGHT;
 
-        var descriptions = page.descriptions();
-        for (var description : descriptions) {
-            y = renderTextLines(collector, x, y, description, ChatFormatting.BLACK, TextAlignment.LEFT);
+        // Draw the headers and texts
+        var headers = page.leftHeaders();
+        var texts = page.leftTexts();
+        for (var i = 0; i < headers.size(); i++) {
+            var header = headers.get(i);
+            if (header.getString().isEmpty() == false) {
+                y = renderTextLines(collector, centerX, y, header, ChatFormatting.GRAY, TextAlignment.CENTER);
+            }
+
+            var text = texts.get(i);
+            y = renderTextLines(collector, x, y, text, ChatFormatting.BLACK, TextAlignment.LEFT);
+            y += TEXT_LINE_HEIGHT;
         }
 
         // TODO: Render anvil cost ?
@@ -91,35 +123,17 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
     }
 
     /**
-     * Renders a list of mutually exclusive enchantments
-     */
-    private void renderMutuallyExclusive(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page, int y) {
-        if (page.exclusive().isEmpty()) {
-            return;
-        }
-
-        var x = this.width / 2 - LEFT_TEXT_OFFSET;
-        y += TEXT_LINE_HEIGHT;
-
-        // Render the exclusive hint & list
-        var exclusive = String.join(", ", page.exclusive());
-        var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
-        y = renderTextLines(collector, x + TEXT_LINE_WIDTH / 2, y, "Incompatible with", ChatFormatting.GRAY,
-                TextAlignment.CENTER);
-        y = renderTextLines(collector, x, y, exclusive, ChatFormatting.BLACK, TextAlignment.LEFT);
-    }
-
-    /**
      * renders the supported items section of the interface. Includes the text hint,
      * the icons and tooltips for each icon
      */
-    private void renderSupportedItems(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page) {
+    private void renderRightPage(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page) {
         var x = this.width / 2 + RIGHT_TEXT_OFFSET;
         var y = TOP_TEXT_OFFSET;
 
         // Render the supported items hint
         var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
-        y = renderTextLines(collector, x + TEXT_LINE_WIDTH / 2, y, "Applicable to", ChatFormatting.GRAY, TextAlignment.CENTER);
+        var title = Component.translatable("gui.lectern-enchanted-books.applicable").getString();
+        y = renderTextLines(collector, x + TEXT_LINE_WIDTH / 2, y, title, ChatFormatting.GRAY, TextAlignment.CENTER);
         y += TEXT_LINE_HEIGHT / 2;
 
         var iconSize = 16;
@@ -199,5 +213,69 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         }
 
         return y;
+    }
+
+    private int renderTextLines(ActiveTextCollector collector, int x, int y, MutableComponent text, ChatFormatting format,
+            TextAlignment align) {
+
+        var component = text.withStyle(format).withoutShadow();
+        var lines = this.font.split(component, TEXT_LINE_WIDTH);
+        for (var line : lines) {
+            collector.accept(align, x, y, line);
+            y += TEXT_LINE_HEIGHT;
+        }
+
+        return y;
+    }
+
+    public boolean setPage(final int page) {
+        int clampedPage = Mth.clamp(page, 0, this.totalPageCount - 1);
+        if (clampedPage != this.currentPage) {
+            this.currentPage = clampedPage;
+            this.updateButtonVisibility();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void pageBack() {
+        if (this.currentPage > 0) {
+            this.currentPage--;
+        }
+
+        this.updateButtonVisibility();
+    }
+
+    private void pageForward() {
+        if (this.currentPage < this.totalPageCount - 1) {
+            this.currentPage++;
+        }
+
+        this.updateButtonVisibility();
+    }
+
+    private void updateButtonVisibility() {
+        this.forwardButton.visible = this.currentPage < this.totalPageCount - 1;
+        this.backButton.visible = this.currentPage > 0;
+    }
+
+    @Override
+    public boolean keyPressed(final KeyEvent event) {
+        if (super.keyPressed(event)) {
+            return true;
+        } else {
+            return switch (event.key()) {
+            case 266 -> {
+                this.backButton.onPress(event);
+                yield true;
+            }
+            case 267 -> {
+                this.forwardButton.onPress(event);
+                yield true;
+            }
+            default -> false;
+            };
+        }
     }
 }

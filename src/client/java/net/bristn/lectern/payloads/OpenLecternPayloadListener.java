@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 
@@ -16,15 +17,24 @@ import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
 import net.bristn.lectern.screen.handlers.LecternScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.Level;
 
 public class OpenLecternPayloadListener {
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
@@ -40,50 +50,128 @@ public class OpenLecternPayloadListener {
      */
     public static void handleOpenLecternPayload(OpenLecternPayload payload, Context context) {
         context.client().execute(() -> {
-            var inventory = context.client().player.getInventory();
+            var client = context.client();
+            var inventory = client.player.getInventory();
             var book = payload.book();
-            var pages = getScreenPages(book);
+            var pages = getScreenPages(book, client.level);
             var menu = new LecternScreenHandler(0, inventory, book, pages);
 
-            context.client().player.containerMenu = menu;
+            client.player.containerMenu = menu;
             var screen = new LecternEnchantedBookScreen(menu, inventory, Component.empty());
-            context.client().setScreen(screen);
+            client.setScreen(screen);
+
         });
     }
 
-    private static List<LecternScreenPageData> getScreenPages(ItemStack book) {
+    private static List<LecternScreenPageData> getScreenPages(ItemStack book, Level level) {
         var pages = new ArrayList<LecternScreenPageData>();
 
+        // Uses snippet of "addToTooltip" to properly order the enchantments. Using the
+        // entrySet results in alphabetical ordering
         var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
-        for (var entry : itemEnchants.entrySet()) {
-            var enchantment = entry.getKey().value();
-            var enchantmentLevel = entry.getIntValue();
+        var registries = Item.TooltipContext.of(level).registries();
+        var order = getTagOrEmpty(registries, Registries.ENCHANTMENT, EnchantmentTags.TOOLTIP_ORDER);
+        var enchantments = new ArrayList<Holder<Enchantment>>();
 
-            // Determine the individual parts of each single enchantment page
-            var descriptions = new ArrayList<String>();
-            descriptions.addAll(getEnchantmentDescription(enchantment, enchantmentLevel));
-            var supported = getSupportedItemData(enchantment.getSupportedItems());
-
-            // Determine the title use for the page
-            var title = getEnchantmentName(enchantment);
-            var level = getRomanNumber(enchantmentLevel);
-
-            // Determine the list of mutually exclusive enchantments
-            var exclusive = new ArrayList<String>();
-            for (var exclusiveEnchant : enchantment.exclusiveSet()) {
-                if (enchantment != exclusiveEnchant.value()) {
-                    exclusive.add(getEnchantmentName(exclusiveEnchant.value()));
-                }
+        for (var holder : order) {
+            var enchantment = holder.value();
+            int enchantmentLevel = itemEnchants.getLevel(holder);
+            if (enchantmentLevel <= 0) {
+                continue;
             }
 
-            // Construct the page data
-            var page = new LecternScreenPageData(supported, title, level, descriptions, exclusive);
-            pages.add(page);
+            pages.add(getContentPage(enchantment, enchantmentLevel));
+            enchantments.add(holder);
         }
 
-        // TODO: Insert title page (All enchantments without exclusive set)
+        if (pages.size() > 1) {
+            pages.add(0, getTitlePage(pages, enchantments, itemEnchants));
+        }
 
         return pages;
+    }
+
+    private static <T> HolderSet<T> getTagOrEmpty(final HolderLookup.Provider registries, final ResourceKey<Registry<T>> registry,
+            final TagKey<T> tag) {
+        if (registries != null) {
+            Optional<HolderSet.Named<T>> maybeOrder = registries.lookupOrThrow(registry).get(tag);
+            if (maybeOrder.isPresent()) {
+                return (HolderSet<T>) maybeOrder.get();
+            }
+        }
+
+        return HolderSet.empty();
+    }
+
+    /**
+     * Get the content page. This includes title, description, exclusive set and
+     * support items
+     */
+    private static LecternScreenPageData getContentPage(Enchantment enchantment, int enchantmentLevel) {
+        var leftHeaders = new ArrayList<MutableComponent>();
+        var leftTexts = new ArrayList<MutableComponent>();
+
+        var items = new HashSet<Item>();
+        for (var item : enchantment.getSupportedItems()) {
+            items.add(item.value());
+        }
+
+        // Determine the individual parts of each single enchantment page
+        leftHeaders.add(Component.empty());
+        leftTexts.add(Component.literal(getEnchantmentDescription(enchantment, enchantmentLevel)));
+        var supported = getSupportedItemData(items);
+
+        // Determine the title use for the page
+        var title = Component.literal(getEnchantmentName(enchantment) + " " + getRomanNumber(enchantmentLevel));
+
+        // Determine the list of mutually exclusive enchantments
+        var exclusive = new ArrayList<String>();
+        for (var exclusiveEnchant : enchantment.exclusiveSet()) {
+            if (enchantment != exclusiveEnchant.value()) {
+                exclusive.add(getEnchantmentName(exclusiveEnchant.value()));
+            }
+        }
+
+        if (exclusive.isEmpty() == false) {
+            leftHeaders.add(Component.translatable("gui.lectern-enchanted-books.incompatible"));
+            leftTexts.add(Component.literal(String.join(", ", exclusive)));
+        }
+
+        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts);
+    }
+
+    /**
+     * If there are multiple enchantments in the book, get a title page that shows
+     * the included enchantments and all supported items. Does not include a list of
+     * exclusive sets
+     */
+    private static LecternScreenPageData getTitlePage(List<LecternScreenPageData> pages, List<Holder<Enchantment>> enchantments,
+            ItemEnchantments itemEnchants) {
+
+        var leftHeaders = new ArrayList<MutableComponent>();
+        var leftTexts = new ArrayList<MutableComponent>();
+
+        var title = Component.translatable("gui.lectern-enchanted-books.title");
+        leftHeaders.add(Component.translatable("gui.lectern-enchanted-books.enchantments"));
+
+        // Determine a set of all supported items from every enchantment
+        var items = new HashSet<Item>();
+        var enchantmentNames = new ArrayList<String>();
+        var count = 1;
+        for (var entry : enchantments) {
+            var enchantment = entry.value();
+            var enchantmentLevel = itemEnchants.getLevel(entry);
+            for (var item : enchantment.getSupportedItems()) {
+                items.add(item.value());
+            }
+
+            enchantmentNames.add(count + ". " + getEnchantmentName(enchantment) + " " + getRomanNumber(enchantmentLevel));
+            count++;
+        }
+
+        leftTexts.add(Component.literal(String.join("\n", enchantmentNames)));
+        var supported = getSupportedItemData(items);
+        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts);
     }
 
     private static String getEnchantmentName(Enchantment enchantment) {
@@ -96,7 +184,6 @@ public class OpenLecternPayloadListener {
     }
 
     /**
-     * 
      * Source:
      * https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
      * 
@@ -127,8 +214,7 @@ public class OpenLecternPayloadListener {
      * @param enchantmentLevel
      * @return
      */
-    private static List<String> getEnchantmentDescription(Enchantment enchantment, int enchantmentLevel) {
-        var result = new ArrayList<String>();
+    private static String getEnchantmentDescription(Enchantment enchantment, int enchantmentLevel) {
         var descriptionKey = "n/a";
         var descriptionLevelKey = "n/a";
         var descriptionParamKey = "n/a";
@@ -142,8 +228,7 @@ public class OpenLecternPayloadListener {
 
             // If there is a translation for the specific level, use it immediately
             if (descriptionLevelKey.equals(levelTranslation) == false) {
-                result.add(levelTranslation);
-                return result;
+                return levelTranslation;
             }
 
             // If there is no specific level, check if there is a generic level translation
@@ -159,26 +244,25 @@ public class OpenLecternPayloadListener {
                     paramTranslation = paramTranslation.replace(placeholder, value);
                 }
 
-                result.add(paramTranslation);
-                return result;
+                return paramTranslation;
             }
 
             // Otherwise check if there is a general enchantment description
             descriptionKey = translatable.getKey() + ".desc";
             var translation = Component.translatable(descriptionKey).getString();
             if (descriptionKey.equals(translation) == false) {
-                result.add(translation);
-                return result;
+                return translation;
             }
         }
 
         // If no translation has been found, use a fallback translation that is shipped
         // with the mod. Uses the other keys to inform the user which keys can be
         // implemented
+        var result = new ArrayList<String>();
         result.add(Component.translatable(FALLBACK_DESCRIPTION).getString());
         result.add(descriptionKey);
         result.add(descriptionLevelKey);
-        return result;
+        return String.join("\n", result);
     }
 
     /**
@@ -190,7 +274,7 @@ public class OpenLecternPayloadListener {
      * @param supportedItems
      * @return
      */
-    private static LecternScreenSupportedData getSupportedItemData(HolderSet<Item> supportedItems) {
+    private static LecternScreenSupportedData getSupportedItemData(HashSet<Item> supportedItems) {
         var supportedTags = ItemTagTextureLoader.getMap();
 
         // Iterate all supported items of the enchantment and populate the collections
@@ -198,8 +282,7 @@ public class OpenLecternPayloadListener {
         // in the JSON loader. Format [order -> [tag -> entry]]
         var usedTagsByOrder = new HashMap<Integer, HashMap<TagKey<Item>, HashSet<Item>>>();
         var missingItemMap = new HashSet<Item>();
-        for (var holder : supportedItems) {
-            var item = holder.value();
+        for (var item : supportedItems) {
             var itemStack = item.getDefaultInstance();
             var itemTags = itemStack.tags();
 

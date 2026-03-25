@@ -2,6 +2,8 @@ package net.bristn.lectern.screen.data;
 
 import java.util.List;
 
-public record LecternScreenPageData(LecternScreenSupportedData supported, String name, String level,
-        List<String> descriptions, List<String> exclusive) {
+import net.minecraft.network.chat.MutableComponent;
+
+public record LecternScreenPageData(LecternScreenSupportedData supported, MutableComponent title,
+        List<MutableComponent> leftHeaders, List<MutableComponent> leftTexts) {
 }

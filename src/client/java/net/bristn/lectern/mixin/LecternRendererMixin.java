@@ -33,7 +33,9 @@ public abstract class LecternRendererMixin implements BlockEntityRenderer<Lecter
     // @Inject(method =
     // "render(Lnet/minecraft/world/level/block/entity/LecternBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
     // at = @At("HEAD"), cancellable = true)
-    // private void render(LecternBlockEntity lectern, float f, PoseStack poseStack, MultiBufferSource vertexProvider, int i, int j, CallbackInfo originalMethod) {
+    // private void render(LecternBlockEntity lectern, float f, PoseStack poseStack,
+    // MultiBufferSource vertexProvider, int i, int j, CallbackInfo originalMethod)
+    // {
 
     // // Use the regular renderer if the lectern does not contain an enchanted book
     // ItemStack stack = lectern.getBook();
@@ -48,8 +50,8 @@ public abstract class LecternRendererMixin implements BlockEntityRenderer<Lecter
     // }
 
     @Inject(method = "submit", at = @At("HEAD"), cancellable = true)
-    private void submit(final LecternRenderState state, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector, final CameraRenderState camera,
-            CallbackInfo originalMethod) {
+    private void submit(final LecternRenderState state, final PoseStack poseStack, final SubmitNodeCollector submitNodeCollector,
+            final CameraRenderState camera, CallbackInfo originalMethod) {
 
     }
 
@@ -67,7 +69,8 @@ public abstract class LecternRendererMixin implements BlockEntityRenderer<Lecter
         // Set the page flip
         // regularBook.setupAnim(0.0F, 0.1F, 0.9F, 1.2F);
 
-        // VertexConsumer vertexConsumer = BOOK_LOCATION.buffer(vertexProvider, RenderType::entitySolid);
+        // VertexConsumer vertexConsumer = BOOK_LOCATION.buffer(vertexProvider,
+        // RenderType::entitySolid);
         // regularBook.render(poseStack, vertexConsumer, i, j, -1);
         // poseStack.popPose();
     }

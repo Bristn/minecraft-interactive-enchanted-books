@@ -1,17 +1,18 @@
 {
-	"required": true,
-	"package": "net.bristn.lectern.mixin",
-	"compatibilityLevel": "JAVA_25",
-	"mixins": [
-		"BlockEntityMixin",
-		"LecternBlockEntityMixin",
-		"LecternBlockMixin",
-		"particle.LecternParticleMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
-	}
+    "required": true,
+    "package": "net.bristn.lectern.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "BlockEntityMixin",
+        "LecternBlockEntityMixin",
+        "LecternBlockMixin",
+        "EnchantedBookItemMixin",
+        "particle.LecternParticleMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+    }
 }

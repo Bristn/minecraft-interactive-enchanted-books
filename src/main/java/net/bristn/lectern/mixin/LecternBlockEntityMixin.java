@@ -49,7 +49,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            var payload = new OpenLecternPayload(lectern.getBlockPos(), lectern.getBook());
+            var payload = new OpenLecternPayload(lectern.getBook());
             ServerPlayNetworking.send(serverPlayer, payload);
             originalMethod.setReturnValue(null);
         }
