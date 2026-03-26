@@ -9,7 +9,7 @@ import net.bristn.lectern.screen.handlers.LecternScreenHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.ActiveTextCollector;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -69,15 +69,15 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         return this.menu;
     }
 
-    public void renderBackground(GuiGraphics graphics, int i, int j, float f) {
-        this.renderTransparentBackground(graphics);
-
+    @Override
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         graphics.blit(RenderPipelines.GUI_TEXTURED, BOOK_LOCATION, width / 2 - 256, 2, 0.0F, 0.0F, 512, 192, 512, 256);
     }
 
     @Override
-    public void render(final GuiGraphics graphics, final int mouseX, final int mouseY, final float a) {
-        super.render(graphics, mouseX, mouseY, a);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
 
         // Determine the current page data
         var pages = this.menu.getPages();
@@ -93,14 +93,14 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
      * position below all texts. Used to dynamically draw the exclusive set
      * afterwards
      */
-    private int renderLeftPage(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page) {
+    private int renderLeftPage(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page) {
         var x = this.width / 2 - LEFT_TEXT_OFFSET;
         var y = TOP_TEXT_OFFSET;
 
         var centerX = x + TEXT_LINE_WIDTH / 2;
 
         // Draw the title
-        var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
+        var collector = graphics.textRenderer(GuiGraphicsExtractor.HoveredTextEffects.TOOLTIP_AND_CURSOR);
         y = renderTextLines(collector, centerX, y, page.title(), ChatFormatting.AQUA, TextAlignment.CENTER);
         y += TEXT_LINE_HEIGHT;
 
@@ -126,12 +126,12 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
      * renders the supported items section of the interface. Includes the text hint,
      * the icons and tooltips for each icon
      */
-    private void renderRightPage(GuiGraphics graphics, int mouseX, int mouseY, LecternScreenPageData page) {
+    private void renderRightPage(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page) {
         var x = this.width / 2 + RIGHT_TEXT_OFFSET;
         var y = TOP_TEXT_OFFSET;
 
         // Render the supported items hint
-        var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
+        var collector = graphics.textRenderer(GuiGraphicsExtractor.HoveredTextEffects.TOOLTIP_AND_CURSOR);
         var title = Component.translatable("gui.lectern-enchanted-books.applicable").getString();
         y = renderTextLines(collector, x + TEXT_LINE_WIDTH / 2, y, title, ChatFormatting.GRAY, TextAlignment.CENTER);
         y += TEXT_LINE_HEIGHT / 2;
@@ -169,7 +169,7 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
      * Draws the given supported icon at the given position. Additionally adds a
      * tooltip when hovering the icon
      */
-    private void drawSupportedIcon(GuiGraphics graphics, int x, int y, int mouseX, int mouseY,
+    private void drawSupportedIcon(GuiGraphicsExtractor graphics, int x, int y, int mouseX, int mouseY,
             LecternScreenSupportedIconData data) {
 
         // Draw the icon itself
@@ -181,7 +181,7 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
     /**
      * Draws the tooltip when hovering over a given supported item icon
      */
-    private void drawSupportedIconTooltip(GuiGraphics graphics, int x, int y, int mouseX, int mouseY,
+    private void drawSupportedIconTooltip(GuiGraphicsExtractor graphics, int x, int y, int mouseX, int mouseY,
             LecternScreenSupportedIconData data) {
 
         // Draw the icon itself
@@ -195,7 +195,7 @@ public class LecternEnchantedBookScreen extends Screen implements MenuAccess<Lec
         }
 
         var tooltip = new LecternScreenTooltipComponent(data.tooltipTitle(), data.tooltipItems());
-        graphics.renderTooltip(font, List.of(tooltip), x, y, DefaultTooltipPositioner.INSTANCE, null);
+        graphics.tooltip(font, List.of(tooltip), x, y, DefaultTooltipPositioner.INSTANCE, null);
     }
 
     /**

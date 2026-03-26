@@ -3,7 +3,7 @@ package net.bristn.lectern.screen;
 import java.util.List;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
@@ -39,8 +39,8 @@ public class LecternScreenTooltipComponent implements ClientTooltipComponent, To
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics graphics) {
-        var collector = graphics.textRenderer(GuiGraphics.HoveredTextEffects.TOOLTIP_AND_CURSOR);
+    public void extractImage(Font font, int x, int y, int width, int height, GuiGraphicsExtractor graphics) {
+        var collector = graphics.textRenderer(GuiGraphicsExtractor.HoveredTextEffects.TOOLTIP_AND_CURSOR);
         collector.accept(TextAlignment.LEFT, x, y + PADDING / 2, Component.literal(title));
         y += TEXT_OFFSET;
 
@@ -48,7 +48,7 @@ public class LecternScreenTooltipComponent implements ClientTooltipComponent, To
             var col = i % LecternScreenTooltipComponent.ICONS_PER_ROW;
             var row = (int) (Math.floor(i / LecternScreenTooltipComponent.ICONS_PER_ROW));
 
-            graphics.renderItem(new ItemStack(items.get(i)), x + col * (SIZE + PADDING) + PADDING / 2,
+            graphics.item(new ItemStack(items.get(i)), x + col * (SIZE + PADDING) + PADDING / 2,
                     y + row * (SIZE + PADDING) + PADDING / 2);
         }
     }
