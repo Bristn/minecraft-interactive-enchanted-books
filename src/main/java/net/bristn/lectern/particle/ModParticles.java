@@ -9,8 +9,7 @@ import net.minecraft.resources.Identifier;
 
 public class ModParticles {
 
-    public static final SimpleParticleType SPARKLE_PARTICLE = register("sparkle_particle",
-            FabricParticleTypes.simple());
+    public static final SimpleParticleType SPARKLE_PARTICLE = register("sparkle_particle", FabricParticleTypes.simple());
 
     public static void registerModParticles() {
     }
@@ -19,5 +18,4 @@ public class ModParticles {
         var identifier = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
         return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, particle);
     }
-
 }

@@ -1,4 +1,4 @@
-package net.bristn.lectern.payloads;
+package net.bristn.lectern.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,16 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.loader.ItemTagTextureLoader;
-import net.bristn.lectern.screen.LecternEnchantedBookScreen;
 import net.bristn.lectern.screen.data.LecternScreenPageData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
-import net.bristn.lectern.screen.handlers.LecternScreenHandler;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
@@ -36,34 +31,15 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 
-public class OpenLecternPayloadListener {
-    private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
+public class UtilLecternScreenPage {
     private static final String FALLBACK_DESCRIPTION = "enchantment.lectern-enchanted-books.no-description";
 
     /**
-     * Use a custom payload to open the lectern screen with the correct item. The
-     * tested code using mojangs default "createMenu" method did not sync the book.
-     * Therefore use custom payload and open the menu on the client
-     * 
-     * @param payload
-     * @param context
+     * Utility function to determine the pages of the given enchanted book item.
+     * Iterates the different enchantments and returns a separate page array entry
+     * for each enchantment
      */
-    public static void handleOpenLecternPayload(OpenLecternPayload payload, Context context) {
-        context.client().execute(() -> {
-            var client = context.client();
-            var inventory = client.player.getInventory();
-            var book = payload.book();
-            var pages = getScreenPages(book, client.level);
-            var menu = new LecternScreenHandler(0, inventory, book, pages);
-
-            client.player.containerMenu = menu;
-            var screen = new LecternEnchantedBookScreen(menu, inventory, Component.empty());
-            client.setScreen(screen);
-
-        });
-    }
-
-    private static List<LecternScreenPageData> getScreenPages(ItemStack book, Level level) {
+    public static List<LecternScreenPageData> getScreenPages(ItemStack book, Level level) {
         var pages = new ArrayList<LecternScreenPageData>();
 
         // Uses snippet of "addToTooltip" to properly order the enchantments. Using the
@@ -91,8 +67,8 @@ public class OpenLecternPayloadListener {
         return pages;
     }
 
-    private static <T> HolderSet<T> getTagOrEmpty(final HolderLookup.Provider registries, final ResourceKey<Registry<T>> registry,
-            final TagKey<T> tag) {
+    private static <T> HolderSet<T> getTagOrEmpty(HolderLookup.Provider registries, ResourceKey<Registry<T>> registry,
+            TagKey<T> tag) {
         if (registries != null) {
             Optional<HolderSet.Named<T>> maybeOrder = registries.lookupOrThrow(registry).get(tag);
             if (maybeOrder.isPresent()) {
@@ -218,7 +194,7 @@ public class OpenLecternPayloadListener {
         var descriptionKey = "n/a";
         var descriptionLevelKey = "n/a";
         var descriptionParamKey = "n/a";
-        var parameters = EnchantmentValueHelper.getTranslationParameters(enchantment, enchantmentLevel);
+        var parameters = UtilEnchantmentValue.getTranslationParameters(enchantment, enchantmentLevel);
 
         // Try to read the translation key from the description contents
         var keyContent = enchantment.description().getContents();
@@ -305,10 +281,10 @@ public class OpenLecternPayloadListener {
             // If the item has no valid tag (no texture), show this to the user
             if (hasValidTag == false) {
                 missingItemMap.add(item);
-                LOGGER.warn("Unable to get icon for {}  ", itemStack.getItemName().getString());
+                LecternEnchantedBooks.LOGGER.warn("Unable to get icon for {}  ", itemStack.getItemName().getString());
 
                 for (var tag : tags) {
-                    LOGGER.warn(tag.location().toString());
+                    LecternEnchantedBooks.LOGGER.warn(tag.location().toString());
                 }
             }
         }

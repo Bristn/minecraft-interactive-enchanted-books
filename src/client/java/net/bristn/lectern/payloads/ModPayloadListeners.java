@@ -1,5 +1,7 @@
 package net.bristn.lectern.payloads;
 
+import net.bristn.lectern.screen.EnchantedBookAccess;
+import net.bristn.lectern.screen.EnchantedBookViewScreen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
@@ -12,7 +14,7 @@ public class ModPayloadListeners {
         });
 
         ClientPlayNetworking.registerGlobalReceiver(OpenLecternPayload.ID, (payload, context) -> {
-            OpenLecternPayloadListener.handleOpenLecternPayload(payload, context);
+            handleOpenLecternPayload(payload, context);
         });
     }
 
@@ -20,9 +22,6 @@ public class ModPayloadListeners {
      * Uses a custom networking message to keep track of what book the lectern
      * contains. The regular networking from minecraft does not sync the complete
      * book, but a version with reduced information
-     * 
-     * @param payload
-     * @param context
      */
     private static void handleSyncLecternItemPayload(SyncLecternItemPayload payload, Context context) {
         var level = context.client().level;
@@ -42,5 +41,19 @@ public class ModPayloadListeners {
         }
 
         // TODO: Determine the particles here (Move to separate class)
+    }
+
+    /**
+     * Use a custom payload to open the lectern screen when right-clicking with an
+     * enchanted book item
+     */
+    private static void handleOpenLecternPayload(OpenLecternPayload payload, Context context) {
+        context.client().execute(() -> {
+            var client = context.client();
+            var book = payload.book();
+
+            var screen = new EnchantedBookViewScreen(EnchantedBookAccess.fromItem(book));
+            client.setScreen(screen);
+        });
     }
 }

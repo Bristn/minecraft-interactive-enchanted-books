@@ -1,10 +1,8 @@
-package net.bristn.lectern.payloads;
+package net.bristn.lectern.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.slf4j.Logger;
 
 import net.bristn.lectern.EnchantmentUtility;
 import net.bristn.lectern.LecternEnchantedBooks;
@@ -29,9 +27,16 @@ import net.minecraft.world.item.enchantment.effects.ScaleExponentially;
 import net.minecraft.world.item.enchantment.effects.SetValue;
 import net.minecraft.world.item.enchantment.effects.AllOf.EntityEffects;
 
-public class EnchantmentValueHelper {
-    private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
+public class UtilEnchantmentValue {
 
+    /**
+     * Gets the translation parameters for the given enchantment. Uses the
+     * "parameters" of the enchantment json data to assign names to the enchantment
+     * effect values. For this to work as expected, the ordering of values must
+     * match the ordering of the naming in the json. If the first effect of the
+     * enchantment is attribute:protection, then the first naming array element is
+     * for this first effect value
+     */
     public static HashMap<String, Float> getTranslationParameters(Enchantment enchantment, int enchantmentLevel) {
         var values = new ArrayList<Float>();
 
@@ -55,14 +60,10 @@ public class EnchantmentValueHelper {
                 var parameters = translations.parameters.get(i);
                 var value = parameters.transformer.apply(values.get(i));
                 result.put(parameters.name, value);
-
-                // LOGGER.info("Original value: " + values.get(i));
-                // LOGGER.info("transformed value: " +
-                // parameters.transformer.transform(values.get(i)));
             }
         }
 
-        LOGGER.info(result.toString());
+        // TODO: Add enchantment level as last parameter
 
         return result;
     }
@@ -78,15 +79,17 @@ public class EnchantmentValueHelper {
             // ! Can be the root effect (e.g. Blast Protection), but also a child
             return List.of(effect.amount().calculate(enchantmentLevel));
         } else {
-            LOGGER.info("Unrecognized enchantment:");
-            LOGGER.info(effectRecord.toString());
+            LecternEnchantedBooks.LOGGER.info("Unrecognized enchantment:");
+            LecternEnchantedBooks.LOGGER.info(effectRecord.toString());
         }
 
         return result;
     }
 
     /**
-     * 
+     * Handles the different effects the enchantment may have. Reads the
+     * LevelBasedValue of the effect and returns it. If the effect has more than one
+     * value, the values are returned as part of an array
      */
     private static List<Float> getEffectValues(Object effect, int enchantmentLevel) {
         var result = new ArrayList<Float>();
@@ -177,12 +180,11 @@ public class EnchantmentValueHelper {
             break;
 
         default:
-            LOGGER.info("Unrecognized enchantment effect:");
-            LOGGER.info(effect.toString());
+            LecternEnchantedBooks.LOGGER.info("Unrecognized enchantment effect:");
+            LecternEnchantedBooks.LOGGER.info(effect.toString());
             break;
         }
 
         return result;
     }
-
 }

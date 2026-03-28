@@ -14,8 +14,7 @@ public record SyncLecternItemPayload(BlockPos pos, ItemStack book) implements Cu
             Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "sync_lectern_item"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLecternItemPayload> CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, SyncLecternItemPayload::pos,
-            ItemStack.STREAM_CODEC, SyncLecternItemPayload::book,
+            BlockPos.STREAM_CODEC, SyncLecternItemPayload::pos, ItemStack.STREAM_CODEC, SyncLecternItemPayload::book,
             SyncLecternItemPayload::new);
 
     @Override

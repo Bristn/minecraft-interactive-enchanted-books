@@ -11,6 +11,10 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Custom TooltipComponent to handle drawing the tooltip when hovering a
+ * supported item icon. Displays all the icons of the supported icons
+ */
 public class LecternScreenTooltipComponent implements ClientTooltipComponent, TooltipComponent {
     private static final int PADDING = 8;
     private static final int SIZE = 16;

@@ -1,28 +1,22 @@
 package net.bristn.lectern.screen;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.bristn.lectern.screen.handlers.LecternScreenHandler;
+import net.bristn.lectern.screen.handlers.LecternEnchantedBookMenu;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
 public class ModScreens {
+    public static final MenuType<LecternEnchantedBookMenu> MENU = register("dirt_chest",
+            (id, inv) -> new LecternEnchantedBookMenu(id));
 
-	/**
-	 * Shorthand for registering a screen handler with the given name
-	 * 
-	 * @param name    - The name/identifier of the screen
-	 * @param handler - The handler for the screen
-	 */
-	private static void registerScreen(String name, MenuType<LecternScreenHandler> handler) {
-		Identifier id = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
-		Registry.register(BuiltInRegistries.MENU, id, handler);
-	}
+    public static void registerModScreens() {
+        LecternEnchantedBooks.LOGGER.info("Register ModScreens for" + LecternEnchantedBooks.MOD_ID);
+    }
 
-	public static void registerModScreens() {
-		LecternEnchantedBooks.LOGGER.info("Register ModScreens for" + LecternEnchantedBooks.MOD_ID);
-
-		ModScreens.registerScreen("lectern_enchanted_book", LecternScreenHandler.SCREEN_HANDLER);
-	}
+    private static <T extends AbstractContainerMenu> MenuType<T> register(String name, MenuType.MenuSupplier<T> constructor) {
+        return Registry.register(BuiltInRegistries.MENU, name, new MenuType<>(constructor, FeatureFlagSet.of()));
+    }
 }

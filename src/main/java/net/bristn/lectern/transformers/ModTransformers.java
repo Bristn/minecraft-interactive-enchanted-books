@@ -1,16 +1,12 @@
 package net.bristn.lectern.transformers;
 
-import org.slf4j.Logger;
-
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 
 public class ModTransformers {
-    private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
-
     public static void registerModTransformers() {
-        LOGGER.info("Registering mod transformers");
+        LecternEnchantedBooks.LOGGER.info("Registering mod transformers");
     }
 
     public static final SimpleValueTransformer NONE = register("none", value -> {
