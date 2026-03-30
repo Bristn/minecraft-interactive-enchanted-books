@@ -10,8 +10,9 @@ public record EnchantmentDataJsonEntry(String enchantment, String particle, int 
 
     public static final Codec<EnchantmentDataJsonEntry> CODEC = RecordCodecBuilder.create(instance -> {
         var enchantmentBuilder = Codec.STRING.fieldOf("enchantment").forGetter(EnchantmentDataJsonEntry::enchantment);
-        var particleBuilder = Codec.STRING.fieldOf("particle").forGetter(EnchantmentDataJsonEntry::particle);
         var priorityBuilder = Codec.INT.fieldOf("priority").forGetter(EnchantmentDataJsonEntry::priority);
+        var particleBuilder = Codec.STRING.optionalFieldOf("particle", "lectern-enchanted-books:enchant_particle")
+                .forGetter(EnchantmentDataJsonEntry::particle);
 
         return instance.group(enchantmentBuilder, particleBuilder, priorityBuilder).apply(instance,
                 (enchantment, particle, priority) -> {

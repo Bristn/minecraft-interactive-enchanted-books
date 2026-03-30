@@ -86,6 +86,10 @@ public class EnchantedBookViewScreen extends Screen {
         }
 
         var pages = this.bookAccess.pages();
+        if (this.currentPage >= pages.size()) {
+            return;
+        }
+
         var page = pages.get(this.currentPage);
         renderer.renderForeground(graphics, mouseX, mouseY, page, this.currentPage, this.getNumPages());
     }

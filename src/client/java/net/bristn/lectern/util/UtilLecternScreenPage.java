@@ -5,24 +5,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
+import net.bristn.lectern.EnchantmentUtility;
+import net.bristn.lectern.EnchantmentWrapper;
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.loader.ItemTagTextureLoader;
 import net.bristn.lectern.screen.data.LecternScreenPageData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,22 +36,11 @@ public class UtilLecternScreenPage {
     public static List<LecternScreenPageData> getScreenPages(ItemStack book, Level level) {
         var pages = new ArrayList<LecternScreenPageData>();
 
-        // Uses snippet of "addToTooltip" to properly order the enchantments. Using the
-        // entrySet results in alphabetical ordering
+        var enchantments = EnchantmentUtility.getSortedEnchantments(book, level);
         var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
-        var registries = Item.TooltipContext.of(level).registries();
-        var order = getTagOrEmpty(registries, Registries.ENCHANTMENT, EnchantmentTags.TOOLTIP_ORDER);
-        var enchantments = new ArrayList<Holder<Enchantment>>();
 
-        for (var holder : order) {
-            var enchantment = holder.value();
-            int enchantmentLevel = itemEnchants.getLevel(holder);
-            if (enchantmentLevel <= 0) {
-                continue;
-            }
-
-            pages.add(getContentPage(enchantment, enchantmentLevel));
-            enchantments.add(holder);
+        for (var wrapper : enchantments) {
+            pages.add(getContentPage(wrapper.enchantment(), wrapper.enchantmentLevel()));
         }
 
         if (pages.size() > 1) {
@@ -65,18 +48,6 @@ public class UtilLecternScreenPage {
         }
 
         return pages;
-    }
-
-    private static <T> HolderSet<T> getTagOrEmpty(HolderLookup.Provider registries, ResourceKey<Registry<T>> registry,
-            TagKey<T> tag) {
-        if (registries != null) {
-            Optional<HolderSet.Named<T>> maybeOrder = registries.lookupOrThrow(registry).get(tag);
-            if (maybeOrder.isPresent()) {
-                return (HolderSet<T>) maybeOrder.get();
-            }
-        }
-
-        return HolderSet.empty();
     }
 
     /**
@@ -121,7 +92,7 @@ public class UtilLecternScreenPage {
      * the included enchantments and all supported items. Does not include a list of
      * exclusive sets
      */
-    private static LecternScreenPageData getTitlePage(List<LecternScreenPageData> pages, List<Holder<Enchantment>> enchantments,
+    private static LecternScreenPageData getTitlePage(List<LecternScreenPageData> pages, List<EnchantmentWrapper> enchantments,
             ItemEnchantments itemEnchants) {
 
         var leftHeaders = new ArrayList<MutableComponent>();
@@ -134,9 +105,9 @@ public class UtilLecternScreenPage {
         var items = new HashSet<Item>();
         var enchantmentNames = new ArrayList<String>();
         var count = 1;
-        for (var entry : enchantments) {
-            var enchantment = entry.value();
-            var enchantmentLevel = itemEnchants.getLevel(entry);
+        for (var wrapper : enchantments) {
+            var enchantment = wrapper.enchantment();
+            var enchantmentLevel = wrapper.enchantmentLevel();
             for (var item : enchantment.getSupportedItems()) {
                 items.add(item.value());
             }

@@ -1,7 +1,7 @@
 package net.bristn.lectern;
 
 import net.bristn.lectern.particle.ModParticles;
-import net.bristn.lectern.particle.SparkleParticle;
+import net.bristn.lectern.particle.EnchantParticle;
 import net.bristn.lectern.payloads.ModPayloadListeners;
 import net.bristn.lectern.screen.LecternEnchantedBookViewScreen;
 import net.bristn.lectern.screen.ModScreens;
@@ -13,7 +13,8 @@ public class LecternEnchantedBooksClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ParticleProviderRegistry.getInstance().register(ModParticles.SPARKLE_PARTICLE, SparkleParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.CURSE, EnchantParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.ENCHANT, EnchantParticle.Provider::new);
 
         MenuScreens.register(ModScreens.MENU, LecternEnchantedBookViewScreen::new);
 

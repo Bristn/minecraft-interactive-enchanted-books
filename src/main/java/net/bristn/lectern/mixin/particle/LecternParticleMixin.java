@@ -4,15 +4,15 @@ import net.bristn.lectern.EnchantmentUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,10 +20,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
 public class LecternParticleMixin {
+    private static final float MAX_PARTICLE_CHANCE = 0.65f;
+    private static final float MIN_PARTICLE_CHANCE = 0.3f;
+    private static final float RANGE_PARTICLE_CHANCE = MAX_PARTICLE_CHANCE - MIN_PARTICLE_CHANCE;
+
+    private static final float MAX_PARTICLE_RANDOM_SPEED = 0.25f;
+    private static final float MAX_PARTICLE_RANDOM_ANGLE = 90f;
+
+    private int particleIndex = 0;
 
     @Inject(method = "animateTick", at = @At("HEAD"))
     private void renderParticles(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo originalMethod) {
-
         if (world.isClientSide() == false) {
             return;
         }
@@ -34,51 +41,101 @@ public class LecternParticleMixin {
         }
 
         var lectern = (LecternBlockEntity) blockEntity;
-        Item item = lectern.getBook().getItem();
+        var item = lectern.getBook().getItem();
         if (item != Items.ENCHANTED_BOOK) {
-            return;
-        }
-
-        if (random.nextBoolean()) {
             return;
         }
 
         // Using the custom network packet, the lectern contains the proper book
         var stack = lectern.getBook();
-        var enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+        var page = lectern.getPage();
 
-        for (var entry : enchantments.entrySet()) {
-            var enchantment = entry.getKey().value();
+        // TODO: Save this in the mixin for better performance
+        var enchantments = EnchantmentUtility.getSortedEnchantments(stack, world);
 
-            // TODO: Render multiple particles
-
-            renderEnchantmentParticle(enchantment, world, pos, random);
+        // If the lectern is on a specific enchantment page (not the cover), show the
+        // respective particle only. Otherwise loop the different enchantment particles
+        if (enchantments.size() == 0 || page != 0) {
+            particleIndex = page;
+        } else {
+            particleIndex = (particleIndex + 1) % enchantments.size();
         }
+
+        // Determine the chance for a particle to spawn. The chance depends on the
+        // current and max enchantment level. The higher the relative level, the more
+        // particles are spawned. Sharpness 5 spawns the same as mending, as both are on
+        // the highest possible level
+        var wrapper = enchantments.get(particleIndex);
+        var enchantment = wrapper.enchantment();
+        var enchantmentLevel = wrapper.enchantmentLevel();
+        var maxEnchantmentLevel = enchantment.getMaxLevel();
+        var stepPerLevel = RANGE_PARTICLE_CHANCE / maxEnchantmentLevel;
+        var chance = MIN_PARTICLE_CHANCE + stepPerLevel * enchantmentLevel;
+        if (random.nextFloat() > chance) {
+            return;
+        }
+
+        var normalizedLevel = (float) enchantmentLevel / (float) maxEnchantmentLevel;
+        renderEnchantmentParticle(enchantment, world, pos, random, lectern, normalizedLevel);
     }
 
     /**
-     * 
-     * @param enchantment
+     * Spawns a particle using the enchantment and the lectern position. The
+     * particle origin is the center of the book, whilst all particles move away
+     * from the book in a random direction
      */
-    private void renderEnchantmentParticle(Enchantment enchantment, Level world, BlockPos pos, RandomSource random) {
+    private void renderEnchantmentParticle(Enchantment enchantment, Level world, BlockPos pos, RandomSource random,
+            LecternBlockEntity lectern, float normalizedLevel) {
+
         var entry = EnchantmentUtility.getParticleForEnchantment(enchantment);
         if (entry == null) {
             return;
         }
 
-        var particle = (ParticleOptions) entry.particle;
+        // USe the block direction as the base of the direction vector
+        var blockState = lectern.getBlockState();
+        var dir = blockState.getValue(LecternBlock.FACING).getUnitVec3();
 
-        for (int i = 0; i < 3; i++) {
-            var xChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
-            var yChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
-            var zChange = (random.nextBoolean() ? -0.5 : 0.5) * random.nextDouble();
-            var x = (double) pos.getX() + xChange + 0.5;
-            var y = (double) pos.getY() + yChange + 2.5;
-            var z = (double) pos.getZ() + zChange + 0.5;
-            var xSpeed = (xChange - 0.5);
-            var ySpeed = (yChange - 0.6);
-            var zSpeed = (zChange - 0.5);
-            world.addParticle((ParticleOptions) particle, x, y, z, xSpeed, ySpeed, zSpeed);
+        // Determines the base movement speed. Visually the particles emit from the book
+        // and only move in the opened hemisphere
+        var up = new Vector3f(0, 1, 0);
+        var perpAxis = up.cross(new Vector3f((float) dir.x, (float) dir.y, (float) dir.z), new Vector3f()).normalize();
+        var baseDir = up.rotateAxis((float) Math.toRadians(90 - 67.5), perpAxis.x, perpAxis.y, perpAxis.z);
+
+        // Defines the relative center of the book on the lectern
+        var basePos = new Vector3f(pos.getX() + 0.5f, pos.getY() + 1.25f, pos.getZ() + 0.5f);
+
+        // For higher enchantment levels, spawn more than one particle at a time
+        // At most spawns 3 particles at once if the enchantment is at the highest level
+        var maxParticles = 1 + normalizedLevel * 2f;
+        var particle = (ParticleOptions) entry.particle;
+        for (int i = 0; i < maxParticles; i++) {
+            var x = basePos.x + (random.nextDouble() - 0.5) * 0.25;
+            var y = basePos.y + (random.nextDouble() - 0.5) * 0.25;
+            var z = basePos.z + (random.nextDouble() - 0.5) * 0.25;
+
+            // Add a random offset to the movement direction
+            var movementDir = new Vector3f(baseDir.x, baseDir.y, baseDir.z);
+            var pitchOffset = (float) Math.toRadians(getRandomAngleOffset(random));
+            var yawOffset = (float) Math.toRadians(getRandomAngleOffset(random));
+            movementDir.rotateAxis(pitchOffset, perpAxis.x, perpAxis.y, perpAxis.z);
+            movementDir.rotateAxis(yawOffset, 0, 1, 0);
+            movementDir.normalize();
+
+            // Get speed with randomness of +- 10%
+            var randomSpeed = random.nextFloat() * MAX_PARTICLE_RANDOM_SPEED + 1 - MAX_PARTICLE_RANDOM_SPEED / 2;
+            var speedFactor = 25 * randomSpeed;
+            var xSpeed = movementDir.x / speedFactor;
+            var ySpeed = movementDir.y / speedFactor;
+            var zSpeed = movementDir.z / speedFactor;
+
+            // Offset the particles to not all spawn in the same spot
+            var offset = movementDir.mul(0.1f);
+            world.addParticle((ParticleOptions) particle, x + offset.x, y + offset.y, z + offset.z, xSpeed, ySpeed, zSpeed);
         }
+    }
+
+    private static float getRandomAngleOffset(RandomSource random) {
+        return (random.nextFloat() * MAX_PARTICLE_RANDOM_ANGLE * 2) - MAX_PARTICLE_RANDOM_ANGLE;
     }
 }

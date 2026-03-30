@@ -9,7 +9,8 @@ import net.minecraft.resources.Identifier;
 
 public class ModParticles {
 
-    public static final SimpleParticleType SPARKLE_PARTICLE = register("sparkle_particle", FabricParticleTypes.simple());
+    public static final SimpleParticleType CURSE = register("curse_particle", FabricParticleTypes.simple());
+    public static final SimpleParticleType ENCHANT = register("enchant_particle", FabricParticleTypes.simple());
 
     public static void registerModParticles() {
     }

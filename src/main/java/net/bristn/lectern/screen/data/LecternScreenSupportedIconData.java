@@ -5,6 +5,5 @@ import java.util.List;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
-public record LecternScreenSupportedIconData(String tooltipTitle, List<Item> tooltipItems,
-        Identifier texture) {
+public record LecternScreenSupportedIconData(String title, List<Item> tooltipItems, Identifier texture) {
 }

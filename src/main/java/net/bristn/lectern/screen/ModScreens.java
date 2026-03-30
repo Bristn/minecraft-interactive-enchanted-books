@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
 public class ModScreens {
-    public static final MenuType<LecternEnchantedBookMenu> MENU = register("dirt_chest",
+    public static final MenuType<LecternEnchantedBookMenu> MENU = register("lectern_enchanted_book",
             (id, inv) -> new LecternEnchantedBookMenu(id));
 
     public static void registerModScreens() {

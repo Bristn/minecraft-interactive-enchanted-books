@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 
 public class ModTransformers {
     public static void registerModTransformers() {
-        LecternEnchantedBooks.LOGGER.info("Registering mod transformers");
+        LecternEnchantedBooks.LOGGER.info("Register ModTransformers for" + LecternEnchantedBooks.MOD_ID);
     }
 
     public static final SimpleValueTransformer NONE = register("none", value -> {

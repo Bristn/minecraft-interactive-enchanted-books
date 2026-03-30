@@ -1,13 +1,11 @@
 [
   {
     "enchantment": "enchantment.minecraft.aqua_affinity",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "multiplier" }]
   },
   {
     "enchantment": "enchantment.minecraft.bane_of_arthropods",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       { "name": "damage" },
@@ -17,12 +15,11 @@
   },
   {
     "enchantment": "enchantment.minecraft.binding_curse",
-    "particle": "minecraft:enchant",
+    "particle": "lectern-enchanted-books:curse_particle",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.blast_protection",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -37,7 +34,6 @@
   },
   {
     "enchantment": "enchantment.minecraft.breach",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -48,18 +44,15 @@
   },
   {
     "enchantment": "enchantment.minecraft.channeling",
-    "particle": "minecraft:enchant",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.density",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.depth_strider",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -70,13 +63,11 @@
   },
   {
     "enchantment": "enchantment.minecraft.efficiency",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "speed" }]
   },
   {
     "enchantment": "enchantment.minecraft.feather_falling",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -87,13 +78,11 @@
   },
   {
     "enchantment": "enchantment.minecraft.fire_aspect",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "duration" }]
   },
   {
     "enchantment": "enchantment.minecraft.fire_protection",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -108,47 +97,39 @@
   },
   {
     "enchantment": "enchantment.minecraft.flame",
-    "particle": "lectern-enchanted-books:particle.flame",
     "priority": 0,
     "parameters": [{ "name": "duration" }]
   },
   {
     "enchantment": "enchantment.minecraft.fortune",
-    "particle": "minecraft:enchant",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.frost_walker",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "radius" }]
   },
   {
     "enchantment": "enchantment.minecraft.impaling",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.infinity",
-    "particle": "minecraft:enchant",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.knockback",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "knockback" }]
   },
   {
     "enchantment": "enchantment.minecraft.looting",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "quantity" }]
   },
   {
     "enchantment": "enchantment.minecraft.loyalty",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -159,12 +140,10 @@
   },
   {
     "enchantment": "enchantment.minecraft.luck_of_the_sea",
-    "particle": "minecraft:enchant",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.lunge",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       { "name": "damage" },
@@ -174,36 +153,30 @@
   },
   {
     "enchantment": "enchantment.minecraft.lure",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "duration" }]
   },
   {
     "enchantment": "enchantment.minecraft.mending",
-    "particle": "minecraft:enchant",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.multishot",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "quantity" }, { "name": "spread" }]
   },
   {
     "enchantment": "enchantment.minecraft.piercing",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "quantity" }]
   },
   {
     "enchantment": "enchantment.minecraft.power",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.projectile_protection",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -214,7 +187,6 @@
   },
   {
     "enchantment": "enchantment.minecraft.protection",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -225,48 +197,40 @@
   },
   {
     "enchantment": "enchantment.minecraft.punch",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "knockback" }]
   },
   {
     "enchantment": "enchantment.minecraft.quick_charge",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "duration" }]
   },
   {
     "enchantment": "enchantment.minecraft.respiration",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "quantity" }]
   },
   {
     "enchantment": "enchantment.minecraft.riptide",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.sharpness",
-    "particle": "lectern-enchanted-books:sparkle_particle",
     "priority": 0,
     "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.silk_touch",
-    "particle": "minecraft:enchant",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.smite",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "damage" }]
   },
   {
     "enchantment": "enchantment.minecraft.soul_speed",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -277,7 +241,6 @@
   },
   {
     "enchantment": "enchantment.minecraft.sweeping_edge",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -288,7 +251,6 @@
   },
   {
     "enchantment": "enchantment.minecraft.swift_sneak",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -299,13 +261,11 @@
   },
   {
     "enchantment": "enchantment.minecraft.thorns",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [{ "name": "minDamage" }, { "name": "maxDamage" }]
   },
   {
     "enchantment": "enchantment.minecraft.unbreaking",
-    "particle": "minecraft:enchant",
     "priority": 0,
     "parameters": [
       {
@@ -316,12 +276,11 @@
   },
   {
     "enchantment": "enchantment.minecraft.vanishing_curse",
-    "particle": "minecraft:enchant",
+    "particle": "lectern-enchanted-books:curse_particle",
     "priority": 0
   },
   {
     "enchantment": "enchantment.minecraft.wind_burst",
-    "particle": "minecraft:enchant",
     "priority": 0
   }
 ]

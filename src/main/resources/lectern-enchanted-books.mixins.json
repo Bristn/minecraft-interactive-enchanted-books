@@ -5,7 +5,6 @@
     "mixins": [
         "BlockEntityMixin",
         "LecternBlockEntityMixin",
-        "LecternBlockMixin",
         "EnchantedBookItemMixin",
         "particle.LecternParticleMixin"
     ],

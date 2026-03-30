@@ -173,7 +173,7 @@ public class EnchantedBookViewScreenRenderer {
             return;
         }
 
-        var tooltip = new LecternScreenTooltipComponent(data.tooltipTitle(), data.tooltipItems());
+        var tooltip = new LecternScreenTooltipComponent(data.title(), data.tooltipItems());
         graphics.tooltip(screen.getFont(), List.of(tooltip), x, y, DefaultTooltipPositioner.INSTANCE, null);
     }
 

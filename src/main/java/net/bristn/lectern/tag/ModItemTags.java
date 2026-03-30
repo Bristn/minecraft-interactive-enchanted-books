@@ -22,6 +22,7 @@ public class ModItemTags {
     public static final TagKey<Item> SKULLS = registerTag("skulls");
 
     public static void registerModItemTags() {
+        LecternEnchantedBooks.LOGGER.info("Register ModItemTags for" + LecternEnchantedBooks.MOD_ID);
     }
 
     private static TagKey<Item> registerTag(String name) {
