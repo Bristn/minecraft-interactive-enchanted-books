@@ -69,7 +69,10 @@ public class UtilLecternScreenPage {
         var supported = getSupportedItemData(items);
 
         // Determine the title use for the page
-        var title = Component.literal(getEnchantmentName(enchantment) + " " + getRomanNumber(enchantmentLevel));
+        var title = Component.literal(getEnchantmentName(enchantment));
+        if (enchantment.getMaxLevel() != 1) {
+            title.append(" " + getRomanNumber(enchantmentLevel));
+        }
 
         // Determine the list of mutually exclusive enchantments
         var exclusive = new ArrayList<String>();
@@ -112,7 +115,12 @@ public class UtilLecternScreenPage {
                 items.add(item.value());
             }
 
-            enchantmentNames.add(count + ". " + getEnchantmentName(enchantment) + " " + getRomanNumber(enchantmentLevel));
+            var line = count + ". " + getEnchantmentName(enchantment);
+            if (enchantment.getMaxLevel() != 1) {
+                line += " " + getRomanNumber(enchantmentLevel);
+            }
+
+            enchantmentNames.add(line);
             count++;
         }
 

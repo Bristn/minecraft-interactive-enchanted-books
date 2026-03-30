@@ -39,8 +39,6 @@ public class ModPayloadListeners {
             lectern.setBook(book);
             lectern.setChanged();
         }
-
-        // TODO: Determine the particles here (Move to separate class)
     }
 
     /**
