@@ -91,24 +91,10 @@
     "texture": "lectern-enchanted-books:textures/gui/carved_pumpkin.png",
     "priority": 0
   },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Misc
   {
-    "tag": "lectern-enchanted-books:igniters",
-    "texture": "lectern-enchanted-books:textures/gui/flint_and_steel.png",
-    "priority": 0
-  },
-  {
-    "tag": "lectern-enchanted-books:shears",
-    "texture": "lectern-enchanted-books:textures/gui/shears.png",
-    "priority": 0
-  },
-  {
-    "tag": "lectern-enchanted-books:brushes",
-    "texture": "lectern-enchanted-books:textures/gui/brush.png",
-    "priority": 0
-  },
-  {
-    "tag": "lectern-enchanted-books:fishing_rods",
-    "texture": "lectern-enchanted-books:textures/gui/fishing_rod.png",
+    "tag": "lectern-enchanted-books:misc",
+    "texture": "lectern-enchanted-books:textures/gui/ingot.png",
     "priority": 0
   }
 ]
