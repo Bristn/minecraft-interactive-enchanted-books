@@ -54,6 +54,9 @@ public class UtilEnchantmentValue {
             return new HashMap<>();
         }
 
+        // Add level as last parameter
+        values.add((float) enchantmentLevel);
+
         var result = new HashMap<String, Float>();
         for (var i = 0; i < values.size(); i++) {
             if (i <= translations.parameters.size() - 1) {
@@ -62,8 +65,6 @@ public class UtilEnchantmentValue {
                 result.put(parameters.name, value);
             }
         }
-
-        // TODO: Add enchantment level as last parameter
 
         return result;
     }

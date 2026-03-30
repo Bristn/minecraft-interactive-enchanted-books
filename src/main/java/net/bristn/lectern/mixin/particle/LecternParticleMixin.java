@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
 public class LecternParticleMixin {
-    private static final float MAX_PARTICLE_CHANCE = 0.65f;
-    private static final float MIN_PARTICLE_CHANCE = 0.3f;
+    private static final float MAX_PARTICLE_CHANCE = 0.6f;
+    private static final float MIN_PARTICLE_CHANCE = 0.2f;
     private static final float RANGE_PARTICLE_CHANCE = MAX_PARTICLE_CHANCE - MIN_PARTICLE_CHANCE;
 
     private static final float MAX_PARTICLE_RANDOM_SPEED = 0.25f;
@@ -124,7 +124,7 @@ public class LecternParticleMixin {
 
             // Get speed with randomness of +- 10%
             var randomSpeed = random.nextFloat() * MAX_PARTICLE_RANDOM_SPEED + 1 - MAX_PARTICLE_RANDOM_SPEED / 2;
-            var speedFactor = 25 * randomSpeed;
+            var speedFactor = 30 * randomSpeed;
             var xSpeed = movementDir.x / speedFactor;
             var ySpeed = movementDir.y / speedFactor;
             var zSpeed = movementDir.z / speedFactor;

@@ -38,7 +38,7 @@
     "enchantment.minecraft.fire_aspect.desc.level-x": "Sets the target on fire for {duration} seconds",
     "enchantment.minecraft.fire_protection.desc.level-x": "Reduces burn time by {duration}% and damage by {damage}&",
     "enchantment.minecraft.flame.desc": "Sets the target on fire for 5 seconds",
-    "enchantment.minecraft.fortune.desc": "Increases drop quantity of some blocks mined", // TODO
+    "enchantment.minecraft.fortune.desc.level-x": "Multiplies the drop quantity of some blocks mined by an average of {multiplier}x",
     "enchantment.minecraft.frost_walker.desc.level-x": "Reduces damage when walking over fire. Converts a disk of {radius} blocks of water into ice when walking on top",
     "enchantment.minecraft.impaling.desc.level-x": "Increases damage dealt to ocean mobs by {damage} hearts",
     "enchantment.minecraft.infinity.desc": "Does not consume ammo when firing. Still requires one ammo item to fire",

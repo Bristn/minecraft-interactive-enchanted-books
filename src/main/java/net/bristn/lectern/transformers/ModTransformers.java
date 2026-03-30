@@ -29,6 +29,13 @@ public class ModTransformers {
         return twoDecimals(value / 25f * 100f);
     });
 
+    /**
+     * Determines the fortune multiplier from the enchantment level
+     */
+    public static final SimpleValueTransformer FORTUNE_FROM_LEVEL = register("fortune_from_level", value -> {
+        return twoDecimals(1f / (value + 2f) + (value + 1f) / 2);
+    });
+
     private static SimpleValueTransformer register(String name, SimpleValueTransformerImpl transformer) {
         var identifier = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
         return Registry.register(SimpleValueTransformer.REGISTRY, identifier, new SimpleValueTransformer(transformer));

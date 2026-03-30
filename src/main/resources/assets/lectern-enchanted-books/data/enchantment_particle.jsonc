@@ -102,7 +102,13 @@
   },
   {
     "enchantment": "enchantment.minecraft.fortune",
-    "priority": 0
+    "priority": 0,
+    "parameters": [
+      {
+        "name": "multiplier",
+        "transformer": "lectern-enchanted-books:fortune_from_level"
+      }
+    ]
   },
   {
     "enchantment": "enchantment.minecraft.frost_walker",
