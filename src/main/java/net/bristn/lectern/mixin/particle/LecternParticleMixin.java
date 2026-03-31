@@ -1,9 +1,11 @@
 package net.bristn.lectern.mixin.particle;
 
 import net.bristn.lectern.EnchantmentUtility;
+import net.bristn.lectern.EnchantmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -11,6 +13,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.List;
 
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,6 +32,9 @@ public class LecternParticleMixin {
     private static final float MAX_PARTICLE_RANDOM_ANGLE = 90f;
 
     private int particleIndex = 0;
+
+    private ItemStack cachedBook;
+    private List<EnchantmentWrapper> cachedEnchantments;
 
     @Inject(method = "animateTick", at = @At("HEAD"))
     private void renderParticles(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo originalMethod) {
@@ -50,13 +57,17 @@ public class LecternParticleMixin {
         var stack = lectern.getBook();
         var page = lectern.getPage();
 
-        // TODO: Save this in the mixin for better performance
-        var enchantments = EnchantmentUtility.getSortedEnchantments(stack, world);
+        // Cache the enchantments to improve performance
+        if (stack != cachedBook) {
+            cachedBook = stack;
+            cachedEnchantments = EnchantmentUtility.getSortedEnchantments(stack, world);
+        }
 
         // If the lectern is on a specific enchantment page (not the cover), show the
         // respective particle only. Otherwise loop the different enchantment particles
+        var enchantments = cachedEnchantments;
         if (enchantments.size() == 0 || page != 0) {
-            particleIndex = page;
+            particleIndex = page - 1; // Book has i + 1 pages as there is a title page
         } else {
             particleIndex = (particleIndex + 1) % enchantments.size();
         }
