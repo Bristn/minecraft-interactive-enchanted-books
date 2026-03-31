@@ -13,11 +13,16 @@ public class LecternEnchantedBooksClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ParticleProviderRegistry.getInstance().register(ModParticles.CURSE, EnchantParticle.Provider::new);
-        ParticleProviderRegistry.getInstance().register(ModParticles.ENCHANT, EnchantParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.CURSE, (sprites) -> {
+            return new EnchantParticle.ColorProvider(sprites, 0.570f, 0.148f, 0.148f);
+        });
 
+        ParticleProviderRegistry.getInstance().register(ModParticles.ENCHANT, EnchantParticle.ColorProvider::new);
+
+        // Register the client mod screens
         MenuScreens.register(ModScreens.MENU, LecternEnchantedBookViewScreen::new);
 
+        // REgister the client payload listener
         ModPayloadListeners.registerModPayloadListeners();
     }
 }

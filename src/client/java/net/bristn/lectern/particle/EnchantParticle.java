@@ -15,10 +15,12 @@ public class EnchantParticle extends SimpleAnimatedParticle {
     private double ySpeed;
     private double zSpeed;
 
+    private final float randomAlpha;
+
     private static LifetimeAlpha startFade = new LifetimeAlpha(0.0f, 0.70f, 0f, 0.2f);
     private static LifetimeAlpha endFade = new LifetimeAlpha(0.70f, 0.0f, 0.8f, 1.0f);
 
-    protected EnchantParticle(final ClientLevel level, final double x, final double y, final double z, final double xSpeed,
+    public EnchantParticle(final ClientLevel level, final double x, final double y, final double z, final double xSpeed,
             final double ySpeed, final double zSpeed, final SpriteSet sprites) {
 
         super(level, x, y, z, sprites, 0.0125f);
@@ -26,6 +28,9 @@ public class EnchantParticle extends SimpleAnimatedParticle {
         // Set the lifetime in ticks (3 - 5 seconds)
         this.lifetime = 3 * 20 + this.random.nextInt(40);
         this.setSprite(sprites.get(random));
+
+        // Randomly alternate the alpha by 0.8 to 1.0
+        this.randomAlpha = 0.8f + random.nextFloat() * 0.2f;
 
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
@@ -38,12 +43,20 @@ public class EnchantParticle extends SimpleAnimatedParticle {
         this.setAlpha(startFade.startAlpha());
     }
 
+    protected EnchantParticle(final ClientLevel level, final double x, final double y, final double z, final double xSpeed,
+            final double ySpeed, final double zSpeed, final SpriteSet sprites, final float r, final float g, final float b) {
+
+        this(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites);
+
+        this.setColor(r, g, b);
+    }
+
     @Override
     public void extract(QuadParticleRenderState particleTypeRenderState, Camera camera, float partialTickTime) {
         var startAlpha = startFade.currentAlphaForAge(this.age, this.lifetime, partialTickTime);
         var endAlphaAlpha = endFade.currentAlphaForAge(this.age, this.lifetime, partialTickTime);
         var minAlpha = Math.min(startAlpha, endAlphaAlpha);
-        this.setAlpha(minAlpha);
+        this.setAlpha(minAlpha * randomAlpha);
         super.extract(particleTypeRenderState, camera, partialTickTime);
     }
 
@@ -59,16 +72,31 @@ public class EnchantParticle extends SimpleAnimatedParticle {
         this.setLocationFromBoundingbox();
     }
 
-    public static class Provider implements ParticleProvider<SimpleParticleType> {
+    public static class ColorProvider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
+        private final float red;
+        private final float green;
+        private final float blue;
 
-        public Provider(final SpriteSet sprites) {
+        public ColorProvider(final SpriteSet sprites) {
             this.sprites = sprites;
+            this.red = 1.0f;
+            this.green = 1.0f;
+            this.blue = 1.0f;
+        }
+
+        public ColorProvider(final SpriteSet sprites, final float red, final float green, final float blue) {
+            this.sprites = sprites;
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
         }
 
         public Particle createParticle(final SimpleParticleType options, final ClientLevel level, final double x, final double y,
-                final double z, final double xAux, final double yAux, final double zAux, final RandomSource random) {
-            return new EnchantParticle(level, x, y, z, xAux, yAux, zAux, this.sprites);
+                final double z, final double xSpeed, final double ySpeed, final double zSpeed, final RandomSource random) {
+
+            return new EnchantParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites, red, green, blue);
         }
     }
+
 }
