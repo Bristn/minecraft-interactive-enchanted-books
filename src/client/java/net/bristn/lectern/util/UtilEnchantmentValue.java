@@ -6,6 +6,8 @@ import java.util.List;
 
 import net.bristn.lectern.EnchantmentUtility;
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
@@ -25,6 +27,7 @@ import net.minecraft.world.item.enchantment.effects.RemoveBinomial;
 import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 import net.minecraft.world.item.enchantment.effects.ScaleExponentially;
 import net.minecraft.world.item.enchantment.effects.SetValue;
+import net.minecraft.world.item.enchantment.effects.SpawnParticlesEffect;
 import net.minecraft.world.item.enchantment.effects.AllOf.EntityEffects;
 
 public class UtilEnchantmentValue {
@@ -80,6 +83,13 @@ public class UtilEnchantmentValue {
             // ! Can be the root effect (e.g. Blast Protection), but also a child
             return List.of(effect.amount().calculate(enchantmentLevel));
         } else {
+            if (effectRecord instanceof Holder holder) {
+                // ! Ignore sound events
+                if (holder.value() instanceof SoundEvent) {
+                    return new ArrayList<Float>();
+                }
+            }
+
             LecternEnchantedBooks.LOGGER.info("Unrecognized enchantment:");
             LecternEnchantedBooks.LOGGER.info(effectRecord.toString());
         }
@@ -178,6 +188,9 @@ public class UtilEnchantmentValue {
 
         // Empty case to prevent this effect type from showing in the logs
         case @SuppressWarnings("unused") PlaySoundEffect value:
+            break;
+
+        case @SuppressWarnings("unused") SpawnParticlesEffect value:
             break;
 
         default:

@@ -14,26 +14,82 @@ public class ModTransformers {
     });
 
     public static final SimpleValueTransformer PERCENTAGE = register("percentage", value -> {
-        return twoDecimals(value * 100f);
+        return Math.abs(twoDecimals(value * 100f));
     });
 
-    public static final SimpleValueTransformer LOYALTY_ACCELERATION = register("loyalty_acceleration", value -> {
-        return twoDecimals(value * 0.05f);
+    public static final SimpleValueTransformer DAMAGE_TO_HEARTS = register("damage_to_hearts", value -> {
+        return twoDecimals(value / 2f);
     });
 
-    /**
-     * CombatRules -> getDamageAfterMagicAbsorb. A value of 25 would be 100%
-     * reduction
-     */
+    public static final SimpleValueTransformer TICKS_TO_SECONDS = register("ticks_to_seconds", value -> {
+        return twoDecimals(value * 20f);
+    });
+
+    // Formulas taken from: https://minecraft.wiki/w/Enchantment
+
+    // Formula from code (max of 80% reduction possible)
     public static final SimpleValueTransformer PROTECTION_PERCENTAGE = register("protection_percentage", value -> {
-        return twoDecimals(value / 25f * 100f);
+        return twoDecimals(Math.min(value / 25f, 0.8f) * 100f);
     });
 
-    /**
-     * Determines the fortune multiplier from the enchantment level
-     */
-    public static final SimpleValueTransformer FORTUNE_FROM_LEVEL = register("fortune_from_level", value -> {
-        return twoDecimals(1f / (value + 2f) + (value + 1f) / 2);
+    public static final SimpleValueTransformer FORTUNE_LUCK = register("fortune_luck", value -> {
+        return twoDecimals(((1f / (value + 2f) + (value + 1f) / 2) - 1f) * 100f);
+    });
+
+    public static final SimpleValueTransformer KNOCKBACK_DISTANCE = register("knockback_distance", value -> {
+        return twoDecimals(value * 2.586f);
+    });
+
+    public static final SimpleValueTransformer LOYALTY_SPEED = register("loyalty_speed", value -> {
+        return twoDecimals(value * 16.67f);
+    });
+
+    public static final SimpleValueTransformer LUCK_OF_THE_SEA_TREASURE = register("luck_of_the_sea_treasure", value -> {
+        return twoDecimals(value * 2.1f);
+    });
+
+    public static final SimpleValueTransformer LUCK_OF_THE_SEA_JUNK = register("luck_of_the_sea_junk", value -> {
+        return twoDecimals(value * 1.96f);
+    });
+
+    public static final SimpleValueTransformer POWER_DAMAGE = register("power_damage", value -> {
+        return twoDecimals(25f * (value + 1f));
+    });
+
+    public static final SimpleValueTransformer PUNCH_DISTANCE = register("punch_distance", value -> {
+        return twoDecimals(value * 3.3f);
+    });
+
+    public static final SimpleValueTransformer QUICK_CHARGE_DURATION = register("quick_charge_duration", value -> {
+        return twoDecimals(value * 0.25f);
+    });
+
+    public static final SimpleValueTransformer RESPIRATION_TIME = register("respiration_time", value -> {
+        return twoDecimals(value * 15f);
+    });
+
+    public static final SimpleValueTransformer RESPIRATION_CHANCE = register("respiration_chance", value -> {
+        return twoDecimals((value / (value + 1f)) * 100f);
+    });
+
+    public static final SimpleValueTransformer RIPTIDE_DISTANCE = register("riptide_distance", value -> {
+        return twoDecimals((6f * value) + 3);
+    });
+
+    public static final SimpleValueTransformer SOUL_SPEED = register("soul_speed", value -> {
+        return twoDecimals(30.0f + (10.5f * value));
+    });
+
+    public static final SimpleValueTransformer SWIFT_SNEAK = register("swift_sneak", value -> {
+        return twoDecimals((value + 0.30f) * 100f);
+    });
+
+    public static final SimpleValueTransformer THORNS_CHANCE = register("thorns_chance", value -> {
+        return twoDecimals(value * 15f);
+    });
+
+    public static final SimpleValueTransformer WIND_BURST_DISTANCE = register("wind_burst_distance", value -> {
+        return twoDecimals(value * 8f);
     });
 
     private static SimpleValueTransformer register(String name, SimpleValueTransformerImpl transformer) {
