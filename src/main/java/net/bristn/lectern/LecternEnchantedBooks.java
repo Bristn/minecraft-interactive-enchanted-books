@@ -5,6 +5,7 @@ import net.bristn.lectern.particle.ModParticles;
 import net.bristn.lectern.payloads.ModPayloads;
 import net.bristn.lectern.resources.loader.ModResourceLoaders;
 import net.bristn.lectern.screen.ModScreens;
+import net.bristn.lectern.tag.ModEnchantmentTags;
 import net.bristn.lectern.tag.ModItemTags;
 import net.bristn.lectern.transformers.ModTransformers;
 import net.fabricmc.api.ModInitializer;
@@ -24,6 +25,7 @@ public class LecternEnchantedBooks implements ModInitializer {
         ModPayloads.registerModPayloads();
         ModResourceLoaders.registerModResourceLoaders();
         ModItemTags.registerModItemTags();
+        ModEnchantmentTags.registerModEnchantmentTags();
         ModTransformers.registerModTransformers();
     }
 }

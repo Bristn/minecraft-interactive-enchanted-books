@@ -316,7 +316,7 @@
     "enchantment": "enchantment.minecraft.soul_speed",
     "priority": 0,
     "parameters": [
-      { "name": "_unused_" }, // TODO: SpawnParticlesEffect wird nicht erkannt
+      { "name": "_unused_" },
       {
         "name": "speed",
         "transformer": "lectern-enchanted-books:soul_speed"

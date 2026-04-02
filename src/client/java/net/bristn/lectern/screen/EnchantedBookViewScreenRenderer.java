@@ -95,6 +95,7 @@ public class EnchantedBookViewScreenRenderer {
         }
 
         // TODO: Render anvil cost ?
+        // TODO: Render redstone signal level ?
         return y;
     }
 

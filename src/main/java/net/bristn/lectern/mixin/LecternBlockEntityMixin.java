@@ -1,8 +1,12 @@
 package net.bristn.lectern.mixin;
 
+import net.bristn.lectern.EnchantmentUtility;
+import net.bristn.lectern.EnchantmentWrapper;
 import net.bristn.lectern.screen.handlers.LecternEnchantedBookMenu;
+import net.bristn.lectern.tag.ModEnchantmentTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,6 +23,8 @@ import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,6 +35,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LecternBlockEntity.class)
 public abstract class LecternBlockEntityMixin extends BlockEntity {
     private static final int DATA_ID_PAGE = 0;
+
+    private ItemStack cachedBook;
+    private List<EnchantmentWrapper> cachedEnchantments;
+    private int cachedPage;
+    private int cachedSignal;
 
     @Shadow
     ItemStack book;
@@ -163,8 +174,43 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
         super(type, pos, state);
     }
 
+    @Inject(method = "getRedstoneSignal", at = @At("HEAD"), cancellable = true)
+    public void getEnchantedBookRedstoneSignal(final CallbackInfoReturnable<Integer> originalMethod) {
+        if (this.book.getItem() != Items.ENCHANTED_BOOK) {
+            return;
+        }
+
+        // Cache the enchantments to improve performance
+        var changedBook = false;
+        if (this.book != cachedBook) {
+            cachedBook = this.book;
+            cachedEnchantments = EnchantmentUtility.getSortedEnchantments(this.book, this.level);
+            changedBook = true;
+        }
+
+        // Title page always has a redstone signal of 1
+        if (cachedEnchantments.size() == 1 || this.page == 0) {
+            originalMethod.setReturnValue(1);
+            return;
+        }
+
+        // Only get the signal every time the page has been flipped
+        if (this.page != cachedPage || changedBook == true) {
+            var wrapper = cachedEnchantments.get(this.page - 1);
+            var enchantment = wrapper.enchantment();
+
+            var registry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            var holder = registry.wrapAsHolder(enchantment);
+
+            this.cachedSignal = ModEnchantmentTags.getRedstoneSignal(holder);
+            this.cachedPage = this.page;
+        }
+
+        originalMethod.setReturnValue(this.cachedSignal);
+    }
+
     @Inject(method = "loadAdditional", at = @At("TAIL"), cancellable = true)
-    public void loadAdditional(final ValueInput input, final CallbackInfo originalMethod) {
+    public void loadEnchantedBook(final ValueInput input, final CallbackInfo originalMethod) {
         // ! Original setBook uses resolveBook method
         this.book = (ItemStack) input.read("Book", ItemStack.CODEC).orElse(ItemStack.EMPTY);
         var item = book.getItem();
@@ -182,8 +228,6 @@ public abstract class LecternBlockEntityMixin extends BlockEntity {
         if (item != Items.ENCHANTED_BOOK) {
             return;
         }
-
-        // TODO: Customize redstone signal?
 
         this.book = book; // ! Original setBook uses resolveBook method
         this.page = 0;
