@@ -25,7 +25,7 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
         }
 
         public void dataChanged(AbstractContainerMenu container, int id, int value) {
-            if (id == 0) {
+            if (id == LecternEnchantedBookMenu.DATA_ID_PAGE) {
                 LecternEnchantedBookViewScreen.this.pageChanged();
             }
         }
@@ -82,16 +82,16 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
     }
 
     protected void pageBack() {
-        this.sendButtonClick(1);
+        this.sendButtonClick(LecternEnchantedBookMenu.BUTTON_PREV_PAGE);
     }
 
     protected void pageForward() {
-        this.sendButtonClick(2);
+        this.sendButtonClick(LecternEnchantedBookMenu.BUTTON_NEXT_PAGE);
     }
 
     protected boolean forcePage(final int page) {
         if (page != this.menu.getPage()) {
-            this.sendButtonClick(100 + page);
+            this.sendButtonClick(LecternEnchantedBookMenu.BUTTON_PAGE_JUMP_RANGE_START + page);
             return true;
         }
 

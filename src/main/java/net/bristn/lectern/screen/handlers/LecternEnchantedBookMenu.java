@@ -11,6 +11,9 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 public class LecternEnchantedBookMenu extends AbstractContainerMenu {
+    public static final int DATA_ID_PAGE = 0;
+    public static final int SLOT_BOOK = 0;
+
     public static final int BUTTON_PREV_PAGE = 1;
     public static final int BUTTON_NEXT_PAGE = 2;
     public static final int BUTTON_TAKE_BOOK = 3;
