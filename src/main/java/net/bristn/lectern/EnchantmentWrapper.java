@@ -1,7 +1,11 @@
 package net.bristn.lectern;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public record EnchantmentWrapper(Enchantment enchantment, int enchantmentLevel) {
+public record EnchantmentWrapper(int enchantmentLevel, Holder<Enchantment> holder) {
 
+    public Enchantment enchantment() {
+        return holder.value();
+    }
 }

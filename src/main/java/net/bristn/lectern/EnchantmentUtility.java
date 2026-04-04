@@ -44,7 +44,7 @@ public class EnchantmentUtility {
                 continue;
             }
 
-            enchantments.add(new EnchantmentWrapper(holder.value(), enchantmentLevel));
+            enchantments.add(new EnchantmentWrapper(enchantmentLevel, holder));
         }
 
         return enchantments;

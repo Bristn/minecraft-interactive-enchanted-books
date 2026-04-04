@@ -22,6 +22,8 @@ public class EnchantedBookViewScreen extends Screen {
     private int currentPage = 0;
     private PageButton forwardButton;
     private PageButton backButton;
+
+    @SuppressWarnings("unused")
     private final boolean playTurnSound;
 
     /** Delegates rendering the elements to a separate script */

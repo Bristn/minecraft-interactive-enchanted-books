@@ -13,6 +13,8 @@ import net.bristn.lectern.resources.loader.ItemTagTextureLoader;
 import net.bristn.lectern.screen.data.LecternScreenPageData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
+import net.bristn.lectern.tag.ModEnchantmentTags;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -40,7 +42,7 @@ public class UtilLecternScreenPage {
         var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
 
         for (var wrapper : enchantments) {
-            pages.add(getContentPage(wrapper.enchantment(), wrapper.enchantmentLevel()));
+            pages.add(getContentPage(wrapper.holder(), wrapper.enchantmentLevel()));
         }
 
         if (pages.size() > 1) {
@@ -54,7 +56,8 @@ public class UtilLecternScreenPage {
      * Get the content page. This includes title, description, exclusive set and
      * support items
      */
-    private static LecternScreenPageData getContentPage(Enchantment enchantment, int enchantmentLevel) {
+    private static LecternScreenPageData getContentPage(Holder<Enchantment> holder, int enchantmentLevel) {
+        var enchantment = holder.value();
         var leftHeaders = new ArrayList<MutableComponent>();
         var leftTexts = new ArrayList<MutableComponent>();
 
@@ -87,7 +90,8 @@ public class UtilLecternScreenPage {
             leftTexts.add(Component.literal(String.join(", ", exclusive)));
         }
 
-        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts);
+        var redstoneSignal = Component.literal(ModEnchantmentTags.getRedstoneSignal(holder) + "");
+        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal);
     }
 
     /**
@@ -126,7 +130,9 @@ public class UtilLecternScreenPage {
 
         leftTexts.add(Component.literal(String.join("\n", enchantmentNames)));
         var supported = getSupportedItemData(items);
-        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts);
+
+        var redstoneSignal = Component.literal("1");
+        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal);
     }
 
     private static String getEnchantmentName(Enchantment enchantment) {

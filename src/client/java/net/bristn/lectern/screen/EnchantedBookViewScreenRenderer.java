@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Items;
 
 public class EnchantedBookViewScreenRenderer {
     public static final int BACKGROUND_WIDTH = 272;
@@ -94,8 +95,6 @@ public class EnchantedBookViewScreenRenderer {
             y += TEXT_LINE_HEIGHT;
         }
 
-        // TODO: Render anvil cost ?
-        // TODO: Render redstone signal level ?
         return y;
     }
 
@@ -146,6 +145,21 @@ public class EnchantedBookViewScreenRenderer {
             var iconX = x + ICON_SIZE * col + iconPadding * (col - 1) + ICON_SIZE / 2;
             var iconY = y + ICON_SIZE * row + iconPadding * (row - 1) + ICON_SIZE / 2;
             this.renderSupportedIconTooltip(graphics, iconX, iconY, mouseX, mouseY, iconData);
+        }
+
+        // Show the redstone comparator signal of the page
+        var redstoneX = screen.width / 2 + 2;
+        var redstoneY = TOP_TEXT_OFFSET - 4;
+        graphics.item(Items.COMPARATOR.getDefaultInstance(), redstoneX, redstoneY);
+        renderTextLines(collector, redstoneX + 18, redstoneY + 4, page.redstoneSignal(), ChatFormatting.BLACK,
+                TextAlignment.LEFT);
+
+        // Show the comparator tooltip
+        if (mouseX > redstoneX && mouseX < redstoneX + 16) {
+            if (mouseY > redstoneY && mouseY < redstoneY + 16) {
+                var tooltip = Component.translatable("gui.lectern-enchanted-books.signal");
+                graphics.setTooltipForNextFrame(tooltip, mouseX, mouseY);
+            }
         }
     }
 
