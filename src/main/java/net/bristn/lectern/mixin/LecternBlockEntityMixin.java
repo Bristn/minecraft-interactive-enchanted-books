@@ -197,7 +197,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     }
 
     @Inject(method = "getRedstoneSignal", at = @At("HEAD"), cancellable = true)
-    public void getEnchantedBookRedstoneSignal(final CallbackInfoReturnable<Integer> originalMethod) {
+    public void getEnchantedBookRedstoneSignal(CallbackInfoReturnable<Integer> method) {
         if (this.book.getItem() != Items.ENCHANTED_BOOK || this.page < 0) {
             return;
         }
@@ -213,7 +213,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         // Title page always has a redstone signal of 1
         var isOnePage = cachedEnchantments.size() == 1;
         if (this.page == 0 && isOnePage == false) {
-            originalMethod.setReturnValue(1);
+            method.setReturnValue(1);
             return;
         }
 
@@ -229,11 +229,11 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
             this.cachedPage = this.page;
         }
 
-        originalMethod.setReturnValue(this.cachedSignal);
+        method.setReturnValue(this.cachedSignal);
     }
 
     @Inject(method = "loadAdditional", at = @At("TAIL"), cancellable = true)
-    public void loadEnchantedBook(final ValueInput input, final CallbackInfo originalMethod) {
+    public void loadEnchantedBook(ValueInput input, CallbackInfo method) {
         // ! Original setBook uses resolveBook method
         this.book = (ItemStack) input.read("Book", ItemStack.CODEC).orElse(ItemStack.EMPTY);
         var item = book.getItem();
@@ -373,12 +373,12 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Override
     public int getPageCount() {
-        var enchantments = EnchantmentUtility.getSortedEnchantments(this.book, this.level);
-        if (enchantments.size() == 1) {
+        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(this.book);
+        if (itemEnchants.entrySet().size() == 1) {
             return 1;
         }
 
-        return enchantments.size() + 1;
+        return itemEnchants.entrySet().size() + 1;
     }
 
     @Override
