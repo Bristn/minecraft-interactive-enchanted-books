@@ -2,6 +2,7 @@ package net.bristn.lectern.mixin;
 
 import net.bristn.lectern.EnchantmentUtility;
 import net.bristn.lectern.EnchantmentWrapper;
+import net.bristn.lectern.LecternAccess;
 import net.bristn.lectern.screen.handlers.LecternEnchantedBookMenu;
 import net.bristn.lectern.tag.ModEnchantmentTags;
 import net.minecraft.core.BlockPos;
@@ -38,7 +39,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LecternBlockEntity.class)
-public abstract class LecternBlockEntityMixin extends BlockEntity implements WorldlyContainer {
+public abstract class LecternBlockEntityMixin extends BlockEntity implements WorldlyContainer, LecternAccess {
 
     private static final int SLOT_BOOK = LecternEnchantedBookMenu.SLOT_BOOK;
     private static final int[] SLOTS = new int[] { SLOT_BOOK };
@@ -68,22 +69,6 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Shadow
     public abstract void setBook(ItemStack book);
-
-    /**
-     * Replaces the hasBook() method to properly check for enchanted books
-     */
-    private boolean hasEnchantedBook() {
-        return this.book.has(DataComponents.STORED_ENCHANTMENTS);
-    }
-
-    private void setEnchantedBookPage(int page) {
-        int newPage = Mth.clamp(page, 0, this.pageCount - 1);
-        if (newPage != this.page) {
-            this.page = newPage;
-            this.setChanged();
-            LecternBlock.signalPageChange(this.getLevel(), this.getBlockPos(), this.getBlockState());
-        }
-    }
 
     private final Container enchantedBookAccess = new Container() {
         @Override
@@ -189,13 +174,25 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         super(type, pos, state);
     }
 
+    /**
+     * Replaces the hasBook() method to properly check for enchanted books
+     */
+    private boolean hasEnchantedBook() {
+        return this.book.has(DataComponents.STORED_ENCHANTMENTS);
+    }
+
+    private void setEnchantedBookPage(int page) {
+        int newPage = Mth.clamp(page, 0, this.pageCount - 1);
+        if (newPage != this.page) {
+            this.page = newPage;
+            this.setChanged();
+            LecternBlock.signalPageChange(this.getLevel(), this.getBlockPos(), this.getBlockState());
+        }
+    }
+
     @Inject(method = "getRedstoneSignal", at = @At("HEAD"), cancellable = true)
     public void getEnchantedBookRedstoneSignal(final CallbackInfoReturnable<Integer> originalMethod) {
-        if (this.book.getItem() != Items.ENCHANTED_BOOK) {
-            return;
-        }
-
-        if (this.page < 0) {
+        if (this.book.getItem() != Items.ENCHANTED_BOOK || this.page < 0) {
             return;
         }
 
@@ -238,7 +235,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
             return;
         }
 
-        this.pageCount = getEnchantedPageCount(this.book);
+        this.pageCount = getPageCount();
         this.page = Mth.clamp(input.getIntOr("Page", 0), 0, this.pageCount - 1);
     }
 
@@ -251,7 +248,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
         this.book = book; // ! Original setBook uses resolveBook method
         this.page = 0;
-        this.pageCount = getEnchantedPageCount(this.book);
+        this.pageCount = getPageCount();
         this.setChanged();
     }
 
@@ -271,22 +268,21 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         method.setReturnValue(menu);
     }
 
-    /**
-     * Helper method to get the total page count
-     */
-    private static int getEnchantedPageCount(ItemStack book) {
-        var item = book.getItem();
+    @Inject(method = "getPage", at = @At("HEAD"), cancellable = true)
+    private void getEnchantedPage(CallbackInfoReturnable<Integer> method) {
+        var item = this.book.getItem();
         if (item != Items.ENCHANTED_BOOK) {
-            return 0;
+            return;
         }
 
-        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
+        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(this.book);
         var enchantmentCount = itemEnchants.entrySet().size();
         if (enchantmentCount == 1) {
-            return enchantmentCount;
+            method.setReturnValue(enchantmentCount);
+            return;
         }
 
-        return enchantmentCount + 1;
+        method.setReturnValue(enchantmentCount + 1);
     }
 
     // ! Methods for hopper functionality
@@ -360,5 +356,27 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
         return slot == SLOT_BOOK && this.book.isEmpty() == false;
+    }
+
+    // ! Methods of the LecternAccessor interface
+
+    @Override
+    public int getCurrentPage() {
+        return this.page;
+    }
+
+    @Override
+    public int getPageCount() {
+        var enchantments = EnchantmentUtility.getSortedEnchantments(this.book, this.level);
+        if (enchantments.size() == 1) {
+            return 1;
+        }
+
+        return enchantments.size() + 1;
+    }
+
+    @Override
+    public void setCurrentPage(int page) {
+        this.setEnchantedBookPage(page);
     }
 }

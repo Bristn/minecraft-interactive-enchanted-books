@@ -2,6 +2,8 @@ package net.bristn.lectern.mixin.particle;
 
 import net.bristn.lectern.EnchantmentUtility;
 import net.bristn.lectern.EnchantmentWrapper;
+import net.bristn.lectern.LecternAccess;
+import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
@@ -55,7 +57,7 @@ public class LecternParticleMixin {
 
         // Using the custom network packet, the lectern contains the proper book
         var stack = lectern.getBook();
-        var page = lectern.getPage();
+        var page = ((LecternAccess) lectern).getCurrentPage();
 
         // Cache the enchantments to improve performance
         if (stack != cachedBook) {
@@ -70,6 +72,12 @@ public class LecternParticleMixin {
             particleIndex = page - 1; // Book has i + 1 pages as there is a title page
         } else {
             particleIndex = (particleIndex + 1) % enchantments.size();
+        }
+
+        if (particleIndex >= enchantments.size() || particleIndex < 0) {
+            var message = "Particle index {} is not valid. Count of enchantments {}";
+            LecternEnchantedBooks.LOGGER.error(message, particleIndex, enchantments.size());
+            return;
         }
 
         // Determine the chance for a particle to spawn. The chance depends on the
