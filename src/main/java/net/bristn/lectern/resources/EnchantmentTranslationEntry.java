@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bristn.lectern.resources.json.EnchantmentTranslationJsonEntry;
-import net.bristn.lectern.transformers.SimpleValueTransformer;
+import net.bristn.lectern.transformers.ValueTransformer;
 
 public class EnchantmentTranslationEntry {
     public final String name;
-    public final SimpleValueTransformer transformer;
+    public final ValueTransformer transformer;
 
-    public EnchantmentTranslationEntry(String name, SimpleValueTransformer transformer) {
+    public EnchantmentTranslationEntry(String name, ValueTransformer transformer) {
         this.name = name;
         this.transformer = transformer;
     }

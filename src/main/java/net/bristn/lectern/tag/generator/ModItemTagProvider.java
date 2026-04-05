@@ -1,12 +1,18 @@
-package net.bristn.lectern.tag;
+package net.bristn.lectern.tag.generator;
 
 import java.util.concurrent.CompletableFuture;
 
+import net.bristn.lectern.tag.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.world.item.Items;
 
+/**
+ * Adds custom item tags to group certain items into one icon in the supported
+ * item section. Vanilla has some tags like "SWORDS", "AXES", etc, but some item
+ * groups don't have these tags. Therefore these are created here
+ */
 public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
     public ModItemTagProvider(FabricPackOutput output, CompletableFuture<Provider> registryLookupFuture) {

@@ -1,4 +1,4 @@
-package net.bristn.lectern.util;
+package net.bristn.lectern.utility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,14 +6,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.bristn.lectern.EnchantmentUtility;
-import net.bristn.lectern.EnchantmentWrapper;
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.loader.ItemTagTextureLoader;
 import net.bristn.lectern.screen.data.LecternScreenPageData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
 import net.bristn.lectern.tag.ModEnchantmentTags;
+import net.bristn.lectern.utility.wrappers.EnchantmentWrapper;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,7 +26,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 
-public class UtilLecternScreenPage {
+public class LecternScreenPageUtility {
     private static final String FALLBACK_DESCRIPTION = "enchantment.lectern-enchanted-books.no-description";
 
     /**
@@ -145,11 +144,7 @@ public class UtilLecternScreenPage {
     }
 
     /**
-     * Source:
      * https://stackoverflow.com/questions/12967896/converting-integers-to-roman-numerals-java
-     * 
-     * @param number
-     * @return
      */
     private static String getRomanNumber(int number) {
         return "I".repeat(number).replace("IIIII", "V").replace("IIII", "IV").replace("VV", "X").replace("VIV", "IX")
@@ -170,16 +165,12 @@ public class UtilLecternScreenPage {
      * <b>Example: enchantment.minecraft.blast_protection.desc</b> <br>
      * 3. A fallback translation that shows the user which translation keys need to
      * be implemented
-     * 
-     * @param enchantment
-     * @param enchantmentLevel
-     * @return
      */
     private static String getEnchantmentDescription(Enchantment enchantment, int enchantmentLevel) {
         var descriptionKey = "n/a";
         var descriptionLevelKey = "n/a";
         var descriptionParamKey = "n/a";
-        var parameters = UtilEnchantmentValue.getTranslationParameters(enchantment, enchantmentLevel);
+        var parameters = EnchantmentValueUtility.getTranslationParameters(enchantment, enchantmentLevel);
 
         // Try to read the translation key from the description contents
         var keyContent = enchantment.description().getContents();
@@ -231,9 +222,6 @@ public class UtilLecternScreenPage {
      * loaded tags from the json file to get the relevant texture. If a supported
      * item does not have any tag that is contained in the json, the item is added
      * to the missing items list
-     * 
-     * @param supportedItems
-     * @return
      */
     private static LecternScreenSupportedData getSupportedItemData(HashSet<Item> supportedItems) {
         var supportedTags = ItemTagTextureLoader.getMap();
@@ -315,5 +303,4 @@ public class UtilLecternScreenPage {
 
         return new LecternScreenSupportedData(screenIcons);
     }
-
 }

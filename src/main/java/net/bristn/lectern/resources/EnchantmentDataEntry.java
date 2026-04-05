@@ -15,5 +15,4 @@ public class EnchantmentDataEntry {
         this.particle = particle;
         this.parameters = parameters;
     }
-
 }

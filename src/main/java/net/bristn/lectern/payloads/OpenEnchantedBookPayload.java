@@ -7,13 +7,13 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
-public record OpenLecternPayload(ItemStack book) implements CustomPacketPayload {
+public record OpenEnchantedBookPayload(ItemStack book) implements CustomPacketPayload {
 
-    public static final Type<OpenLecternPayload> ID = new CustomPacketPayload.Type<>(
+    public static final Type<OpenEnchantedBookPayload> ID = new CustomPacketPayload.Type<>(
             Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "open_lectern"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, OpenLecternPayload> CODEC = StreamCodec
-            .composite(ItemStack.STREAM_CODEC, OpenLecternPayload::book, OpenLecternPayload::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, OpenEnchantedBookPayload> CODEC = StreamCodec
+            .composite(ItemStack.STREAM_CODEC, OpenEnchantedBookPayload::book, OpenEnchantedBookPayload::new);
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

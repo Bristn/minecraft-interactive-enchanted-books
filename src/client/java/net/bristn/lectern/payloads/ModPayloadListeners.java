@@ -13,8 +13,8 @@ public class ModPayloadListeners {
             handleSyncLecternItemPayload(payload, context);
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(OpenLecternPayload.ID, (payload, context) -> {
-            handleOpenLecternPayload(payload, context);
+        ClientPlayNetworking.registerGlobalReceiver(OpenEnchantedBookPayload.ID, (payload, context) -> {
+            handleOpenEnchantedBookPayload(payload, context);
         });
     }
 
@@ -45,7 +45,7 @@ public class ModPayloadListeners {
      * Use a custom payload to open the lectern screen when right-clicking with an
      * enchanted book item
      */
-    private static void handleOpenLecternPayload(OpenLecternPayload payload, Context context) {
+    private static void handleOpenEnchantedBookPayload(OpenEnchantedBookPayload payload, Context context) {
         context.client().execute(() -> {
             var client = context.client();
             var book = payload.book();

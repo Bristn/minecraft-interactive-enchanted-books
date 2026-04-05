@@ -31,7 +31,7 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
         }
     };
 
-    public LecternEnchantedBookViewScreen(final LecternEnchantedBookMenu menu, final Inventory inventory, final Component title) {
+    public LecternEnchantedBookViewScreen(LecternEnchantedBookMenu menu, Inventory inventory, Component title) {
         this.menu = menu;
     }
 
@@ -89,7 +89,7 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
         this.sendButtonClick(LecternEnchantedBookMenu.BUTTON_NEXT_PAGE);
     }
 
-    protected boolean forcePage(final int page) {
+    protected boolean forcePage(int page) {
         if (page != this.menu.getPage()) {
             this.sendButtonClick(LecternEnchantedBookMenu.BUTTON_PAGE_JUMP_RANGE_START + page);
             return true;
@@ -102,7 +102,7 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
      * Send the button click event using the server to ensure the page changes for
      * all players
      */
-    private void sendButtonClick(final int button) {
+    private void sendButtonClick(int button) {
         this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, button);
     }
 

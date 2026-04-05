@@ -1,4 +1,4 @@
-package net.bristn.lectern;
+package net.bristn.lectern.utility.wrappers;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;

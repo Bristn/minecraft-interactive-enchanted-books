@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bristn.lectern.screen.data.LecternScreenPageData;
-import net.bristn.lectern.util.UtilLecternScreenPage;
+import net.bristn.lectern.utility.LecternScreenPageUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+/**
+ * Custom version of the BookAccess used by vanilla. Returns a custom record per
+ * page instead of a single renderable component
+ */
 public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
     public int getPageCount() {
         return this.pages.size();
@@ -17,7 +21,7 @@ public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
     /**
      * Gets the page contents from the page number
      */
-    public LecternScreenPageData getPage(final int page) {
+    public LecternScreenPageData getPage(int page) {
         if (page >= 0 && page < this.getPageCount()) {
             return this.pages.get(page);
         }
@@ -28,7 +32,7 @@ public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
     /**
      * Utility to get the BookAccess from a given item stack
      */
-    public static EnchantedBookAccess fromItem(final ItemStack stack) {
+    public static EnchantedBookAccess fromItem(ItemStack stack) {
         var item = stack.getItem();
         if (item != Items.ENCHANTED_BOOK) {
             return new EnchantedBookAccess(new ArrayList<>());
@@ -36,9 +40,11 @@ public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
 
         var mc = Minecraft.getInstance();
 
+        // TODO: Add unit & game tests
+
         // TODO: Respect this boolean
         var filterEnabled = mc.isTextFilteringEnabled();
-        var pages = UtilLecternScreenPage.getScreenPages(stack, mc.level);
+        var pages = LecternScreenPageUtility.getScreenPages(stack, mc.level);
         return new EnchantedBookAccess(pages);
     }
 }

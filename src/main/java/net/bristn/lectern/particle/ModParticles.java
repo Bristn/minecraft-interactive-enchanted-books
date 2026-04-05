@@ -13,6 +13,7 @@ public class ModParticles {
     public static final SimpleParticleType ENCHANT = register("enchant_particle", FabricParticleTypes.simple());
 
     public static void registerModParticles() {
+        LecternEnchantedBooks.LOGGER.info("Register ModParticles for" + LecternEnchantedBooks.MOD_ID);
     }
 
     private static SimpleParticleType register(String name, SimpleParticleType particle) {

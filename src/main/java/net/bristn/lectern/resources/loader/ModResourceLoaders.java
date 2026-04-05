@@ -9,6 +9,8 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 public class ModResourceLoaders {
 
     public static void registerModResourceLoaders() {
+        LecternEnchantedBooks.LOGGER.info("Register ModResourceLoader for" + LecternEnchantedBooks.MOD_ID);
+
         register("item_tag_texture_loader", new ItemTagTextureLoader());
         register("enchantment_particle_loader", new EnchantmentDataLoader());
     }

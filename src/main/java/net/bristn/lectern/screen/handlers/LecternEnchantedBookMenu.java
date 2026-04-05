@@ -10,6 +10,9 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Handles menu interactions. Mainly identical to the vanilla LecternScreenMenu
+ */
 public class LecternEnchantedBookMenu extends AbstractContainerMenu {
     public static final int DATA_ID_PAGE = 0;
     public static final int SLOT_BOOK = 0;
@@ -22,11 +25,11 @@ public class LecternEnchantedBookMenu extends AbstractContainerMenu {
     private final Container lectern;
     private final ContainerData lecternData;
 
-    public LecternEnchantedBookMenu(final int containerId) {
+    public LecternEnchantedBookMenu(int containerId) {
         this(containerId, new SimpleContainer(1), new SimpleContainerData(1));
     }
 
-    public LecternEnchantedBookMenu(final int containerId, final Container lectern, final ContainerData lecternData) {
+    public LecternEnchantedBookMenu(int containerId, Container lectern, ContainerData lecternData) {
         super(ModScreens.MENU, containerId);
 
         checkContainerSize(lectern, 1);
@@ -45,7 +48,7 @@ public class LecternEnchantedBookMenu extends AbstractContainerMenu {
         this.addDataSlots(lecternData);
     }
 
-    public boolean clickMenuButton(final Player player, final int buttonId) {
+    public boolean clickMenuButton(Player player, int buttonId) {
         if (buttonId >= BUTTON_PAGE_JUMP_RANGE_START) {
             int pageToSet = buttonId - BUTTON_PAGE_JUMP_RANGE_START;
             this.setData(0, pageToSet);
@@ -77,16 +80,16 @@ public class LecternEnchantedBookMenu extends AbstractContainerMenu {
         return false;
     }
 
-    public ItemStack quickMoveStack(final Player player, final int slotIndex) {
+    public ItemStack quickMoveStack(Player player, int slotIndex) {
         return ItemStack.EMPTY;
     }
 
-    public void setData(final int id, final int value) {
+    public void setData(int id, int value) {
         super.setData(id, value);
         this.broadcastChanges();
     }
 
-    public boolean stillValid(final Player player) {
+    public boolean stillValid(Player player) {
         return this.lectern.stillValid(player);
     }
 

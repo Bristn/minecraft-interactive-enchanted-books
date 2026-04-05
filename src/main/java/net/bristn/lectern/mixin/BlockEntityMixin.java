@@ -24,6 +24,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Injects methods to ensure the enchanted book of the lectern is sent to the
+ * clients in order for them to correctly render the particle effects
+ */
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin {
 
@@ -41,11 +45,9 @@ public abstract class BlockEntityMixin {
      * The default networking does not send the full book item to the clients.
      * Update the method to send a custom packet, which internally sets the book on
      * the client side
-     * 
-     * @param ci
      */
     @Inject(method = "setChanged()V", at = @At("TAIL"))
-    private void addPacketToMarkDirty(CallbackInfo ci) {
+    private void addPacketToMarkDirty(CallbackInfo method) {
         var blockEntity = (BlockEntity) (Object) this;
         if (blockEntity instanceof LecternBlockEntity == false) {
             return;
@@ -73,28 +75,25 @@ public abstract class BlockEntityMixin {
     /**
      * Handles sending the book item of the lectern to the player. Otherwise the
      * player would not be able get the book of the lectern
-     * 
-     * @param cir
-     * @param registryLookup
      */
     @Inject(method = "getUpdateTag", at = @At("HEAD"), cancellable = true)
-    private void addInitialNbt(CallbackInfoReturnable<CompoundTag> cir,
+    private void addInitialNbt(CallbackInfoReturnable<CompoundTag> method,
             @Local(argsOnly = true) HolderLookup.Provider registryLookup) {
         var blockEntity = (BlockEntity) (Object) this;
         if (blockEntity instanceof LecternBlockEntity == false) {
             return;
         }
 
-        cir.setReturnValue(this.saveWithoutMetadata(registryLookup));
+        method.setReturnValue(this.saveWithoutMetadata(registryLookup));
     }
 
     @Inject(method = "getUpdatePacket", at = @At("HEAD"), cancellable = true)
-    private void addLecternUpdatePacket(CallbackInfoReturnable<Packet<ClientGamePacketListener>> cir) {
+    private void addLecternUpdatePacket(CallbackInfoReturnable<Packet<ClientGamePacketListener>> method) {
         var blockEntity = (BlockEntity) (Object) this;
         if (blockEntity instanceof LecternBlockEntity == false) {
             return;
         }
 
-        cir.setReturnValue(ClientboundBlockEntityDataPacket.create((BlockEntity) (Object) this));
+        method.setReturnValue(ClientboundBlockEntityDataPacket.create((BlockEntity) (Object) this));
     }
 }

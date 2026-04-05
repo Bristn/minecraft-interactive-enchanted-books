@@ -1,6 +1,5 @@
 package net.bristn.lectern;
 
-import net.bristn.lectern.item.ModItems;
 import net.bristn.lectern.particle.ModParticles;
 import net.bristn.lectern.payloads.ModPayloads;
 import net.bristn.lectern.resources.loader.ModResourceLoaders;
@@ -19,13 +18,14 @@ public class LecternEnchantedBooks implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ModItems.registerModItems();
         ModScreens.registerModScreens();
         ModParticles.registerModParticles();
         ModPayloads.registerModPayloads();
         ModResourceLoaders.registerModResourceLoaders();
+
         ModItemTags.registerModItemTags();
         ModEnchantmentTags.registerModEnchantmentTags();
+
         ModTransformers.registerModTransformers();
     }
 }

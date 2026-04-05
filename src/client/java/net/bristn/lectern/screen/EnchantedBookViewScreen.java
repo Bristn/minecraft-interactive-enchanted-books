@@ -29,7 +29,7 @@ public class EnchantedBookViewScreen extends Screen {
     /** Delegates rendering the elements to a separate script */
     private EnchantedBookViewScreenRenderer renderer;
 
-    public EnchantedBookViewScreen(final EnchantedBookAccess bookAccess) {
+    public EnchantedBookViewScreen(EnchantedBookAccess bookAccess) {
         this(bookAccess, true);
     }
 
@@ -37,19 +37,19 @@ public class EnchantedBookViewScreen extends Screen {
         this(EMPTY_ACCESS, false);
     }
 
-    private EnchantedBookViewScreen(final EnchantedBookAccess bookAccess, final boolean playTurnSound) {
+    private EnchantedBookViewScreen(EnchantedBookAccess bookAccess, boolean playTurnSound) {
         super(TITLE);
         this.bookAccess = bookAccess;
         this.playTurnSound = playTurnSound;
     }
 
-    public void setBookAccess(final EnchantedBookAccess bookAccess) {
+    public void setBookAccess(EnchantedBookAccess bookAccess) {
         this.bookAccess = bookAccess;
         this.currentPage = Mth.clamp(this.currentPage, 0, bookAccess.getPageCount());
         this.updateButtonVisibility();
     }
 
-    public boolean setPage(final int page) {
+    public boolean setPage(int page) {
         int clampedPage = Mth.clamp(page, 0, this.bookAccess.getPageCount() - 1);
         if (clampedPage != this.currentPage) {
             this.currentPage = clampedPage;
@@ -60,7 +60,7 @@ public class EnchantedBookViewScreen extends Screen {
         return false;
     }
 
-    protected boolean forcePage(final int page) {
+    protected boolean forcePage(int page) {
         return this.setPage(page);
     }
 
@@ -167,7 +167,7 @@ public class EnchantedBookViewScreen extends Screen {
     /**
      * Handle keyboard inputs from the user to allow changing pages
      */
-    public boolean keyPressed(final KeyEvent event) {
+    public boolean keyPressed(KeyEvent event) {
         if (super.keyPressed(event)) {
             return true;
         }

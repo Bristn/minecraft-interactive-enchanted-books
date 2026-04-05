@@ -1,4 +1,4 @@
-package net.bristn.lectern;
+package net.bristn.lectern.utility.interfaces;
 
 public interface LecternAccess {
 
@@ -7,5 +7,4 @@ public interface LecternAccess {
     public int getPageCount();
 
     public void setCurrentPage(int page);
-
 }

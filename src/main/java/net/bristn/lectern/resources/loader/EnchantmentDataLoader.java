@@ -49,9 +49,6 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
 
     /**
      * Uses the resource manager to read all relevant data files
-     * 
-     * @param manager
-     * @return
      */
     private Map<Identifier, List<EnchantmentDataJsonEntry>> loadAllResources(ResourceManager manager) {
         LOGGER.info("EnchantmentParticleLoader: Loading data from item_tag_texture.json");
@@ -87,11 +84,6 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
     /**
      * Reads the json data of the resource file and converts the data into a
      * collection of java objects per array entry
-     * 
-     * @param resourceId
-     * @param resource
-     * @return
-     * @throws IOException
      */
     private HashMap<Identifier, List<EnchantmentDataJsonEntry>> loadResource(Identifier resourceId, Resource resource)
             throws IOException {
@@ -138,8 +130,6 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
      * Performs final modifications on all read data in the main thread. Converts
      * the HashMap of multiple mods into a single list that respects the priorities
      * of the json
-     * 
-     * @param prepared
      */
     private void apply(Map<Identifier, List<EnchantmentDataJsonEntry>> prepared) {
 

@@ -17,6 +17,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 
+/**
+ * A separate class for rendering the menu page. This reduces the complexity of
+ * the screen class itself why keeping all rendering logic in one place
+ */
 public class EnchantedBookViewScreenRenderer {
     public static final int BACKGROUND_WIDTH = 272;
     private static final int PADDING_FROM_CENTER = 6;
@@ -42,7 +46,7 @@ public class EnchantedBookViewScreenRenderer {
      * Public interface to this renderer. Handles rendering the static background of
      * the menu
      */
-    public void renderBackground(final GuiGraphicsExtractor graphics) {
+    public void renderBackground(GuiGraphicsExtractor graphics) {
         if (this.screen == null) {
             return;
         }
@@ -54,8 +58,8 @@ public class EnchantedBookViewScreenRenderer {
      * Public interface to this renderer. Handles rendering all foreground elements,
      * including the displayed texts, icons and tooltips
      */
-    public void renderForeground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
-            final LecternScreenPageData page, final int currentPage, final int totalPages) {
+    public void renderForeground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page,
+            int currentPage, int totalPages) {
 
         if (this.screen == null) {
             return;
@@ -102,8 +106,8 @@ public class EnchantedBookViewScreenRenderer {
      * renders the supported items section of the interface. Includes the text hint,
      * the icons and tooltips for each icon
      */
-    private void renderRightPage(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY,
-            final LecternScreenPageData page, final int currentPage, final int totalPages) {
+    private void renderRightPage(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page,
+            int currentPage, int totalPages) {
 
         var x = screen.width / 2 + RIGHT_TEXT_OFFSET;
         var y = TOP_TEXT_OFFSET;

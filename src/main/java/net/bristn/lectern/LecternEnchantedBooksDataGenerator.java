@@ -1,7 +1,7 @@
 package net.bristn.lectern;
 
-import net.bristn.lectern.tag.ModEnchantmentTagProvider;
-import net.bristn.lectern.tag.ModItemTagProvider;
+import net.bristn.lectern.tag.generator.ModEnchantmentTagProvider;
+import net.bristn.lectern.tag.generator.ModItemTagProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 

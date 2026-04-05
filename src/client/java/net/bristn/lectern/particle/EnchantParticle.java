@@ -20,8 +20,8 @@ public class EnchantParticle extends SimpleAnimatedParticle {
     private static LifetimeAlpha startFade = new LifetimeAlpha(0.0f, 0.70f, 0f, 0.2f);
     private static LifetimeAlpha endFade = new LifetimeAlpha(0.70f, 0.0f, 0.8f, 1.0f);
 
-    public EnchantParticle(final ClientLevel level, final double x, final double y, final double z, final double xSpeed,
-            final double ySpeed, final double zSpeed, final SpriteSet sprites) {
+    public EnchantParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+            SpriteSet sprites) {
 
         super(level, x, y, z, sprites, 0.0125f);
 
@@ -43,8 +43,8 @@ public class EnchantParticle extends SimpleAnimatedParticle {
         this.setAlpha(startFade.startAlpha());
     }
 
-    protected EnchantParticle(final ClientLevel level, final double x, final double y, final double z, final double xSpeed,
-            final double ySpeed, final double zSpeed, final SpriteSet sprites, final float r, final float g, final float b) {
+    protected EnchantParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+            SpriteSet sprites, float r, float g, float b) {
 
         this(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites);
 
@@ -66,7 +66,7 @@ public class EnchantParticle extends SimpleAnimatedParticle {
     }
 
     @Override
-    public void move(final double xa, final double ya, final double za) {
+    public void move(double xa, double ya, double za) {
         this.ySpeed -= 0.04 * (double) this.gravity;
         this.setBoundingBox(this.getBoundingBox().move(this.xSpeed, this.ySpeed, this.zSpeed));
         this.setLocationFromBoundingbox();
@@ -78,25 +78,24 @@ public class EnchantParticle extends SimpleAnimatedParticle {
         private final float green;
         private final float blue;
 
-        public ColorProvider(final SpriteSet sprites) {
+        public ColorProvider(SpriteSet sprites) {
             this.sprites = sprites;
             this.red = 1.0f;
             this.green = 1.0f;
             this.blue = 1.0f;
         }
 
-        public ColorProvider(final SpriteSet sprites, final float red, final float green, final float blue) {
+        public ColorProvider(SpriteSet sprites, float red, float green, float blue) {
             this.sprites = sprites;
             this.red = red;
             this.green = green;
             this.blue = blue;
         }
 
-        public Particle createParticle(final SimpleParticleType options, final ClientLevel level, final double x, final double y,
-                final double z, final double xSpeed, final double ySpeed, final double zSpeed, final RandomSource random) {
+        public Particle createParticle(SimpleParticleType options, ClientLevel level, double x, double y, double z, double xSpeed,
+                double ySpeed, double zSpeed, RandomSource random) {
 
             return new EnchantParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites, red, green, blue);
         }
     }
-
 }

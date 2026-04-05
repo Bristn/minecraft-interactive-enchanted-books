@@ -7,7 +7,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 public class ModItemTags {
-
     public static final TagKey<Item> BOWS = registerTag("bows");
     public static final TagKey<Item> CROSSBOWS = registerTag("crossbows");
     public static final TagKey<Item> ELYTRAS = registerTag("elytras");

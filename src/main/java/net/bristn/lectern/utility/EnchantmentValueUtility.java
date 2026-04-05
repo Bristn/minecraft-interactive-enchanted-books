@@ -1,10 +1,9 @@
-package net.bristn.lectern.util;
+package net.bristn.lectern.utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.bristn.lectern.EnchantmentUtility;
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
@@ -30,7 +29,10 @@ import net.minecraft.world.item.enchantment.effects.SetValue;
 import net.minecraft.world.item.enchantment.effects.SpawnParticlesEffect;
 import net.minecraft.world.item.enchantment.effects.AllOf.EntityEffects;
 
-public class UtilEnchantmentValue {
+/**
+ * Helper to read the LevelBased values of the enchantment effects
+ */
+public class EnchantmentValueUtility {
 
     /**
      * Gets the translation parameters for the given enchantment. Uses the

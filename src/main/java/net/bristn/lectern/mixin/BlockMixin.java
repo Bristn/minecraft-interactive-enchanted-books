@@ -1,9 +1,9 @@
-package net.bristn.lectern.mixin.particle;
+package net.bristn.lectern.mixin;
 
-import net.bristn.lectern.EnchantmentUtility;
-import net.bristn.lectern.EnchantmentWrapper;
-import net.bristn.lectern.LecternAccess;
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.bristn.lectern.utility.EnchantmentUtility;
+import net.bristn.lectern.utility.interfaces.LecternAccess;
+import net.bristn.lectern.utility.wrappers.EnchantmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
@@ -24,8 +24,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Injects into the animateTick method to spawn particles based on the enchanted
+ * book of the lectern
+ */
 @Mixin(Block.class)
-public class LecternParticleMixin {
+public class BlockMixin {
     private static final float MAX_PARTICLE_CHANCE = 0.6f;
     private static final float MIN_PARTICLE_CHANCE = 0.2f;
     private static final float RANGE_PARTICLE_CHANCE = MAX_PARTICLE_CHANCE - MIN_PARTICLE_CHANCE;
@@ -55,7 +59,6 @@ public class LecternParticleMixin {
             return;
         }
 
-        // Using the custom network packet, the lectern contains the proper book
         var stack = lectern.getBook();
         var page = ((LecternAccess) lectern).getCurrentPage();
 

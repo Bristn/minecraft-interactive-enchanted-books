@@ -1,10 +1,10 @@
 package net.bristn.lectern.mixin;
 
-import net.bristn.lectern.EnchantmentUtility;
-import net.bristn.lectern.EnchantmentWrapper;
-import net.bristn.lectern.LecternAccess;
 import net.bristn.lectern.screen.handlers.LecternEnchantedBookMenu;
 import net.bristn.lectern.tag.ModEnchantmentTags;
+import net.bristn.lectern.utility.EnchantmentUtility;
+import net.bristn.lectern.utility.interfaces.LecternAccess;
+import net.bristn.lectern.utility.wrappers.EnchantmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -38,6 +38,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Injects into the LecternBlockEntity to allow.
+ * <li>Opening the enchanted book screen when right clicking</li>
+ * <li>Saving the enchanted book in the data to preserve during reload</li>
+ * <li>Enable hopper functionality</li>
+ */
 @Mixin(LecternBlockEntity.class)
 public abstract class LecternBlockEntityMixin extends BlockEntity implements WorldlyContainer, LecternAccess {
 

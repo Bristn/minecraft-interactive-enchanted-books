@@ -1,10 +1,11 @@
-package net.bristn.lectern.tag;
+package net.bristn.lectern.tag.generator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import net.bristn.lectern.LecternEnchantedBooks;
+import net.bristn.lectern.tag.ModEnchantmentTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class ModEnchantmentTagProvider extends FabricTagsProvider<Enchantment> {
-
     public ModEnchantmentTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, Registries.ENCHANTMENT, registriesFuture);
 

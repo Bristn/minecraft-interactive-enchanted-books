@@ -1,4 +1,4 @@
-package net.bristn.lectern;
+package net.bristn.lectern.utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 
+import net.bristn.lectern.LecternEnchantedBooks;
 import net.bristn.lectern.resources.EnchantmentDataEntry;
 import net.bristn.lectern.resources.loader.EnchantmentDataLoader;
+import net.bristn.lectern.utility.wrappers.EnchantmentWrapper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
