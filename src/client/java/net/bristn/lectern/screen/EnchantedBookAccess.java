@@ -39,11 +39,6 @@ public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
         }
 
         var mc = Minecraft.getInstance();
-
-        // TODO: Add unit & game tests
-
-        // TODO: Respect this boolean
-        var filterEnabled = mc.isTextFilteringEnabled();
         var pages = LecternScreenPageUtility.getScreenPages(stack, mc.level);
         return new EnchantedBookAccess(pages);
     }
