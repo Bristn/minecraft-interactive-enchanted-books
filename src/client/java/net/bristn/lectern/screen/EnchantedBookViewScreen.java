@@ -98,9 +98,15 @@ public class EnchantedBookViewScreen extends Screen {
 
     public Component getNarrationMessage() {
         var components = new ArrayList<Component>();
-        components.add(super.getNarrationMessage());
         components.add(this.getPageNumberMessage());
-        // TODO: Get page content narration component
+
+        // Determine the content narration message
+        var pages = this.bookAccess.pages();
+        if (this.currentPage < pages.size()) {
+            var page = pages.get(this.currentPage);
+            components.addAll(page.getNarrationMessage());
+        }
+
         return CommonComponents.joinLines(components);
     }
 
