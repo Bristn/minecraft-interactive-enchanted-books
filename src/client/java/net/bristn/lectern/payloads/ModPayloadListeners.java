@@ -4,6 +4,8 @@ import net.bristn.lectern.screen.EnchantedBookAccess;
 import net.bristn.lectern.screen.EnchantedBookViewScreen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 
 public class ModPayloadListeners {
@@ -11,10 +13,6 @@ public class ModPayloadListeners {
     public static void registerModPayloadListeners() {
         ClientPlayNetworking.registerGlobalReceiver(SyncLecternItemPayload.ID, (payload, context) -> {
             handleSyncLecternItemPayload(payload, context);
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(OpenEnchantedBookPayload.ID, (payload, context) -> {
-            handleOpenEnchantedBookPayload(payload, context);
         });
     }
 
@@ -41,17 +39,4 @@ public class ModPayloadListeners {
         }
     }
 
-    /**
-     * Use a custom payload to open the lectern screen when right-clicking with an
-     * enchanted book item
-     */
-    private static void handleOpenEnchantedBookPayload(OpenEnchantedBookPayload payload, Context context) {
-        context.client().execute(() -> {
-            var client = context.client();
-            var book = payload.book();
-
-            var screen = new EnchantedBookViewScreen(EnchantedBookAccess.fromItem(book));
-            client.setScreen(screen);
-        });
-    }
 }

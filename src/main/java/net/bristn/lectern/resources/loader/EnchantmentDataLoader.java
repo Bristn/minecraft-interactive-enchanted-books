@@ -31,7 +31,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;
 
 public class EnchantmentDataLoader implements PreparableReloadListener {
-    private static final String FILE_NAME = "enchantment_particle.jsonc";
+    private static final String FILE_NAME = "enchantment_setting.jsonc";
     private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final List<EnchantmentDataEntry> DATA = new ArrayList<>();
@@ -51,7 +51,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
      * Uses the resource manager to read all relevant data files
      */
     private Map<Identifier, List<EnchantmentDataJsonEntry>> loadAllResources(ResourceManager manager) {
-        LOGGER.info("EnchantmentParticleLoader: Loading data from item_tag_texture.json");
+        LOGGER.info("EnchantmentParticleLoader: Loading data from " + FILE_NAME);
 
         // Filter out any resource with the given file name
         var modResources = manager.listResources("data", (identifier) -> {

@@ -62,6 +62,8 @@ public class EnchantmentValueUtility {
         // Add level as last parameter
         values.add((float) enchantmentLevel);
 
+        LecternEnchantedBooks.LOGGER.info("LevelBasedValues: " + values);
+
         var result = new HashMap<String, Float>();
         for (var i = 0; i < values.size(); i++) {
             if (i <= translations.parameters.size() - 1) {

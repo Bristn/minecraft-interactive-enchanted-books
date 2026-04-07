@@ -13,6 +13,5 @@ public class ModPayloads {
 
     private static void registerServerToClientPayloads() {
         PayloadTypeRegistry.clientboundPlay().register(SyncLecternItemPayload.ID, SyncLecternItemPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(OpenEnchantedBookPayload.ID, OpenEnchantedBookPayload.CODEC);
     }
 }

@@ -50,7 +50,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
      * Uses the resource manager to read all relevant data files
      */
     private Map<Identifier, List<ItemTagTextureJsonEntry>> loadAllResources(ResourceManager manager) {
-        LOGGER.info("ItemTagTextureLoader: Loading data from item_tag_texture.json");
+        LOGGER.info("ItemTagTextureLoader: Loading data from " + FILE_NAME);
 
         // Filter out any resource with the given file name
         var modResources = manager.listResources("data", (identifier) -> {
