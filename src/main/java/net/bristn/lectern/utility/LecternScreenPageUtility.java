@@ -13,6 +13,7 @@ import net.bristn.lectern.screen.data.LecternScreenSupportedData;
 import net.bristn.lectern.screen.data.LecternScreenSupportedIconData;
 import net.bristn.lectern.tag.ModEnchantmentTags;
 import net.bristn.lectern.utility.wrappers.EnchantmentWrapper;
+import net.fabricmc.fabric.api.tag.client.v1.ClientTags;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -89,7 +90,8 @@ public class LecternScreenPageUtility {
             leftTexts.add(Component.literal(String.join(", ", exclusive)));
         }
 
-        var redstoneSignal = Component.literal(ModEnchantmentTags.getRedstoneSignal(holder) + "");
+        var signal = ModEnchantmentTags.getRedstoneSignal(holder);
+        var redstoneSignal = Component.literal((signal == 0 ? "" : signal) + "");
         return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal);
     }
 
@@ -225,6 +227,7 @@ public class LecternScreenPageUtility {
      */
     private static LecternScreenSupportedData getSupportedItemData(HashSet<Item> supportedItems) {
         var supportedTags = ItemTagTextureLoader.getMap();
+        var fabricItemTags = ClientTagUtility.getFabricItemTags();
 
         // Iterate all supported items of the enchantment and populate the collections
         // The first map is used to keep track of the icon ordering that is determined
@@ -251,14 +254,38 @@ public class LecternScreenPageUtility {
                 }
             }
 
+            // The server might not send the custom item tags if the mod is not installed on
+            // the server. Therefore also check the fabric client side item tags
+            // ! To ensure client-only tags are recognized, the Fabric ClientTags are used
+            for (var tag : fabricItemTags) {
+                var hasTag = ClientTags.isInWithLocalFallback(tag, item);
+                if (hasTag == false) {
+                    continue;
+                }
+
+                if (supportedTags.containsKey(tag)) {
+                    var order = supportedTags.get(tag).order;
+                    var orderMap = usedTagsByOrder.getOrDefault(order, new HashMap<>());
+                    var itemMap = orderMap.getOrDefault(tag, new HashSet<>());
+                    itemMap.add(item);
+
+                    orderMap.put(tag, itemMap);
+                    usedTagsByOrder.put(order, orderMap);
+                    hasValidTag = true;
+                }
+            }
+
             // If the item has no valid tag (no texture), show this to the user
             if (hasValidTag == false) {
                 missingItemMap.add(item);
-                LecternEnchantedBooks.LOGGER.warn("Unable to get icon for {}  ", itemStack.getItemName().getString());
 
+                var name = itemStack.getItemName().getString();
+                var tagNames = new ArrayList<String>();
                 for (var tag : tags) {
-                    LecternEnchantedBooks.LOGGER.warn(tag.location().toString());
+                    tagNames.add(tag.location().toString());
                 }
+
+                LecternEnchantedBooks.LOGGER.warn("Unable to get supported item icon for {}. Tag list: {} ", name, tagNames);
             }
         }
 

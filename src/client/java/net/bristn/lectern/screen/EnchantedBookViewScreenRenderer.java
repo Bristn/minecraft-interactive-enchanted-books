@@ -151,6 +151,12 @@ public class EnchantedBookViewScreenRenderer {
             this.renderSupportedIconTooltip(graphics, iconX, iconY, mouseX, mouseY, iconData);
         }
 
+        // Hide the comparator element if the signal is 0 (Happens if the mod is not
+        // installed on the server)
+        if (page.redstoneSignal().getString().isEmpty()) {
+            return;
+        }
+
         // Show the redstone comparator signal of the page
         var redstoneX = screen.width / 2 + 2;
         var redstoneY = TOP_TEXT_OFFSET - 4;

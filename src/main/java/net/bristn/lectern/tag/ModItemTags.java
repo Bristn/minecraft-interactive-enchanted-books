@@ -1,5 +1,7 @@
 package net.bristn.lectern.tag;
 
+import java.util.List;
+
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -16,6 +18,9 @@ public class ModItemTags {
 
     public static final TagKey<Item> SKULLS = registerTag("skulls");
     public static final TagKey<Item> MISC = registerTag("misc");
+
+    public static final List<TagKey<Item>> ALL_TAG_KEYS = List.of(BOWS, CROSSBOWS, ELYTRAS, SHIELDS, TRIDENTS, MACES, SKULLS,
+            MISC);
 
     public static void registerModItemTags() {
         LecternEnchantedBooks.LOGGER.info("Register ModItemTags for" + LecternEnchantedBooks.MOD_ID);
