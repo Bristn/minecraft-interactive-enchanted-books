@@ -17,8 +17,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.bristn.lectern.resources.ItemTagTextureEntry;
-import net.bristn.lectern.resources.json.ItemTagTextureJsonEntry;
+import net.bristn.lectern.resources.ItemTagTexture;
+import net.bristn.lectern.resources.json.ItemTagTextureJson;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
@@ -30,8 +30,8 @@ import net.minecraft.world.item.Item;
 public class ItemTagTextureLoader implements PreparableReloadListener {
     private static final String FILE_NAME = "item_tag_texture.jsonc";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final List<ItemTagTextureEntry> DATA = new ArrayList<>();
-    private static final HashMap<TagKey<Item>, ItemTagTextureEntry> DATA_BY_TAG = new HashMap<>();
+    private static final List<ItemTagTexture> DATA = new ArrayList<>();
+    private static final HashMap<TagKey<Item>, ItemTagTexture> DATA_BY_TAG = new HashMap<>();
 
     @Override
     public CompletableFuture<Void> reload(SharedState currentReload, Executor taskExecutor, PreparationBarrier preparationBarrier,
@@ -46,7 +46,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
     /**
      * Uses the resource manager to read all relevant data files
      */
-    private List<ItemTagTextureJsonEntry> loadAllResources(ResourceManager manager) {
+    private List<ItemTagTextureJson> loadAllResources(ResourceManager manager) {
         LecternEnchantedBooks.LOGGER.info("ItemTagTextureLoader: Loading data from " + FILE_NAME);
 
         // Filter out any resource with the given file name
@@ -61,7 +61,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
         });
 
         // Read each found json file & convert its content
-        var result = new ArrayList<ItemTagTextureJsonEntry>();
+        var result = new ArrayList<ItemTagTextureJson>();
         for (var resourceEntry : modResources.entrySet()) {
             var resources = resourceEntry.getValue();
             for (var resource : resources) {
@@ -81,7 +81,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
      * Reads the json data of the resource file and converts the data into a
      * collection of java objects per array entry
      */
-    private List<ItemTagTextureJsonEntry> loadResource(Resource resource) throws IOException {
+    private List<ItemTagTextureJson> loadResource(Resource resource) throws IOException {
 
         // Read the json file. The root of the file is a json array
         var stream = resource.open();
@@ -89,13 +89,13 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
         var array = GSON.fromJson(reader, JsonArray.class);
 
         // Convert each array entry to the Java class
-        var result = new ArrayList<ItemTagTextureJsonEntry>();
+        var result = new ArrayList<ItemTagTextureJson>();
         for (var i = 0; i < array.size(); i++) {
             var jsonElement = array.get(i);
 
             // TODO: Properly determine order. Allow other mods to insert icons at any point
             var order = i;
-            var data = ItemTagTextureJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonElement);
+            var data = ItemTagTextureJson.CODEC.parse(JsonOps.INSTANCE, jsonElement);
             data.ifSuccess(entry -> {
                 var ordered = entry.withOrder(order);
                 result.add(ordered);
@@ -114,10 +114,10 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
      * the HashMap of multiple mods into a single list that respects the priorities
      * of the json
      */
-    private void apply(List<ItemTagTextureJsonEntry> prepared) {
+    private void apply(List<ItemTagTextureJson> prepared) {
 
         // Merge all the different mod setting into one flat map
-        var flatMap = new HashMap<String, ItemTagTextureJsonEntry>();
+        var flatMap = new HashMap<String, ItemTagTextureJson>();
         for (var entry : prepared) {
             var tagName = entry.tag();
             var priority = entry.priority();
@@ -149,7 +149,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
             var tagIdentifier = Identifier.tryParse(entry.tag());
 
             var tagKey = TagKey.create(Registries.ITEM, tagIdentifier);
-            var data = new ItemTagTextureEntry(tagKey, textureIdentifier, entry.order());
+            var data = new ItemTagTexture(tagKey, textureIdentifier, entry.order());
             DATA.add(data);
             DATA_BY_TAG.put(tagKey, data);
         }
@@ -157,11 +157,11 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
         LecternEnchantedBooks.LOGGER.info("ItemTagTextureLoader: Loaded a total of {} unique entries", DATA.size());
     }
 
-    public static List<ItemTagTextureEntry> getList() {
+    public static List<ItemTagTexture> getList() {
         return Collections.unmodifiableList(DATA);
     }
 
-    public static Map<TagKey<Item>, ItemTagTextureEntry> getMap() {
+    public static Map<TagKey<Item>, ItemTagTexture> getMap() {
         return Collections.unmodifiableMap(DATA_BY_TAG);
     }
 }

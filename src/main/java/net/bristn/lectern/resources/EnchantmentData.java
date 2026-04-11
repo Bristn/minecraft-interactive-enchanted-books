@@ -1,16 +1,18 @@
 package net.bristn.lectern.resources;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.Identifier;
 
-public class EnchantmentDataEntry {
+public class EnchantmentData {
     public final Identifier enchantment;
     public final ParticleOptions particle;
-    public final List<EnchantmentTranslationEntry> parameters;
+    public final ArrayList<ArrayList<EnchantmentNamedParameter>> parameters;
 
-    public EnchantmentDataEntry(Identifier enchantment, ParticleOptions particle, List<EnchantmentTranslationEntry> parameters) {
+    public EnchantmentData(Identifier enchantment, ParticleOptions particle,
+            ArrayList<ArrayList<EnchantmentNamedParameter>> parameters) {
+
         this.enchantment = enchantment;
         this.particle = particle;
         this.parameters = parameters;

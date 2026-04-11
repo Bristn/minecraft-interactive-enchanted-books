@@ -54,23 +54,25 @@ public class EnchantmentValueUtility {
             }
         }
 
-        var translations = EnchantmentUtility.getParticleForEnchantment(enchantment);
-        if (translations == null) {
+        var enchantmentData = EnchantmentUtility.getParticleForEnchantment(enchantment);
+        if (enchantmentData == null) {
             return new HashMap<>();
         }
 
         LecternEnchantedBooks.LOGGER
-                .info("Enchantment data: " + translations.enchantment.toString() + "  " + translations.parameters.size());
+                .info("Enchantment data: " + enchantmentData.enchantment.toString() + "  " + enchantmentData.parameters.size());
 
         // Add level as last parameter
         values.add((float) enchantmentLevel);
 
         var result = new HashMap<String, Float>();
         for (var i = 0; i < values.size(); i++) {
-            if (i <= translations.parameters.size() - 1) {
-                var parameters = translations.parameters.get(i);
-                var value = parameters.transformer.apply(values.get(i));
-                result.put(parameters.name, value);
+            if (i <= enchantmentData.parameters.size() - 1) {
+                var namedParameters = enchantmentData.parameters.get(i);
+                for (var namedParameter : namedParameters) {
+                    var value = namedParameter.transformer.apply(values.get(i));
+                    result.put(namedParameter.name, value);
+                }
             }
         }
 

@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 
 import net.bristn.lectern.LecternEnchantedBooks;
-import net.bristn.lectern.resources.EnchantmentDataEntry;
+import net.bristn.lectern.resources.EnchantmentData;
 import net.bristn.lectern.resources.loader.EnchantmentDataLoader;
 import net.bristn.lectern.utility.wrappers.EnchantmentWrapper;
 import net.minecraft.core.HolderLookup;
@@ -69,7 +69,7 @@ public class EnchantmentUtility {
      * enchantment_particle.json. If any error occurs, the default enchantment
      * particle is returned
      */
-    public static EnchantmentDataEntry getParticleForEnchantment(Enchantment enchantment) {
+    public static EnchantmentData getParticleForEnchantment(Enchantment enchantment) {
         try {
             var enchantmentKey = EnchantmentUtility.getEnchantmentIdentifier(enchantment);
             if (enchantmentKey == null) {
