@@ -21,11 +21,11 @@ public class LecternEnchantedBooks implements ModInitializer {
         ModScreens.registerModScreens();
         ModParticles.registerModParticles();
         ModPayloads.registerModPayloads();
-        ModResourceLoaders.registerModResourceLoaders();
 
         ModItemTags.registerModItemTags();
         ModEnchantmentTags.registerModEnchantmentTags();
 
         ModTransformers.registerModTransformers();
+        ModResourceLoaders.registerModResourceLoaders();
     }
 }

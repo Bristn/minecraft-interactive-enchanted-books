@@ -28,11 +28,8 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
-import org.slf4j.Logger;
-
 public class EnchantmentDataLoader implements PreparableReloadListener {
     private static final String FILE_NAME = "enchantment_setting.jsonc";
-    private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final List<EnchantmentDataEntry> DATA = new ArrayList<>();
     private static final HashMap<Identifier, EnchantmentDataEntry> DATA_BY_TAG = new HashMap<>();
@@ -50,11 +47,11 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
     /**
      * Uses the resource manager to read all relevant data files
      */
-    private Map<Identifier, List<EnchantmentDataJsonEntry>> loadAllResources(ResourceManager manager) {
-        LOGGER.info("EnchantmentParticleLoader: Loading data from " + FILE_NAME);
+    private List<EnchantmentDataJsonEntry> loadAllResources(ResourceManager manager) {
+        LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Loading data from " + FILE_NAME);
 
-        // Filter out any resource with the given file name
-        var modResources = manager.listResources("data", (identifier) -> {
+        // Filter out any resource with the given file names
+        var modResources = manager.listResourceStacks("data", (identifier) -> {
             var namespace = identifier.getNamespace();
             if (namespace.equals(LecternEnchantedBooks.MOD_ID) == false) {
                 return false;
@@ -65,16 +62,16 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
         });
 
         // Read each found json file & convert its content
-        var result = new HashMap<Identifier, List<EnchantmentDataJsonEntry>>();
+        var result = new ArrayList<EnchantmentDataJsonEntry>();
         for (var resourceEntry : modResources.entrySet()) {
-            var resourceId = resourceEntry.getKey();
-            var resource = resourceEntry.getValue();
-
-            try {
-                var modResult = loadResource(resourceId, resource);
-                result.putAll(modResult);
-            } catch (IOException error) {
-                error.printStackTrace();
+            var resources = resourceEntry.getValue();
+            for (var resource : resources) {
+                try {
+                    var modResult = loadResource(resource);
+                    result.addAll(modResult);
+                } catch (IOException error) {
+                    error.printStackTrace();
+                }
             }
         }
 
@@ -85,8 +82,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
      * Reads the json data of the resource file and converts the data into a
      * collection of java objects per array entry
      */
-    private HashMap<Identifier, List<EnchantmentDataJsonEntry>> loadResource(Identifier resourceId, Resource resource)
-            throws IOException {
+    private List<EnchantmentDataJsonEntry> loadResource(Resource resource) throws IOException {
 
         // Read the json file. The root of the file is a json array
         var stream = resource.open();
@@ -94,7 +90,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
         var array = GSON.fromJson(reader, JsonArray.class);
 
         // Convert each array entry to the Java class
-        var result = new HashMap<Identifier, List<EnchantmentDataJsonEntry>>();
+        var result = new ArrayList<EnchantmentDataJsonEntry>();
         for (var jsonElement : array) {
             var jsonObject = jsonElement.getAsJsonObject();
 
@@ -108,18 +104,20 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
                         parameters.add(entry);
                     });
 
+                    data.ifError(error -> {
+                        LecternEnchantedBooks.LOGGER.error("EnchantmentDataLoader: Error parsing {} {}", FILE_NAME, error);
+                    });
                 }
             }
 
             // Parse the main json object
             var data = EnchantmentDataJsonEntry.CODEC.parse(JsonOps.INSTANCE, jsonObject);
             data.ifSuccess(entry -> {
-                result.putIfAbsent(resourceId, new ArrayList<EnchantmentDataJsonEntry>());
-                result.get(resourceId).add(entry.withParameters(parameters));
+                result.add(entry.withParameters(parameters));
             });
 
             data.ifError(error -> {
-                LOGGER.info("EnchantmentParticleLoader: Encountered an error whilst loading {} {}", resourceId, error);
+                LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Error parsing {} {}", FILE_NAME, error);
             });
         }
 
@@ -131,32 +129,30 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
      * the HashMap of multiple mods into a single list that respects the priorities
      * of the json
      */
-    private void apply(Map<Identifier, List<EnchantmentDataJsonEntry>> prepared) {
+    private void apply(List<EnchantmentDataJsonEntry> prepared) {
 
         // Merge all the different mod setting into one flat map
         var flatMap = new HashMap<String, EnchantmentDataJsonEntry>();
-        for (var entriesPerMod : prepared.entrySet()) {
-            for (var entry : entriesPerMod.getValue()) {
-                var enchantmentName = entry.enchantment();
-                var priority = entry.priority();
+        for (var entry : prepared) {
+            var enchantmentName = entry.enchantment();
+            var priority = entry.priority();
 
-                // If no entry is registered for the tag, add this one
-                if (flatMap.containsKey(enchantmentName) == false) {
-                    flatMap.put(enchantmentName, entry);
-                    continue;
-                }
+            // If no entry is registered for the tag, add this one
+            if (flatMap.containsKey(enchantmentName) == false) {
+                flatMap.put(enchantmentName, entry);
+                continue;
+            }
 
-                // Otherwise check the current priority and overwrite if necessary
-                var existingEntry = flatMap.get(enchantmentName);
-                if (priority > existingEntry.priority()) {
-                    flatMap.put(enchantmentName, entry);
+            // Otherwise check the current priority and overwrite if necessary
+            var existingEntry = flatMap.get(enchantmentName);
+            if (priority > existingEntry.priority()) {
+                flatMap.put(enchantmentName, entry);
 
-                    var enchantment = existingEntry.enchantment();
-                    var oldParticle = existingEntry.particle();
-                    var newParticle = entry.particle();
-                    LOGGER.info("EnchantmentParticleLoader: Overwriting {} particle {} with {}", enchantment, oldParticle,
-                            newParticle);
-                }
+                var enchantment = existingEntry.enchantment();
+                var oldParticle = existingEntry.particle();
+                var newParticle = entry.particle();
+                LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Overwriting {} particle {} with {}", enchantment,
+                        oldParticle, newParticle);
             }
         }
 
@@ -183,7 +179,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
             DATA_BY_TAG.put(enchantmentIdentifier, data);
         }
 
-        LOGGER.info("EnchantmentParticleLoader: Loaded a total of {} unique entries", DATA.size());
+        LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Loaded a total of {} unique entries", DATA.size());
     }
 
     public static List<EnchantmentDataEntry> getList() {

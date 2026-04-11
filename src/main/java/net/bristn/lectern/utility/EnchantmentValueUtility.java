@@ -59,10 +59,11 @@ public class EnchantmentValueUtility {
             return new HashMap<>();
         }
 
+        LecternEnchantedBooks.LOGGER
+                .info("Enchantment data: " + translations.enchantment.toString() + "  " + translations.parameters.size());
+
         // Add level as last parameter
         values.add((float) enchantmentLevel);
-
-        LecternEnchantedBooks.LOGGER.info("LevelBasedValues: " + values);
 
         var result = new HashMap<String, Float>();
         for (var i = 0; i < values.size(); i++) {
@@ -73,6 +74,7 @@ public class EnchantmentValueUtility {
             }
         }
 
+        LecternEnchantedBooks.LOGGER.info("LevelBasedValues: {}, Named parameters: {}", values, result);
         return result;
     }
 

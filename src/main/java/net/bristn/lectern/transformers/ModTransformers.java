@@ -1,5 +1,7 @@
 package net.bristn.lectern.transformers;
 
+import java.util.function.Function;
+
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
@@ -15,19 +17,19 @@ public class ModTransformers {
 
     // ! General transformers
 
-    public static final ValueTransformer NONE = register("none", value -> {
+    public static final Function<Float, Float> NONE = register("none", value -> {
         return twoDecimals(value);
     });
 
-    public static final ValueTransformer PERCENTAGE = register("percentage", value -> {
+    public static final Function<Float, Float> PERCENTAGE = register("percentage", value -> {
         return Math.abs(twoDecimals(value * 100f));
     });
 
-    public static final ValueTransformer DAMAGE_TO_HEARTS = register("damage_to_hearts", value -> {
+    public static final Function<Float, Float> DAMAGE_TO_HEARTS = register("damage_to_hearts", value -> {
         return twoDecimals(value / 2f);
     });
 
-    public static final ValueTransformer TICKS_TO_SECONDS = register("ticks_to_seconds", value -> {
+    public static final Function<Float, Float> TICKS_TO_SECONDS = register("ticks_to_seconds", value -> {
         return twoDecimals(value * 20f);
     });
 
@@ -36,75 +38,76 @@ public class ModTransformers {
     // ! Enchantment specific transformers
 
     // Formula from code (max of 80% reduction possible)
-    public static final ValueTransformer PROTECTION_PERCENTAGE = register("protection_percentage", value -> {
+    public static final Function<Float, Float> PROTECTION_PERCENTAGE = register("protection_percentage", value -> {
         return twoDecimals(Math.min(value / 25f, 0.8f) * 100f);
     });
 
-    public static final ValueTransformer FORTUNE_LUCK = register("fortune_luck", value -> {
+    public static final Function<Float, Float> FORTUNE_LUCK = register("fortune_luck", value -> {
         return twoDecimals(((1f / (value + 2f) + (value + 1f) / 2) - 1f) * 100f);
     });
 
-    public static final ValueTransformer KNOCKBACK_DISTANCE = register("knockback_distance", value -> {
+    public static final Function<Float, Float> KNOCKBACK_DISTANCE = register("knockback_distance", value -> {
         return twoDecimals(value * 2.586f);
     });
 
-    public static final ValueTransformer LOYALTY_SPEED = register("loyalty_speed", value -> {
+    public static final Function<Float, Float> LOYALTY_SPEED = register("loyalty_speed", value -> {
         return twoDecimals(value * 16.67f);
     });
 
-    public static final ValueTransformer LUCK_OF_THE_SEA_TREASURE = register("luck_of_the_sea_treasure", value -> {
+    public static final Function<Float, Float> LUCK_OF_THE_SEA_TREASURE = register("luck_of_the_sea_treasure", value -> {
         return twoDecimals(value * 2.1f);
     });
 
-    public static final ValueTransformer LUCK_OF_THE_SEA_JUNK = register("luck_of_the_sea_junk", value -> {
+    public static final Function<Float, Float> LUCK_OF_THE_SEA_JUNK = register("luck_of_the_sea_junk", value -> {
         return twoDecimals(value * 1.96f);
     });
 
-    public static final ValueTransformer POWER_DAMAGE = register("power_damage", value -> {
+    public static final Function<Float, Float> POWER_DAMAGE = register("power_damage", value -> {
         return twoDecimals(25f * (value + 1f));
     });
 
-    public static final ValueTransformer PUNCH_DISTANCE = register("punch_distance", value -> {
+    public static final Function<Float, Float> PUNCH_DISTANCE = register("punch_distance", value -> {
         return twoDecimals(value * 3.3f);
     });
 
-    public static final ValueTransformer QUICK_CHARGE_DURATION = register("quick_charge_duration", value -> {
+    public static final Function<Float, Float> QUICK_CHARGE_DURATION = register("quick_charge_duration", value -> {
         return twoDecimals(value * 0.25f);
     });
 
-    public static final ValueTransformer RESPIRATION_TIME = register("respiration_time", value -> {
+    public static final Function<Float, Float> RESPIRATION_TIME = register("respiration_time", value -> {
         return twoDecimals(value * 15f);
     });
 
-    public static final ValueTransformer RESPIRATION_CHANCE = register("respiration_chance", value -> {
+    public static final Function<Float, Float> RESPIRATION_CHANCE = register("respiration_chance", value -> {
         return twoDecimals((value / (value + 1f)) * 100f);
     });
 
-    public static final ValueTransformer RIPTIDE_DISTANCE = register("riptide_distance", value -> {
+    public static final Function<Float, Float> RIPTIDE_DISTANCE = register("riptide_distance", value -> {
         return twoDecimals((6f * value) + 3);
     });
 
-    public static final ValueTransformer SOUL_SPEED = register("soul_speed", value -> {
+    public static final Function<Float, Float> SOUL_SPEED = register("soul_speed", value -> {
         return twoDecimals(30.0f + (10.5f * value));
     });
 
-    public static final ValueTransformer SWIFT_SNEAK = register("swift_sneak", value -> {
+    public static final Function<Float, Float> SWIFT_SNEAK = register("swift_sneak", value -> {
         return twoDecimals((value + 0.30f) * 100f);
     });
 
-    public static final ValueTransformer THORNS_CHANCE = register("thorns_chance", value -> {
+    public static final Function<Float, Float> THORNS_CHANCE = register("thorns_chance", value -> {
         return twoDecimals(value * 15f);
     });
 
-    public static final ValueTransformer WIND_BURST_DISTANCE = register("wind_burst_distance", value -> {
+    public static final Function<Float, Float> WIND_BURST_DISTANCE = register("wind_burst_distance", value -> {
         return twoDecimals(value * 8f);
     });
 
     // ! Helper functions
 
-    private static ValueTransformer register(String name, ValueTransformerImpl transformer) {
+    private static Function<Float, Float> register(String name, Function<Float, Float> transformer) {
         var identifier = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
-        return Registry.register(ValueTransformer.REGISTRY, identifier, new ValueTransformer(transformer));
+        var registry = ValueTransformer.getOrCreateRegistry();
+        return Registry.register(registry, identifier, transformer);
     }
 
     private static float twoDecimals(float value) {

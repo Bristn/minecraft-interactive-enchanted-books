@@ -2,15 +2,15 @@ package net.bristn.lectern.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import net.bristn.lectern.resources.json.EnchantmentTranslationJsonEntry;
-import net.bristn.lectern.transformers.ValueTransformer;
 
 public class EnchantmentTranslationEntry {
     public final String name;
-    public final ValueTransformer transformer;
+    public final Function<Float, Float> transformer;
 
-    public EnchantmentTranslationEntry(String name, ValueTransformer transformer) {
+    public EnchantmentTranslationEntry(String name, Function<Float, Float> transformer) {
         this.name = name;
         this.transformer = transformer;
     }
