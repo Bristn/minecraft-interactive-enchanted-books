@@ -34,6 +34,14 @@ fabricApi {
 	configureDataGeneration {
 		client = true
 	}
+
+    configureTests {
+		createSourceSet = true
+		modId = "interactive-enchanted-books-${project.name}"
+		enableGameTests = true  
+		enableClientGameTests = true  
+		eula = true 
+	}
 }
 
 dependencies {
@@ -45,6 +53,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 }
 
 processResources {
@@ -97,4 +106,8 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}
+
+test {
+	useJUnitPlatform()
 }

@@ -80,7 +80,7 @@ public class EnchantmentUtility {
             var enchantmentId = Identifier.parse(enchantmentKey);
             var enchantmentParticles = EnchantmentDataLoader.getMap();
             if (enchantmentParticles.containsKey(enchantmentId) == false) {
-                LOGGER.info("EnchantmentUtility: Enchantment {} is not registered in th json", enchantment.toString());
+                LOGGER.info("EnchantmentUtility: Enchantment {} is not registered in the json", enchantment.toString());
                 return null;
             }
 

@@ -1,0 +1,14 @@
+{
+    "schemaVersion": 1,
+    "id": "interactive-enchanted-books",
+    "version": "1.0.0",
+    "name": "Lectern Enchanted Books",
+    "icon": "assets/example-mod/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-gametest": [],
+        "fabric-client-gametest": [
+            "net.bristn.lectern.EnchantmentValueUtilityTest"
+        ]
+    }
+}

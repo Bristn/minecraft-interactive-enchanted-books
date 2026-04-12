@@ -7,6 +7,7 @@ import java.util.List;
 import net.bristn.lectern.LecternEnchantedBooks;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.CrossbowItem.ChargingSounds;
 import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.enchantment.effects.ApplyExhaustion;
 import net.minecraft.world.item.enchantment.effects.ApplyMobEffect;
 import net.minecraft.world.item.enchantment.effects.ChangeItemDamage;
 import net.minecraft.world.item.enchantment.effects.DamageEntity;
+import net.minecraft.world.item.enchantment.effects.DamageImmunity;
 import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import net.minecraft.world.item.enchantment.effects.ExplodeEffect;
 import net.minecraft.world.item.enchantment.effects.Ignite;
@@ -27,7 +29,9 @@ import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
 import net.minecraft.world.item.enchantment.effects.ScaleExponentially;
 import net.minecraft.world.item.enchantment.effects.SetValue;
 import net.minecraft.world.item.enchantment.effects.SpawnParticlesEffect;
+import net.minecraft.world.item.enchantment.effects.SummonEntityEffect;
 import net.minecraft.world.item.enchantment.effects.AllOf.EntityEffects;
+import net.minecraft.world.item.enchantment.effects.AllOf.LocationBasedEffects;
 
 /**
  * Helper to read the LevelBased values of the enchantment effects
@@ -59,9 +63,6 @@ public class EnchantmentValueUtility {
             return new HashMap<>();
         }
 
-        LecternEnchantedBooks.LOGGER
-                .info("Enchantment data: " + enchantmentData.enchantment.toString() + "  " + enchantmentData.parameters.size());
-
         // Add level as last parameter
         values.add((float) enchantmentLevel);
 
@@ -90,6 +91,9 @@ public class EnchantmentValueUtility {
         } else if (effectRecord instanceof EnchantmentAttributeEffect effect) {
             // ! Can be the root effect (e.g. Blast Protection), but also a child
             return List.of(effect.amount().calculate(enchantmentLevel));
+        } else if (effectRecord instanceof ChargingSounds) {
+            // ! Ignore crossbow sound events
+            return new ArrayList<Float>();
         } else {
             if (effectRecord instanceof Holder holder) {
                 // ! Ignore sound events
@@ -162,7 +166,9 @@ public class EnchantmentValueUtility {
 
         case ExplodeEffect value:
             if (value.knockbackMultiplier().isEmpty() == false) {
-                result.add(value.knockbackMultiplier().get().calculate(enchantmentLevel));
+                // result.add(value.knockbackMultiplier().get().calculate(enchantmentLevel)); //
+                // TODO: Causes index out of bounds -1
+                result.add(0.0F);
             } else {
                 result.add(0.0F);
             }
@@ -199,6 +205,18 @@ public class EnchantmentValueUtility {
             break;
 
         case @SuppressWarnings("unused") SpawnParticlesEffect value:
+            break;
+
+        case @SuppressWarnings("unused") LocationBasedEffects value:
+            break;
+
+        case @SuppressWarnings("unused") SummonEntityEffect value:
+            break;
+
+        case @SuppressWarnings("unused") DamageImmunity[] value:
+            break;
+
+        case @SuppressWarnings("unused") DamageImmunity value:
             break;
 
         default:

@@ -2,13 +2,7 @@
   {
     "enchantment": "enchantment.minecraft.aqua_affinity",
     "priority": 0,
-    "parameters": [
-      [
-        {
-          "name": "multiplier"
-        }
-      ]
-    ]
+    "parameters": []
   },
   {
     "enchantment": "enchantment.minecraft.bane_of_arthropods",
