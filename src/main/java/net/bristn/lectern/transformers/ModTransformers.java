@@ -42,64 +42,64 @@ public class ModTransformers {
         return twoDecimals(Math.min(value / 25f, 0.8f) * 100f);
     });
 
-    public static final Function<Float, Float> FORTUNE_LUCK = register("fortune_luck", value -> {
-        return twoDecimals(((1f / (value + 2f) + (value + 1f) / 2) - 1f) * 100f);
+    public static final Function<Float, Float> FORTUNE_LUCK = register("fortune_luck", level -> {
+        return twoDecimals(((1f / (level + 2f) + (level + 1f) / 2) - 1f) * 100f);
     });
 
-    public static final Function<Float, Float> KNOCKBACK_DISTANCE = register("knockback_distance", value -> {
-        return twoDecimals(value * 2.586f);
+    public static final Function<Float, Float> KNOCKBACK_DISTANCE = register("knockback_distance", level -> {
+        return twoDecimals(level * 2.586f);
     });
 
-    public static final Function<Float, Float> LOYALTY_SPEED = register("loyalty_speed", value -> {
-        return twoDecimals(value * 16.67f);
+    public static final Function<Float, Float> LOYALTY_SPEED = register("loyalty_speed", level -> {
+        return twoDecimals(level * 16.67f);
     });
 
-    public static final Function<Float, Float> LUCK_OF_THE_SEA_TREASURE = register("luck_of_the_sea_treasure", value -> {
-        return twoDecimals(value * 2.1f);
+    public static final Function<Float, Float> LUCK_OF_THE_SEA_TREASURE = register("luck_of_the_sea_treasure", level -> {
+        return twoDecimals(level * 2.1f);
     });
 
     public static final Function<Float, Float> LUCK_OF_THE_SEA_JUNK = register("luck_of_the_sea_junk", value -> {
         return twoDecimals(value * 1.96f);
     });
 
-    public static final Function<Float, Float> POWER_DAMAGE = register("power_damage", value -> {
-        return twoDecimals(25f * (value + 1f));
+    public static final Function<Float, Float> POWER_DAMAGE = register("power_damage", level -> {
+        return twoDecimals(25f * (level + 1f));
     });
 
-    public static final Function<Float, Float> PUNCH_DISTANCE = register("punch_distance", value -> {
-        return twoDecimals(value * 3.3f);
+    public static final Function<Float, Float> PUNCH_DISTANCE = register("punch_distance", level -> {
+        return twoDecimals(level * 3.3f);
     });
 
-    public static final Function<Float, Float> QUICK_CHARGE_DURATION = register("quick_charge_duration", value -> {
-        return twoDecimals(value * 0.25f);
+    public static final Function<Float, Float> QUICK_CHARGE_DURATION = register("quick_charge_duration", level -> {
+        return twoDecimals(level * 0.25f);
     });
 
-    public static final Function<Float, Float> RESPIRATION_TIME = register("respiration_time", value -> {
-        return twoDecimals(value * 15f);
+    public static final Function<Float, Float> RESPIRATION_TIME = register("respiration_time", level -> {
+        return twoDecimals(level * 15f);
     });
 
-    public static final Function<Float, Float> RESPIRATION_CHANCE = register("respiration_chance", value -> {
-        return twoDecimals((value / (value + 1f)) * 100f);
+    public static final Function<Float, Float> RESPIRATION_CHANCE = register("respiration_chance", level -> {
+        return twoDecimals((level / (level + 1f)) * 100f);
     });
 
-    public static final Function<Float, Float> RIPTIDE_DISTANCE = register("riptide_distance", value -> {
-        return twoDecimals((6f * value) + 3);
+    public static final Function<Float, Float> RIPTIDE_DISTANCE = register("riptide_distance", level -> {
+        return twoDecimals((6f * level) + 3);
     });
 
-    public static final Function<Float, Float> SOUL_SPEED = register("soul_speed", value -> {
-        return twoDecimals(30.0f + (10.5f * value));
+    public static final Function<Float, Float> SOUL_SPEED = register("soul_speed", level -> {
+        return twoDecimals(30.0f + (10.5f * level));
     });
 
     public static final Function<Float, Float> SWIFT_SNEAK = register("swift_sneak", value -> {
         return twoDecimals((value + 0.30f) * 100f);
     });
 
-    public static final Function<Float, Float> THORNS_CHANCE = register("thorns_chance", value -> {
-        return twoDecimals(value * 15f);
+    public static final Function<Float, Float> THORNS_CHANCE = register("thorns_chance", level -> {
+        return twoDecimals(level * 15f);
     });
 
-    public static final Function<Float, Float> WIND_BURST_DISTANCE = register("wind_burst_distance", value -> {
-        return twoDecimals(value * 8f);
+    public static final Function<Float, Float> WIND_BURST_DISTANCE = register("wind_burst_distance", level -> {
+        return twoDecimals(level * 8f);
     });
 
     // ! Helper functions

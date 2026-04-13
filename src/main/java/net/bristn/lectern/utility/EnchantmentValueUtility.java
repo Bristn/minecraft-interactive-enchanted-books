@@ -48,6 +48,7 @@ public class EnchantmentValueUtility {
      */
     public static HashMap<String, Float> getTranslationParameters(Enchantment enchantment, int enchantmentLevel) {
         var values = new ArrayList<Float>();
+        values.add((float) enchantmentLevel);
 
         var effectsMap = enchantment.effects();
         for (var effectEntry : effectsMap) {
@@ -62,9 +63,6 @@ public class EnchantmentValueUtility {
         if (enchantmentData == null) {
             return new HashMap<>();
         }
-
-        // Add level as last parameter
-        values.add((float) enchantmentLevel);
 
         var result = new HashMap<String, Float>();
         for (var i = 0; i < values.size(); i++) {

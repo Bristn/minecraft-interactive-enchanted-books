@@ -173,11 +173,11 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
 
             if (key == Enchantments.LOOTING) {
                 assertNamedParameter(enchantment, 1, "level", 1.0F);
-                assertNamedParameter(enchantment, 1, "increase", 1.0F);
+                assertNamedParameter(enchantment, 1, "increase", 100.0F);
                 assertNamedParameter(enchantment, 2, "level", 2.0F);
-                assertNamedParameter(enchantment, 2, "increase", 2.0F);
+                assertNamedParameter(enchantment, 2, "increase", 200.0F);
                 assertNamedParameter(enchantment, 3, "level", 3.0F);
-                assertNamedParameter(enchantment, 3, "increase", 3.0F);
+                assertNamedParameter(enchantment, 3, "increase", 300.0F);
 
                 continue;
             }
@@ -370,7 +370,16 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
 
     private void assertNamedParameter(Enchantment enchantment, int level, String name, float expected) {
         var parameters = EnchantmentValueUtility.getTranslationParameters(enchantment, level);
-        if (parameters.get(name) != expected)
-            LecternEnchantedBooks.LOGGER.error("Wrong named parameter {}: {} level {}", name, enchantment.toString(), level);
+        var actual = parameters.get(name);
+        if (actual == null) {
+            LecternEnchantedBooks.LOGGER.error("{} {} Missing actual value for {} {}", enchantment.toString(), level, name,
+                    expected);
+            return;
+        }
+
+        if (actual != expected) {
+            LecternEnchantedBooks.LOGGER.error("{} {} Named parameter {} {} != {}", enchantment.toString(), level, name, actual,
+                    expected);
+        }
     }
 }

@@ -8,6 +8,7 @@
     "enchantment": "enchantment.minecraft.bane_of_arthropods",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "damage",
@@ -35,6 +36,7 @@
     "enchantment": "enchantment.minecraft.blast_protection",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "knockback",
@@ -53,6 +55,7 @@
     "enchantment": "enchantment.minecraft.breach",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "reduction",
@@ -69,6 +72,7 @@
     "enchantment": "enchantment.minecraft.density",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "damage",
@@ -81,6 +85,7 @@
     "enchantment": "enchantment.minecraft.depth_strider",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "speed",
@@ -93,6 +98,7 @@
     "enchantment": "enchantment.minecraft.efficiency",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "speed"
@@ -104,6 +110,7 @@
     "enchantment": "enchantment.minecraft.feather_falling",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "reduction",
@@ -116,6 +123,7 @@
     "enchantment": "enchantment.minecraft.fire_aspect",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "duration"
@@ -127,6 +135,7 @@
     "enchantment": "enchantment.minecraft.fire_protection",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "duration",
@@ -145,6 +154,7 @@
     "enchantment": "enchantment.minecraft.flame",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "duration"
@@ -157,6 +167,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "increase",
           "transformer": "lectern-enchanted-books:fortune_luck"
@@ -168,6 +179,7 @@
     "enchantment": "enchantment.minecraft.frost_walker",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "radius"
@@ -179,6 +191,7 @@
     "enchantment": "enchantment.minecraft.impaling",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "damage",
@@ -196,6 +209,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "distance",
           "transformer": "lectern-enchanted-books:knockback_distance"
@@ -208,12 +222,11 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "increase",
           "transformer": "lectern-enchanted-books:percentage"
-        }
-      ],
-      [
+        },
         {
           "name": "level"
         }
@@ -225,6 +238,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "speed",
           "transformer": "lectern-enchanted-books:loyalty_speed"
@@ -237,6 +251,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "treasure",
           "transformer": "lectern-enchanted-books:luck_of_the_sea_treasure"
@@ -254,6 +269,7 @@
     "enchantment": "enchantment.minecraft.lunge",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "damage"
@@ -276,6 +292,7 @@
     "enchantment": "enchantment.minecraft.lure",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "duration"
@@ -291,6 +308,7 @@
     "enchantment": "enchantment.minecraft.multishot",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "quantity"
@@ -308,6 +326,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "quantity"
         }
@@ -319,11 +338,7 @@
     "priority": 0,
     "parameters": [
       [
-        {
-          "name": "_unused_"
-        }
-      ],
-      [
+        /* Enchantment level */
         {
           "name": "damage",
           "transformer": "lectern-enchanted-books:power_damage"
@@ -335,6 +350,7 @@
     "enchantment": "enchantment.minecraft.projectile_protection",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "reduction",
@@ -347,6 +363,7 @@
     "enchantment": "enchantment.minecraft.protection",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "reduction",
@@ -360,6 +377,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "knockback",
           "transformer": "lectern-enchanted-books:punch_distance"
@@ -372,6 +390,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "duration",
           "transformer": "lectern-enchanted-books:quick_charge_duration"
@@ -384,12 +403,11 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "duration",
           "transformer": "lectern-enchanted-books:respiration_time"
-        }
-      ],
-      [
+        },
         {
           "name": "chance",
           "transformer": "lectern-enchanted-books:respiration_chance"
@@ -402,6 +420,7 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
         {
           "name": "distance",
           "transformer": "lectern-enchanted-books:riptide_distance"
@@ -413,6 +432,7 @@
     "enchantment": "enchantment.minecraft.sharpness",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "damage",
@@ -429,6 +449,7 @@
     "enchantment": "enchantment.minecraft.smite",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "damage",
@@ -442,11 +463,7 @@
     "priority": 0,
     "parameters": [
       [
-        {
-          "name": "_unused_"
-        }
-      ],
-      [
+        /* Enchantment level */
         {
           "name": "speed",
           "transformer": "lectern-enchanted-books:soul_speed"
@@ -458,6 +475,7 @@
     "enchantment": "enchantment.minecraft.sweeping_edge",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "increase",
@@ -470,6 +488,7 @@
     "enchantment": "enchantment.minecraft.swift_sneak",
     "priority": 0,
     "parameters": [
+      [] /* Enchantment level */,
       [
         {
           "name": "increase",
@@ -483,6 +502,13 @@
     "priority": 0,
     "parameters": [
       [
+        /* Enchantment level */
+        {
+          "name": "chance",
+          "transformer": "lectern-enchanted-books:thorns_chance"
+        }
+      ],
+      [
         {
           "name": "minDamage"
         }
@@ -492,17 +518,6 @@
           "name": "maxDamage",
           "transformer": "lectern-enchanted-books:damage_to_hearts"
         }
-      ],
-      [
-        {
-          "name": "_unused_"
-        }
-      ],
-      [
-        {
-          "name": "chance",
-          "transformer": "lectern-enchanted-books:thorns_chance"
-        }
       ]
     ]
   },
@@ -510,11 +525,8 @@
     "enchantment": "enchantment.minecraft.unbreaking",
     "priority": 0,
     "parameters": [
-      [
-        {
-          "name": "_unused_"
-        }
-      ],
+      [] /* Enchantment level */,
+      [],
       [
         {
           "name": "chance",
@@ -533,16 +545,7 @@
     "priority": 0,
     "parameters": [
       [
-        {
-          "name": "_unused_"
-        }
-      ],
-      [
-        {
-          "name": "_unused_"
-        }
-      ],
-      [
+        /* Enchantment level */
         {
           "name": "distance",
           "transformer": "lectern-enchanted-books:wind_burst_distance"
