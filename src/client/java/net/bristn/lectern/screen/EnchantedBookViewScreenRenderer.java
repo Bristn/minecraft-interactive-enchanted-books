@@ -26,6 +26,8 @@ public class EnchantedBookViewScreenRenderer {
     private static final int PADDING_FROM_CENTER = 6;
     private static final int ICON_SIZE = 16;
     private static final int ICONS_PER_ROW = 5;
+    private static final int ICON_PADDING = 8;
+    private static final int ICON_PADDING_HALF = ICON_PADDING / 2;
 
     private static final int TEXT_LINE_WIDTH = BACKGROUND_WIDTH / 2 - PADDING_FROM_CENTER * 2 - 13;
     private static final int TEXT_LINE_HEIGHT = 10;
@@ -125,8 +127,6 @@ public class EnchantedBookViewScreenRenderer {
         var titleCom = Component.literal(title);
         y = renderTextLines(collector, x + TEXT_LINE_WIDTH / 2, y, titleCom, ChatFormatting.GRAY, TextAlignment.CENTER);
 
-        var iconPadding = 8;
-
         // Render the supported item icons
         var supported = page.supported();
         var icons = supported.icons().size();
@@ -135,8 +135,8 @@ public class EnchantedBookViewScreenRenderer {
             var row = (int) (Math.floor(i / ICONS_PER_ROW));
 
             var iconData = supported.icons().get(i);
-            var iconX = x + ICON_SIZE * col + iconPadding * (col - 1) + ICON_SIZE / 2;
-            var iconY = y + ICON_SIZE * row + iconPadding * (row - 1) + ICON_SIZE / 2;
+            var iconX = x + ICON_SIZE * col + ICON_PADDING * (col - 1) + ICON_SIZE / 2;
+            var iconY = y + ICON_SIZE * row + ICON_PADDING * (row - 1) + ICON_SIZE / 2;
             this.renderSupportedIcon(graphics, iconX, iconY, mouseX, mouseY, iconData);
         }
 
@@ -146,9 +146,15 @@ public class EnchantedBookViewScreenRenderer {
             var row = (int) (Math.floor(i / ICONS_PER_ROW));
 
             var iconData = supported.icons().get(i);
-            var iconX = x + ICON_SIZE * col + iconPadding * (col - 1) + ICON_SIZE / 2;
-            var iconY = y + ICON_SIZE * row + iconPadding * (row - 1) + ICON_SIZE / 2;
-            this.renderSupportedIconTooltip(graphics, iconX, iconY, mouseX, mouseY, iconData);
+            var iconX = x + ICON_SIZE * col + ICON_PADDING * (col - 1) + ICON_SIZE / 2;
+            var iconY = y + ICON_SIZE * row + ICON_PADDING * (row - 1) + ICON_SIZE / 2;
+            var hasRendered = this.renderSupportedIconTooltip(graphics, iconX, iconY, mouseX, mouseY, iconData);
+
+            // Only render one tooltip at a time. Additionally improves performance by not
+            // checking the other icons for hits
+            if (hasRendered == true) {
+                break;
+            }
         }
 
         // Hide the comparator element if the signal is 0 (Happens if the mod is not
@@ -188,18 +194,19 @@ public class EnchantedBookViewScreenRenderer {
     /**
      * Draws the tooltip when hovering over a given supported item icon
      */
-    private void renderSupportedIconTooltip(GuiGraphicsExtractor graphics, int x, int y, int mouseX, int mouseY,
+    private boolean renderSupportedIconTooltip(GuiGraphicsExtractor graphics, int x, int y, int mouseX, int mouseY,
             LecternScreenSupportedIconData data) {
 
         // Draw the tooltip if the mouse is hovering above
-        var mouseInX = mouseX > x && mouseX < (x + ICON_SIZE);
-        var mouseInY = mouseY > y && mouseY < (y + ICON_SIZE);
+        var mouseInX = mouseX >= (x - ICON_PADDING_HALF) && mouseX <= (x + ICON_SIZE + ICON_PADDING_HALF);
+        var mouseInY = mouseY >= (y - ICON_PADDING_HALF) && mouseY <= (y + ICON_SIZE + ICON_PADDING_HALF);
         if (mouseInX == false || mouseInY == false) {
-            return;
+            return false;
         }
 
         var tooltip = new LecternScreenTooltipComponent(data.title(), data.tooltipItems());
-        graphics.tooltip(screen.getFont(), List.of(tooltip), x, y, DefaultTooltipPositioner.INSTANCE, null);
+        graphics.tooltip(screen.getFont(), List.of(tooltip), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+        return true;
     }
 
     /**
