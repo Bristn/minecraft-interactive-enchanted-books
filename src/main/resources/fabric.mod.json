@@ -2,14 +2,14 @@
     "schemaVersion": 1,
     "id": "interactive_enchanted_books",
     "version": "${version}",
-    "name": "Lectern Enchanted Books",
-    "description": "This is an example description! Tell everyone what your mod is about!",
+    "name": "Interactive Enchanted Books",
+    "description": "Allows opening of enchanted books to view enchantment details",
     "authors": [
-        "Me!"
+        "Bristn"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "",
+        "sources": "https://github.com/Bristn/minecraft-interactive-enchanted-books"
     },
     "license": "CC0-1.0",
     "icon": "assets/interactive_enchanted_books/icon.png",
