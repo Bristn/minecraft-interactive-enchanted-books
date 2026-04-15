@@ -8,7 +8,7 @@
     "entrypoints": {
         "fabric-gametest": [],
         "fabric-client-gametest": [
-            "net.bristn.lectern.EnchantmentValueUtilityTest"
+            "net.bristn.interactive_enchanted_books.EnchantmentValueUtilityTest"
         ]
     }
 }

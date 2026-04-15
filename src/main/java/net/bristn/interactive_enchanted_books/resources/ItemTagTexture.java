@@ -1,0 +1,17 @@
+package net.bristn.interactive_enchanted_books.resources;
+
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+
+public class ItemTagTexture {
+    public final TagKey<Item> tagKey;
+    public final Identifier texture;
+    public final int order;
+
+    public ItemTagTexture(TagKey<Item> tagKey, Identifier texture, int order) {
+        this.tagKey = tagKey;
+        this.texture = texture;
+        this.order = order;
+    }
+}

@@ -1,41 +1,41 @@
 {
-	"schemaVersion": 1,
-	"id": "lectern-enchanted-books",
-	"version": "${version}",
-	"name": "Lectern Enchanted Books",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/lectern-enchanted-books/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"client": [
-			"net.bristn.lectern.LecternEnchantedBooksClient"
-		],
-		"main": [
-			"net.bristn.lectern.LecternEnchantedBooks"
-		],
-		"fabric-datagen": [
-			"net.bristn.lectern.LecternEnchantedBooksDataGenerator"
-		]
-	},
-	"mixins": [
-		"lectern-enchanted-books.mixins.json",
-		{
-			"config": "lectern-enchanted-books.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "~26.1-",
-		"java": ">=25",
-		"fabric-api": "*"
-	}
+    "schemaVersion": 1,
+    "id": "interactive_enchanted_books",
+    "version": "${version}",
+    "name": "Lectern Enchanted Books",
+    "description": "This is an example description! Tell everyone what your mod is about!",
+    "authors": [
+        "Me!"
+    ],
+    "contact": {
+        "homepage": "https://fabricmc.net/",
+        "sources": "https://github.com/FabricMC/fabric-example-mod"
+    },
+    "license": "CC0-1.0",
+    "icon": "assets/interactive_enchanted_books/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "client": [
+            "net.bristn.interactive_enchanted_books.LecternEnchantedBooksClient"
+        ],
+        "main": [
+            "net.bristn.interactive_enchanted_books.LecternEnchantedBooks"
+        ],
+        "fabric-datagen": [
+            "net.bristn.interactive_enchanted_books.LecternEnchantedBooksDataGenerator"
+        ]
+    },
+    "mixins": [
+        "interactive_enchanted_books.mixins.json",
+        {
+            "config": "interactive_enchanted_books.client.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.18.4",
+        "minecraft": "~26.1-",
+        "java": ">=25",
+        "fabric-api": "*"
+    }
 }

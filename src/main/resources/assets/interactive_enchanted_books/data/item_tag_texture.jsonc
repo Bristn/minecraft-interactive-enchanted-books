@@ -1,0 +1,100 @@
+[
+  // The ordering of the entries dictates the ordering of the supported icons in the UI
+
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Armor
+  {
+    "tag": "minecraft:head_armor",
+    "texture": "interactive_enchanted_books:textures/gui/helmet.png",
+    "priority": 0
+  },
+  {
+    "tag": "interactive_enchanted_books:elytras",
+    "texture": "interactive_enchanted_books:textures/gui/elytra.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:chest_armor",
+    "texture": "interactive_enchanted_books:textures/gui/chestplate.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:leg_armor",
+    "texture": "interactive_enchanted_books:textures/gui/leggings.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:foot_armor",
+    "texture": "interactive_enchanted_books:textures/gui/boots.png",
+    "priority": 0
+  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Tools
+  {
+    "tag": "minecraft:pickaxes",
+    "texture": "interactive_enchanted_books:textures/gui/pickaxe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:shovels",
+    "texture": "interactive_enchanted_books:textures/gui/shovel.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:hoes",
+    "texture": "interactive_enchanted_books:textures/gui/hoe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:axes",
+    "texture": "interactive_enchanted_books:textures/gui/axe.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:swords",
+    "texture": "interactive_enchanted_books:textures/gui/sword.png",
+    "priority": 0
+  },
+  {
+    "tag": "minecraft:spears",
+    "texture": "interactive_enchanted_books:textures/gui/spear.png",
+    "priority": 0
+  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Ranged
+  {
+    "tag": "interactive_enchanted_books:bows",
+    "texture": "interactive_enchanted_books:textures/gui/bow.png",
+    "priority": 0
+  },
+  {
+    "tag": "interactive_enchanted_books:crossbows",
+    "texture": "interactive_enchanted_books:textures/gui/crossbow.png",
+    "priority": 0
+  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Special
+  {
+    "tag": "interactive_enchanted_books:tridents",
+    "texture": "interactive_enchanted_books:textures/gui/trident.png",
+    "priority": 0
+  },
+  {
+    "tag": "interactive_enchanted_books:maces",
+    "texture": "interactive_enchanted_books:textures/gui/mace.png",
+    "priority": 0
+  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Utility
+  {
+    "tag": "interactive_enchanted_books:shields",
+    "texture": "interactive_enchanted_books:textures/gui/shield.png",
+    "priority": 0
+  },
+  {
+    "tag": "interactive_enchanted_books:skulls",
+    "texture": "interactive_enchanted_books:textures/gui/carved_pumpkin.png",
+    "priority": 0
+  },
+  // ----- ----- ----- ----- ---------- ----- ----- ----- ----- Misc
+  {
+    "tag": "interactive_enchanted_books:misc",
+    "texture": "interactive_enchanted_books:textures/gui/ingot.png",
+    "priority": 0
+  }
+]

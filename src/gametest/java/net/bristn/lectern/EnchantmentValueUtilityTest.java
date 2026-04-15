@@ -1,8 +1,9 @@
-package net.bristn.lectern;
+package net.bristn.interactive_enchanted_books;
 
 import java.util.ArrayList;
 
-import net.bristn.lectern.utility.EnchantmentValueUtility;
+import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.utility.EnchantmentValueUtility;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.minecraft.core.registries.Registries;
