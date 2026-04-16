@@ -1,5 +1,6 @@
 {
-    "item.interactive_enchanted_books.test_item": "Test Item US",
+    "gui.interactive_enchanted_books.unable_to_get_identifier": "An error occurred while getting the internal enchantment Identifier",
+    "gui.interactive_enchanted_books.no-description": "Unknown translation",
     "gui.interactive_enchanted_books.title": "Enchanted book",
     "gui.interactive_enchanted_books.enchantments": "Contents",
     "gui.interactive_enchanted_books.applicable": "Applicable to",
@@ -24,7 +25,6 @@
     "tag.item.interactive_enchanted_books.shields": "Shields",
     "tag.item.interactive_enchanted_books.misc": "Miscellaneous",
     "tag.item.interactive_enchanted_books.other": "Other",
-    "enchantment.interactive_enchanted_books.no-description": "Unknown translation",
     "enchantment.minecraft.aqua_affinity.desc": "Removes the mining speed penalty when mining while standing underwater. Does not apply when swimming",
     "enchantment.minecraft.bane_of_arthropods.desc.level-x": "Increases damage dealt to spiders by {damage} hearts and applies up to {maxDuration} seconds of slowness IV",
     "enchantment.minecraft.binding_curse.desc": "Once equipped, the user cannot manually remove this item from any armor slot. The item is dropped upon death",

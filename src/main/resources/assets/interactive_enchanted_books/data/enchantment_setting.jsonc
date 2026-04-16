@@ -1,11 +1,11 @@
 [
   {
-    "enchantment": "enchantment.minecraft.aqua_affinity",
+    "enchantment": "minecraft:aqua_affinity",
     "priority": 0,
     "parameters": []
   },
   {
-    "enchantment": "enchantment.minecraft.bane_of_arthropods",
+    "enchantment": "minecraft:bane_of_arthropods",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -28,12 +28,12 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.binding_curse",
+    "enchantment": "minecraft:binding_curse",
     "particle": "interactive_enchanted_books:curse_particle",
     "priority": 0
   },
   {
-    "enchantment": "enchantment.minecraft.blast_protection",
+    "enchantment": "minecraft:blast_protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.breach",
+    "enchantment": "minecraft:breach",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -65,11 +65,11 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.channeling",
+    "enchantment": "minecraft:channeling",
     "priority": 0
   },
   {
-    "enchantment": "enchantment.minecraft.density",
+    "enchantment": "minecraft:density",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -82,7 +82,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.depth_strider",
+    "enchantment": "minecraft:depth_strider",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -95,7 +95,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.efficiency",
+    "enchantment": "minecraft:efficiency",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -107,7 +107,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.feather_falling",
+    "enchantment": "minecraft:feather_falling",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.fire_aspect",
+    "enchantment": "minecraft:fire_aspect",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -132,7 +132,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.fire_protection",
+    "enchantment": "minecraft:fire_protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -151,7 +151,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.flame",
+    "enchantment": "minecraft:flame",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -163,7 +163,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.fortune",
+    "enchantment": "minecraft:fortune",
     "priority": 0,
     "parameters": [
       [
@@ -176,7 +176,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.frost_walker",
+    "enchantment": "minecraft:frost_walker",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -188,7 +188,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.impaling",
+    "enchantment": "minecraft:impaling",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -201,11 +201,11 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.infinity",
+    "enchantment": "minecraft:infinity",
     "priority": 0
   },
   {
-    "enchantment": "enchantment.minecraft.knockback",
+    "enchantment": "minecraft:knockback",
     "priority": 0,
     "parameters": [
       [
@@ -218,7 +218,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.looting",
+    "enchantment": "minecraft:looting",
     "priority": 0,
     "parameters": [
       [
@@ -234,7 +234,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.loyalty",
+    "enchantment": "minecraft:loyalty",
     "priority": 0,
     "parameters": [
       [
@@ -247,7 +247,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.luck_of_the_sea",
+    "enchantment": "minecraft:luck_of_the_sea",
     "priority": 0,
     "parameters": [
       [
@@ -266,7 +266,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.lunge",
+    "enchantment": "minecraft:lunge",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -289,7 +289,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.lure",
+    "enchantment": "minecraft:lure",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -301,11 +301,11 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.mending",
+    "enchantment": "minecraft:mending",
     "priority": 0
   },
   {
-    "enchantment": "enchantment.minecraft.multishot",
+    "enchantment": "minecraft:multishot",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -322,7 +322,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.piercing",
+    "enchantment": "minecraft:piercing",
     "priority": 0,
     "parameters": [
       [
@@ -334,7 +334,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.power",
+    "enchantment": "minecraft:power",
     "priority": 0,
     "parameters": [
       [
@@ -347,7 +347,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.projectile_protection",
+    "enchantment": "minecraft:projectile_protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -360,7 +360,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.protection",
+    "enchantment": "minecraft:protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -373,7 +373,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.punch",
+    "enchantment": "minecraft:punch",
     "priority": 0,
     "parameters": [
       [
@@ -386,7 +386,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.quick_charge",
+    "enchantment": "minecraft:quick_charge",
     "priority": 0,
     "parameters": [
       [
@@ -399,7 +399,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.respiration",
+    "enchantment": "minecraft:respiration",
     "priority": 0,
     "parameters": [
       [
@@ -416,7 +416,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.riptide",
+    "enchantment": "minecraft:riptide",
     "priority": 0,
     "parameters": [
       [
@@ -429,7 +429,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.sharpness",
+    "enchantment": "minecraft:sharpness",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -442,11 +442,11 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.silk_touch",
+    "enchantment": "minecraft:silk_touch",
     "priority": 0
   },
   {
-    "enchantment": "enchantment.minecraft.smite",
+    "enchantment": "minecraft:smite",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -459,7 +459,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.soul_speed",
+    "enchantment": "minecraft:soul_speed",
     "priority": 0,
     "parameters": [
       [
@@ -472,7 +472,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.sweeping_edge",
+    "enchantment": "minecraft:sweeping_edge",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -485,7 +485,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.swift_sneak",
+    "enchantment": "minecraft:swift_sneak",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -498,7 +498,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.thorns",
+    "enchantment": "minecraft:thorns",
     "priority": 0,
     "parameters": [
       [
@@ -522,7 +522,7 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.unbreaking",
+    "enchantment": "minecraft:unbreaking",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -536,12 +536,12 @@
     ]
   },
   {
-    "enchantment": "enchantment.minecraft.vanishing_curse",
+    "enchantment": "minecraft:vanishing_curse",
     "particle": "interactive_enchanted_books:curse_particle",
     "priority": 0
   },
   {
-    "enchantment": "enchantment.minecraft.wind_burst",
+    "enchantment": "minecraft:wind_burst",
     "priority": 0,
     "parameters": [
       [

@@ -17,7 +17,6 @@ import net.fabricmc.fabric.api.tag.client.v1.ClientTags;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -28,8 +27,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 
 public class LecternScreenPageUtility {
-    private static final String FALLBACK_DESCRIPTION = "enchantment.interactive_enchanted_books.no-description";
-
     /**
      * Utility function to determine the pages of the given enchanted book item.
      * Iterates the different enchantments and returns a separate page array entry
@@ -68,11 +65,11 @@ public class LecternScreenPageUtility {
 
         // Determine the individual parts of each single enchantment page
         leftHeaders.add(Component.empty());
-        leftTexts.add(Component.literal(getEnchantmentDescription(enchantment, enchantmentLevel)));
+        leftTexts.add(Component.literal(getEnchantmentDescription(holder, enchantmentLevel)));
         var supported = getSupportedItemData(items);
 
         // Determine the title use for the page
-        var title = Component.literal(getEnchantmentName(enchantment));
+        var title = Component.literal(enchantment.description().getString());
         if (enchantment.getMaxLevel() != 1) {
             title.append(" " + getRomanNumber(enchantmentLevel));
         }
@@ -81,7 +78,7 @@ public class LecternScreenPageUtility {
         var exclusive = new ArrayList<String>();
         for (var exclusiveEnchant : enchantment.exclusiveSet()) {
             if (enchantment != exclusiveEnchant.value()) {
-                exclusive.add(getEnchantmentName(exclusiveEnchant.value()));
+                exclusive.add(exclusiveEnchant.value().description().getString());
             }
         }
 
@@ -120,7 +117,7 @@ public class LecternScreenPageUtility {
                 items.add(item.value());
             }
 
-            var line = count + ". " + getEnchantmentName(enchantment);
+            var line = count + ". " + enchantment.description().getString();
             if (enchantment.getMaxLevel() != 1) {
                 line += " " + getRomanNumber(enchantmentLevel);
             }
@@ -134,15 +131,6 @@ public class LecternScreenPageUtility {
 
         var redstoneSignal = Component.literal("1");
         return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal);
-    }
-
-    private static String getEnchantmentName(Enchantment enchantment) {
-        var keyContent = enchantment.description().getContents();
-        if (keyContent instanceof TranslatableContents translatable) {
-            return Component.translatable(translatable.getKey()).getString();
-        }
-
-        return "";
     }
 
     /**
@@ -168,55 +156,62 @@ public class LecternScreenPageUtility {
      * 3. A fallback translation that shows the user which translation keys need to
      * be implemented
      */
-    private static String getEnchantmentDescription(Enchantment enchantment, int enchantmentLevel) {
+    private static String getEnchantmentDescription(Holder<Enchantment> holder, int enchantmentLevel) {
         var descriptionKey = "n/a";
         var descriptionLevelKey = "n/a";
         var descriptionParamKey = "n/a";
-        var parameters = EnchantmentValueUtility.getTranslationParameters(enchantment, enchantmentLevel);
+
+        // Use the identifier of the enchantment to get the base translation key
+        var identifier = EnchantmentUtility.getEnchantmentIdentifier(holder);
+        if (identifier == null) {
+            return Component.translatable("gui.interactive_enchanted_books.unable_to_get_identifier").getString();
+        }
+
+        var baseKey = "enchantment." + identifier.toString().replace(":", ".");
+
+        // Get the named parameters for this translation
+        var parameters = EnchantmentValueUtility.getTranslationParameters(holder, enchantmentLevel);
 
         // Try to read the translation key from the description contents
-        var keyContent = enchantment.description().getContents();
-        if (keyContent instanceof TranslatableContents translatable) {
-            descriptionLevelKey = translatable.getKey() + ".desc.level-" + enchantmentLevel;
-            var levelTranslation = Component.translatable(descriptionLevelKey).getString();
+        descriptionLevelKey = baseKey + ".desc.level-" + enchantmentLevel;
+        var levelTranslation = Component.translatable(descriptionLevelKey).getString();
 
-            // If there is a translation for the specific level, use it immediately
-            if (descriptionLevelKey.equals(levelTranslation) == false) {
-                return levelTranslation;
+        // If there is a translation for the specific level, use it immediately
+        if (descriptionLevelKey.equals(levelTranslation) == false) {
+            return levelTranslation;
+        }
+
+        // If there is no specific level, check if there is a generic level translation
+        descriptionParamKey = baseKey + ".desc.level-x";
+        var paramTranslation = Component.translatable(descriptionParamKey).getString();
+        if (descriptionParamKey.equals(paramTranslation) == false) {
+
+            // If there is a generic level description, apply the value formatters to get
+            // the proper attribute values
+            for (var parameter : parameters.entrySet()) {
+                var placeholder = "{" + parameter.getKey() + "}";
+                var value = parameter.getValue().toString();
+                paramTranslation = paramTranslation.replace(placeholder, value);
             }
 
-            // If there is no specific level, check if there is a generic level translation
-            descriptionParamKey = translatable.getKey() + ".desc.level-x";
-            var paramTranslation = Component.translatable(descriptionParamKey).getString();
-            if (descriptionParamKey.equals(paramTranslation) == false) {
+            return paramTranslation;
+        }
 
-                // If there is a generic level description, apply the value formatters to get
-                // the proper attribute values
-                for (var parameter : parameters.entrySet()) {
-                    var placeholder = "{" + parameter.getKey() + "}";
-                    var value = parameter.getValue().toString();
-                    paramTranslation = paramTranslation.replace(placeholder, value);
-                }
-
-                return paramTranslation;
-            }
-
-            // Otherwise check if there is a general enchantment description
-            descriptionKey = translatable.getKey() + ".desc";
-            var translation = Component.translatable(descriptionKey).getString();
-            if (descriptionKey.equals(translation) == false) {
-                return translation;
-            }
+        // Otherwise check if there is a general enchantment description
+        descriptionKey = baseKey + ".desc";
+        var translation = Component.translatable(descriptionKey).getString();
+        if (descriptionKey.equals(translation) == false) {
+            return translation;
         }
 
         // If no translation has been found, use a fallback translation that is shipped
         // with the mod. Uses the other keys to inform the user which keys can be
         // implemented
         var result = new ArrayList<String>();
-        result.add(Component.translatable(FALLBACK_DESCRIPTION).getString());
+        result.add(Component.translatable("gui.interactive_enchanted_books.no-description").getString());
         result.add(descriptionKey);
         result.add(descriptionLevelKey);
-        return String.join("\n", result);
+        return String.join("\n\n", result);
     }
 
     /**

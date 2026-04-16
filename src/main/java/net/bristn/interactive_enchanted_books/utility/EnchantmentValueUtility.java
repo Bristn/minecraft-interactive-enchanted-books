@@ -46,7 +46,9 @@ public class EnchantmentValueUtility {
      * enchantment is attribute:protection, then the first naming array element is
      * for this first effect value
      */
-    public static HashMap<String, Float> getTranslationParameters(Enchantment enchantment, int enchantmentLevel) {
+    public static HashMap<String, Float> getTranslationParameters(Holder<Enchantment> holder, int enchantmentLevel) {
+        var enchantment = holder.value();
+
         var values = new ArrayList<Float>();
         values.add((float) enchantmentLevel);
 
@@ -59,7 +61,7 @@ public class EnchantmentValueUtility {
             }
         }
 
-        var enchantmentData = EnchantmentUtility.getParticleForEnchantment(enchantment);
+        var enchantmentData = EnchantmentUtility.getParticleForEnchantment(holder);
         if (enchantmentData == null) {
             return new HashMap<>();
         }

@@ -10,11 +10,11 @@ import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.resources.EnchantmentData;
 import net.bristn.interactive_enchanted_books.resources.loader.EnchantmentDataLoader;
 import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EnchantmentTags;
@@ -49,6 +49,25 @@ public class EnchantmentUtility {
             enchantments.add(new EnchantmentWrapper(enchantmentLevel, holder));
         }
 
+        // If the custom enchantment has not been added to the tooltip_order.json file,
+        // it wont be added by the previous loop. In this case append the enchantment to
+        // the end of the list. This might not match the books order, but ensures that
+        // the page for the enchantment is properly shown
+        for (var itemEnchantEntry : itemEnchants.entrySet()) {
+            var isOrderedEnchant = false;
+
+            for (var wrapper : enchantments) {
+                if (wrapper.holder() == itemEnchantEntry.getKey()) {
+                    isOrderedEnchant = true;
+                    break;
+                }
+            }
+
+            if (isOrderedEnchant == false) {
+                enchantments.add(new EnchantmentWrapper(itemEnchantEntry.getIntValue(), itemEnchantEntry.getKey()));
+            }
+        }
+
         return enchantments;
     }
 
@@ -69,35 +88,36 @@ public class EnchantmentUtility {
      * enchantment_particle.json. If any error occurs, the default enchantment
      * particle is returned
      */
-    public static EnchantmentData getParticleForEnchantment(Enchantment enchantment) {
+    public static EnchantmentData getParticleForEnchantment(Holder<Enchantment> holder) {
+        var enchantment = holder.value();
+
         try {
-            var enchantmentKey = EnchantmentUtility.getEnchantmentIdentifier(enchantment);
-            if (enchantmentKey == null) {
-                LOGGER.info("EnchantmentUtility: Unable to get the id key of enchantment {}", enchantment.toString());
+            var enchantmentId = EnchantmentUtility.getEnchantmentIdentifier(holder);
+            if (enchantmentId == null) {
+                LOGGER.warn("EnchantmentUtility: Unable to get the id key of enchantment {}", enchantment.toString());
                 return null;
             }
 
-            var enchantmentId = Identifier.parse(enchantmentKey);
             var enchantmentParticles = EnchantmentDataLoader.getMap();
             if (enchantmentParticles.containsKey(enchantmentId) == false) {
-                LOGGER.info("EnchantmentUtility: Enchantment {} is not registered in the json", enchantment.toString());
+                LOGGER.warn("EnchantmentUtility: Enchantment {} is not registered in the json", enchantmentId.toString());
                 return null;
             }
 
             return enchantmentParticles.get(enchantmentId);
         } catch (Exception e) {
-            LOGGER.info("EnchantmentUtility: An error occurred getting the particle for {}", enchantment.toString());
+            LOGGER.error("EnchantmentUtility: An error occurred getting the particle for {}", enchantment.toString());
             e.printStackTrace();
             return null;
         }
     }
 
-    public static String getEnchantmentIdentifier(Enchantment enchantment) {
-        var keyContent = enchantment.description().getContents();
-        if (keyContent instanceof TranslatableContents translatable) {
-            return translatable.getKey();
+    public static Identifier getEnchantmentIdentifier(Holder<Enchantment> holder) {
+        var resourceKey = holder.unwrapKey();
+        if (resourceKey.isEmpty()) {
+            return null;
         }
 
-        return null;
+        return resourceKey.get().identifier();
     }
 }

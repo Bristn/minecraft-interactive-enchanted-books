@@ -1,5 +1,6 @@
 package net.bristn.interactive_enchanted_books.mixin;
 
+import net.bristn.interactive_enchanted_books.particle.ModParticles;
 import net.bristn.interactive_enchanted_books.screen.handlers.LecternEnchantedBookMenu;
 import net.bristn.interactive_enchanted_books.tag.ModEnchantmentTags;
 import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
@@ -8,6 +9,7 @@ import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrappe
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jspecify.annotations.Nullable;
@@ -52,8 +55,10 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     private ItemStack cachedBook;
     private List<EnchantmentWrapper> cachedEnchantments;
+    private List<ParticleOptions> cachedParticles;
     private int cachedPage;
     private int cachedSignal;
+    private int particleIndex;
 
     @Shadow
     protected ItemStack book;
@@ -205,8 +210,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         // Cache the enchantments to improve performance
         var changedBook = false;
         if (this.book != cachedBook) {
-            cachedBook = this.book;
-            cachedEnchantments = EnchantmentUtility.getSortedEnchantments(this.book, this.level);
+            updateCacheUsingStack(this.book);
             changedBook = true;
         }
 
@@ -367,11 +371,6 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     // ! Methods of the LecternAccessor interface
 
     @Override
-    public int getCurrentPage() {
-        return this.page;
-    }
-
-    @Override
     public int getPageCount() {
         var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(this.book);
         if (itemEnchants.entrySet().size() == 1) {
@@ -382,7 +381,59 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     }
 
     @Override
+    public int getCurrentPage() {
+        return this.page;
+    }
+
+    @Override
     public void setCurrentPage(int page) {
         this.setEnchantedBookPage(page);
+    }
+
+    @Override
+    public void updateCacheUsingStack(ItemStack book) {
+        if (cachedBook != null && cachedBook == book) {
+            return;
+        }
+
+        cachedBook = book;
+        cachedEnchantments = EnchantmentUtility.getSortedEnchantments(book, this.level);
+
+        ArrayList<ParticleOptions> particles = new ArrayList<>();
+        for (var wrapper : cachedEnchantments) {
+            var entry = EnchantmentUtility.getParticleForEnchantment(wrapper.holder());
+            if (entry != null) {
+                particles.add(entry.particle);
+            } else {
+                particles.add(ModParticles.ENCHANT);
+            }
+        }
+
+        cachedParticles = particles;
+    }
+
+    @Override
+    public List<EnchantmentWrapper> getCachedEnchantments() {
+        return cachedEnchantments;
+    }
+
+    @Override
+    public List<ParticleOptions> getCachedParticles() {
+        return cachedParticles;
+    }
+
+    @Override
+    public int updateParticleIndex() {
+
+        // If the lectern is on a specific enchantment page (not the cover), show the
+        // respective particle only. Otherwise loop the different enchantment particles
+        var enchantments = getCachedEnchantments();
+        if (enchantments.size() == 0 || getCurrentPage() != 0) {
+            particleIndex = getCurrentPage() - 1; // Book has i + 1 pages as there is a title page
+        } else {
+            particleIndex = (particleIndex + 1) % enchantments.size();
+        }
+
+        return particleIndex;
     }
 }

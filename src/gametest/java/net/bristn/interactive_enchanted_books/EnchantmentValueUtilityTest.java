@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.bristn.interactive_enchanted_books.utility.EnchantmentValueUtility;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -25,7 +26,7 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
         });
 
         for (var key : remaining) {
-            var enchantment = lookup.get(key).get().value();
+            var enchantment = lookup.get(key).get();
             if (key == Enchantments.AQUA_AFFINITY) {
                 continue;
             }
@@ -368,8 +369,9 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
         }
     }
 
-    private void assertNamedParameter(Enchantment enchantment, int level, String name, float expected) {
-        var parameters = EnchantmentValueUtility.getTranslationParameters(enchantment, level);
+    private void assertNamedParameter(Holder<Enchantment> holder, int level, String name, float expected) {
+        var enchantment = holder.value();
+        var parameters = EnchantmentValueUtility.getTranslationParameters(holder, level);
         var actual = parameters.get(name);
         if (actual == null) {
             CommonModInitializer.LOGGER.error("{} {} Missing actual value for {} {}", enchantment.toString(), level, name,

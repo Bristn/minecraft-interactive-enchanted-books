@@ -1,22 +1,16 @@
 package net.bristn.interactive_enchanted_books.mixin;
 
 import net.bristn.interactive_enchanted_books.CommonModInitializer;
-import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
-import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.List;
 
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,11 +31,6 @@ public class BlockMixin {
     private static final float MAX_PARTICLE_RANDOM_SPEED = 0.25f;
     private static final float MAX_PARTICLE_RANDOM_ANGLE = 90f;
 
-    private int particleIndex = 0;
-
-    private ItemStack cachedBook;
-    private List<EnchantmentWrapper> cachedEnchantments;
-
     @Inject(method = "animateTick", at = @At("HEAD"))
     private void renderParticles(BlockState state, Level world, BlockPos pos, RandomSource random, CallbackInfo originalMethod) {
         if (world.isClientSide() == false) {
@@ -59,24 +48,13 @@ public class BlockMixin {
             return;
         }
 
-        var stack = lectern.getBook();
-        var page = ((LecternAccess) lectern).getCurrentPage();
-
-        // Cache the enchantments to improve performance
-        if (stack != cachedBook) {
-            cachedBook = stack;
-            cachedEnchantments = EnchantmentUtility.getSortedEnchantments(stack, world);
-        }
+        var access = ((LecternAccess) lectern);
+        access.updateCacheUsingStack(lectern.getBook());
 
         // If the lectern is on a specific enchantment page (not the cover), show the
         // respective particle only. Otherwise loop the different enchantment particles
-        var enchantments = cachedEnchantments;
-        if (enchantments.size() == 0 || page != 0) {
-            particleIndex = page - 1; // Book has i + 1 pages as there is a title page
-        } else {
-            particleIndex = (particleIndex + 1) % enchantments.size();
-        }
-
+        var enchantments = access.getCachedEnchantments();
+        var particleIndex = access.updateParticleIndex();
         if (particleIndex >= enchantments.size() || particleIndex < 0) {
             var message = "Particle index {} is not valid. Count of enchantments {}";
             CommonModInitializer.LOGGER.error(message, particleIndex, enchantments.size());
@@ -97,8 +75,9 @@ public class BlockMixin {
             return;
         }
 
+        var particle = access.getCachedParticles().get(particleIndex);
         var normalizedLevel = (float) enchantmentLevel / (float) maxEnchantmentLevel;
-        renderEnchantmentParticle(enchantment, world, pos, random, lectern, normalizedLevel);
+        renderEnchantmentParticle(particle, world, pos, random, lectern, normalizedLevel);
     }
 
     /**
@@ -106,13 +85,8 @@ public class BlockMixin {
      * particle origin is the center of the book, whilst all particles move away
      * from the book in a random direction
      */
-    private void renderEnchantmentParticle(Enchantment enchantment, Level world, BlockPos pos, RandomSource random,
+    private void renderEnchantmentParticle(ParticleOptions particle, Level world, BlockPos pos, RandomSource random,
             LecternBlockEntity lectern, float normalizedLevel) {
-
-        var entry = EnchantmentUtility.getParticleForEnchantment(enchantment);
-        if (entry == null) {
-            return;
-        }
 
         // USe the block direction as the base of the direction vector
         var blockState = lectern.getBlockState();
@@ -130,7 +104,6 @@ public class BlockMixin {
         // For higher enchantment levels, spawn more than one particle at a time
         // At most spawns 3 particles at once if the enchantment is at the highest level
         var maxParticles = 1 + normalizedLevel * 2f;
-        var particle = (ParticleOptions) entry.particle;
         for (int i = 0; i < maxParticles; i++) {
             var x = basePos.x + (random.nextDouble() - 0.5) * 0.25;
             var y = basePos.y + (random.nextDouble() - 0.5) * 0.25;
