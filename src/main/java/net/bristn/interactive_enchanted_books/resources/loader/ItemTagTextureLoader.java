@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.resources.ItemTagTexture;
 import net.bristn.interactive_enchanted_books.resources.json.ItemTagTextureJson;
 import net.minecraft.core.registries.Registries;
@@ -47,12 +47,12 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
      * Uses the resource manager to read all relevant data files
      */
     private List<ItemTagTextureJson> loadAllResources(ResourceManager manager) {
-        LecternEnchantedBooks.LOGGER.info("ItemTagTextureLoader: Loading data from " + FILE_NAME);
+        CommonModInitializer.LOGGER.info("ItemTagTextureLoader: Loading data from " + FILE_NAME);
 
         // Filter out any resource with the given file name
         var modResources = manager.listResourceStacks("data", (identifier) -> {
             var namespace = identifier.getNamespace();
-            if (namespace.equals(LecternEnchantedBooks.MOD_ID) == false) {
+            if (namespace.equals(CommonModInitializer.MOD_ID) == false) {
                 return false;
             }
 
@@ -102,7 +102,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
             });
 
             data.ifError(error -> {
-                LecternEnchantedBooks.LOGGER.info("ItemTagTextureLoader: Error parsing {} {}", FILE_NAME, error);
+                CommonModInitializer.LOGGER.info("ItemTagTextureLoader: Error parsing {} {}", FILE_NAME, error);
             });
         }
 
@@ -136,7 +136,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
                 var tag = existingEntry.tag();
                 var oldTexture = existingEntry.texture();
                 var newTexture = entry.texture();
-                LecternEnchantedBooks.LOGGER.info("ItemTagTextureLoader: Overwriting {} texture {} with {}", tag, oldTexture,
+                CommonModInitializer.LOGGER.info("ItemTagTextureLoader: Overwriting {} texture {} with {}", tag, oldTexture,
                         newTexture);
             }
         }
@@ -154,7 +154,7 @@ public class ItemTagTextureLoader implements PreparableReloadListener {
             DATA_BY_TAG.put(tagKey, data);
         }
 
-        LecternEnchantedBooks.LOGGER.info("ItemTagTextureLoader: Loaded a total of {} unique entries", DATA.size());
+        CommonModInitializer.LOGGER.info("ItemTagTextureLoader: Loaded a total of {} unique entries", DATA.size());
     }
 
     public static List<ItemTagTexture> getList() {

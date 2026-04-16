@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.fabricmc.fabric.impl.tag.client.ClientTagsImpl;
 import net.fabricmc.fabric.impl.tag.client.ClientTagsLoader.LoadedTag;
 import net.minecraft.core.registries.Registries;
@@ -37,7 +37,7 @@ public class ClientTagUtility {
                 }
             }
         } catch (Exception error) {
-            LecternEnchantedBooks.LOGGER.info(error.toString());
+            CommonModInitializer.LOGGER.info(error.toString());
         }
 
         return result;

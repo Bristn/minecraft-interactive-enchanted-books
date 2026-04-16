@@ -2,7 +2,7 @@ package net.bristn.interactive_enchanted_books.tag;
 
 import java.util.List;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -23,11 +23,11 @@ public class ModItemTags {
             MISC);
 
     public static void registerModItemTags() {
-        LecternEnchantedBooks.LOGGER.info("Register ModItemTags for" + LecternEnchantedBooks.MOD_ID);
+        CommonModInitializer.LOGGER.info("Register ModItemTags for" + CommonModInitializer.MOD_ID);
     }
 
     private static TagKey<Item> registerTag(String name) {
-        var identifier = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
+        var identifier = Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID, name);
         return TagKey.create(Registries.ITEM, identifier);
     }
 }

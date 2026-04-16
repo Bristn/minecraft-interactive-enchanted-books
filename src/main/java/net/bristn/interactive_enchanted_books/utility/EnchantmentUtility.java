@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.resources.EnchantmentData;
 import net.bristn.interactive_enchanted_books.resources.loader.EnchantmentDataLoader;
 import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
@@ -26,7 +26,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 public class EnchantmentUtility {
-    private static final Logger LOGGER = LecternEnchantedBooks.LOGGER;
+    private static final Logger LOGGER = CommonModInitializer.LOGGER;
 
     /**
      * Utility function to get the enchantments of an item in the correct ordering

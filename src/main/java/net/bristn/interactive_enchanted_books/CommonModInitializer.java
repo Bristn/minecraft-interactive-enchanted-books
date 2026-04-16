@@ -12,7 +12,7 @@ import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LecternEnchantedBooks implements ModInitializer {
+public class CommonModInitializer implements ModInitializer {
     public static final String MOD_ID = "interactive_enchanted_books";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 

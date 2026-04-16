@@ -17,7 +17,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.resources.EnchantmentData;
 import net.bristn.interactive_enchanted_books.resources.EnchantmentNamedParameter;
 import net.bristn.interactive_enchanted_books.resources.json.EnchantmentDataJson;
@@ -49,12 +49,12 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
      * Uses the resource manager to read all relevant data files
      */
     private List<EnchantmentDataJson> loadAllResources(ResourceManager manager) {
-        LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Loading data from " + FILE_NAME);
+        CommonModInitializer.LOGGER.info("EnchantmentDataLoader: Loading data from " + FILE_NAME);
 
         // Filter out any resource with the given file names
         var modResources = manager.listResourceStacks("data", (identifier) -> {
             var namespace = identifier.getNamespace();
-            if (namespace.equals(LecternEnchantedBooks.MOD_ID) == false) {
+            if (namespace.equals(CommonModInitializer.MOD_ID) == false) {
                 return false;
             }
 
@@ -103,7 +103,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
             });
 
             data.ifError(error -> {
-                LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Error parsing {} {}", FILE_NAME, error);
+                CommonModInitializer.LOGGER.info("EnchantmentDataLoader: Error parsing {} {}", FILE_NAME, error);
             });
         }
 
@@ -138,7 +138,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
                 });
 
                 data.ifError(error -> {
-                    LecternEnchantedBooks.LOGGER.error("EnchantmentDataLoader: Error parsing {} {}", FILE_NAME, error);
+                    CommonModInitializer.LOGGER.error("EnchantmentDataLoader: Error parsing {} {}", FILE_NAME, error);
                 });
             }
 
@@ -175,7 +175,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
                 var enchantment = existingEntry.enchantment();
                 var oldParticle = existingEntry.particle();
                 var newParticle = entry.particle();
-                LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Overwriting {} particle {} with {}", enchantment,
+                CommonModInitializer.LOGGER.info("EnchantmentDataLoader: Overwriting {} particle {} with {}", enchantment,
                         oldParticle, newParticle);
             }
         }
@@ -203,7 +203,7 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
             DATA_BY_TAG.put(enchantmentIdentifier, data);
         }
 
-        LecternEnchantedBooks.LOGGER.info("EnchantmentDataLoader: Loaded a total of {} unique entries", DATA.size());
+        CommonModInitializer.LOGGER.info("EnchantmentDataLoader: Loaded a total of {} unique entries", DATA.size());
     }
 
     public static List<EnchantmentData> getList() {

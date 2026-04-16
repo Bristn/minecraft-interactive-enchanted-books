@@ -1,6 +1,6 @@
 package net.bristn.interactive_enchanted_books.screen;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.screen.handlers.LecternEnchantedBookMenu;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,7 +13,7 @@ public class ModScreens {
             (id, inv) -> new LecternEnchantedBookMenu(id));
 
     public static void registerModScreens() {
-        LecternEnchantedBooks.LOGGER.info("Register ModScreens for" + LecternEnchantedBooks.MOD_ID);
+        CommonModInitializer.LOGGER.info("Register ModScreens for" + CommonModInitializer.MOD_ID);
     }
 
     private static <T extends AbstractContainerMenu> MenuType<T> register(String name, MenuType.MenuSupplier<T> constructor) {

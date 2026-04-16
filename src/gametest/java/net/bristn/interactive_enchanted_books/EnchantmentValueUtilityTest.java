@@ -2,7 +2,6 @@ package net.bristn.interactive_enchanted_books;
 
 import java.util.ArrayList;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
 import net.bristn.interactive_enchanted_books.utility.EnchantmentValueUtility;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
@@ -365,7 +364,7 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
                 continue;
             }
 
-            LecternEnchantedBooks.LOGGER.error("Missed parameter tests for: {}", key);
+            CommonModInitializer.LOGGER.error("Missed parameter tests for: {}", key);
         }
     }
 
@@ -373,13 +372,13 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
         var parameters = EnchantmentValueUtility.getTranslationParameters(enchantment, level);
         var actual = parameters.get(name);
         if (actual == null) {
-            LecternEnchantedBooks.LOGGER.error("{} {} Missing actual value for {} {}", enchantment.toString(), level, name,
+            CommonModInitializer.LOGGER.error("{} {} Missing actual value for {} {}", enchantment.toString(), level, name,
                     expected);
             return;
         }
 
         if (actual != expected) {
-            LecternEnchantedBooks.LOGGER.error("{} {} Named parameter {} {} != {}", enchantment.toString(), level, name, actual,
+            CommonModInitializer.LOGGER.error("{} {} Named parameter {} {} != {}", enchantment.toString(), level, name, actual,
                     expected);
         }
     }

@@ -2,7 +2,7 @@ package net.bristn.interactive_enchanted_books.screen;
 
 import java.util.List;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenPageData;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenSupportedIconData;
 import net.minecraft.ChatFormatting;
@@ -35,7 +35,7 @@ public class EnchantedBookViewScreenRenderer {
     private static final int RIGHT_TEXT_OFFSET = PADDING_FROM_CENTER;
     private static final int TOP_TEXT_OFFSET = PADDING_FROM_CENTER + 10;
 
-    private static final Identifier BOOK_LOCATION = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID,
+    private static final Identifier BOOK_LOCATION = Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID,
             "textures/gui/book.png");
 
     private final Screen screen;

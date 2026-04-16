@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.tag.ModEnchantmentTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
@@ -114,7 +114,7 @@ public class ModEnchantmentTagProvider extends FabricTagsProvider<Enchantment> {
                 // Show an additional error if one enchantment is in multiple groups
                 if (removed == false) {
                     var message = "Enchantment is present in multiple groups: " + enchantment.toString();
-                    LecternEnchantedBooks.LOGGER.error(message);
+                    CommonModInitializer.LOGGER.error(message);
                 }
             }
         }
@@ -122,7 +122,7 @@ public class ModEnchantmentTagProvider extends FabricTagsProvider<Enchantment> {
         // Show the enchantments that are not covered by the groups
         if (remainingEnchantments.isEmpty() == false) {
             var message = "Some enchantments are not covered in the signal data: " + remainingEnchantments.toString();
-            LecternEnchantedBooks.LOGGER.error(message);
+            CommonModInitializer.LOGGER.error(message);
         }
     }
 }

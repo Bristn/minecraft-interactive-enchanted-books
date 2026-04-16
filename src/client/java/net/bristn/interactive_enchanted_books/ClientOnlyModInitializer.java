@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.fabricmc.fabric.api.tag.client.v1.ClientTags;
 import net.minecraft.client.gui.screens.MenuScreens;
 
-public class LecternEnchantedBooksClient implements ClientModInitializer {
+public class ClientOnlyModInitializer implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
@@ -29,7 +29,7 @@ public class LecternEnchantedBooksClient implements ClientModInitializer {
 
         // Ensure fabric knows about the client side item tags used by the menu
         ClientPlayConnectionEvents.JOIN.register((listener, sender, client) -> {
-            LecternEnchantedBooks.LOGGER.info("Register client-side tags for" + LecternEnchantedBooks.MOD_ID);
+            CommonModInitializer.LOGGER.info("Register client-side tags for" + CommonModInitializer.MOD_ID);
 
             for (var tagKey : ModItemTags.ALL_TAG_KEYS) {
                 ClientTags.getOrCreateLocalTag(tagKey);

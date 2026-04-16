@@ -16,13 +16,13 @@
     "environment": "*",
     "entrypoints": {
         "client": [
-            "net.bristn.interactive_enchanted_books.LecternEnchantedBooksClient"
+            "net.bristn.interactive_enchanted_books.ClientOnlyModInitializer"
         ],
         "main": [
-            "net.bristn.interactive_enchanted_books.LecternEnchantedBooks"
+            "net.bristn.interactive_enchanted_books.CommonModInitializer"
         ],
         "fabric-datagen": [
-            "net.bristn.interactive_enchanted_books.LecternEnchantedBooksDataGenerator"
+            "net.bristn.interactive_enchanted_books.CommonModDataGenerator"
         ]
     },
     "mixins": [

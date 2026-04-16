@@ -1,6 +1,6 @@
 package net.bristn.interactive_enchanted_books.mixin;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
@@ -79,7 +79,7 @@ public class BlockMixin {
 
         if (particleIndex >= enchantments.size() || particleIndex < 0) {
             var message = "Particle index {} is not valid. Count of enchantments {}";
-            LecternEnchantedBooks.LOGGER.error(message, particleIndex, enchantments.size());
+            CommonModInitializer.LOGGER.error(message, particleIndex, enchantments.size());
             return;
         }
 

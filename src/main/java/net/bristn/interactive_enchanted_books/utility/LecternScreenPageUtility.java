@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.resources.loader.ItemTagTextureLoader;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenPageData;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenSupportedData;
@@ -285,7 +285,7 @@ public class LecternScreenPageUtility {
                     tagNames.add(tag.location().toString());
                 }
 
-                LecternEnchantedBooks.LOGGER.warn("Unable to get supported item icon for {}. Tag list: {} ", name, tagNames);
+                CommonModInitializer.LOGGER.warn("Unable to get supported item icon for {}. Tag list: {} ", name, tagNames);
             }
         }
 
@@ -315,7 +315,7 @@ public class LecternScreenPageUtility {
         // Get the display names of the missing items
         var missingItemNames = new ArrayList<Component>();
         var missingItemItems = new ArrayList<Item>();
-        var missingItemIcon = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "textures/gui/missing.png");
+        var missingItemIcon = Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID, "textures/gui/missing.png");
         for (var item : missingItemMap) {
             var itemName = item.toString();
             missingItemNames.add(Component.translatable(itemName));

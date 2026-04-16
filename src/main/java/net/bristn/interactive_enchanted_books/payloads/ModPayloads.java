@@ -1,12 +1,12 @@
 package net.bristn.interactive_enchanted_books.payloads;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
 public class ModPayloads {
 
     public static void registerModPayloads() {
-        LecternEnchantedBooks.LOGGER.info("Register ModPayloads for" + LecternEnchantedBooks.MOD_ID);
+        CommonModInitializer.LOGGER.info("Register ModPayloads for" + CommonModInitializer.MOD_ID);
 
         registerServerToClientPayloads();
     }

@@ -25,7 +25,7 @@
     "tag.item.interactive_enchanted_books.misc": "Miscellaneous",
     "tag.item.interactive_enchanted_books.other": "Other",
     "enchantment.interactive_enchanted_books.no-description": "Unknown translation",
-    "enchantment.minecraft.aqua_affinity.desc": "Removes the mining speed penalty when mining whilst standing underwater. Does not apply when swimming",
+    "enchantment.minecraft.aqua_affinity.desc": "Removes the mining speed penalty when mining while standing underwater. Does not apply when swimming",
     "enchantment.minecraft.bane_of_arthropods.desc.level-x": "Increases damage dealt to spiders by {damage} hearts and applies up to {maxDuration} seconds of slowness IV",
     "enchantment.minecraft.binding_curse.desc": "Once equipped, the user cannot manually remove this item from any armor slot. The item is dropped upon death",
     "enchantment.minecraft.blast_protection.desc.level-x": "Reduces damage of explosions by {reduction}% and knockback by {knockback}%",

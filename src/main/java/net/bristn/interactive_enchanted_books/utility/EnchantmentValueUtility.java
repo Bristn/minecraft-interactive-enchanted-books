@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CrossbowItem.ChargingSounds;
@@ -75,7 +75,7 @@ public class EnchantmentValueUtility {
             }
         }
 
-        LecternEnchantedBooks.LOGGER.info("LevelBasedValues: {}, Named parameters: {}", values, result);
+        CommonModInitializer.LOGGER.info("LevelBasedValues: {}, Named parameters: {}", values, result);
         return result;
     }
 
@@ -100,8 +100,8 @@ public class EnchantmentValueUtility {
                 }
             }
 
-            LecternEnchantedBooks.LOGGER.info("Unrecognized enchantment:");
-            LecternEnchantedBooks.LOGGER.info(effectRecord.toString());
+            CommonModInitializer.LOGGER.info("Unrecognized enchantment:");
+            CommonModInitializer.LOGGER.info(effectRecord.toString());
         }
 
         return result;
@@ -218,8 +218,8 @@ public class EnchantmentValueUtility {
             break;
 
         default:
-            LecternEnchantedBooks.LOGGER.info("Unrecognized enchantment effect:");
-            LecternEnchantedBooks.LOGGER.info(effect.toString());
+            CommonModInitializer.LOGGER.info("Unrecognized enchantment effect:");
+            CommonModInitializer.LOGGER.info(effect.toString());
             break;
         }
 

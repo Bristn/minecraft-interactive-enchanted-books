@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 
-import net.bristn.interactive_enchanted_books.LecternEnchantedBooks;
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,10 +16,10 @@ import net.minecraft.resources.ResourceKey;
  * LevelBasedValues into human readable values
  */
 public class ModTransformers {
-    private static final Identifier ID = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, "value_transformers");
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID, "value_transformers");
 
     public static void registerModTransformers() {
-        LecternEnchantedBooks.LOGGER.info("Register ModTransformers for" + LecternEnchantedBooks.MOD_ID);
+        CommonModInitializer.LOGGER.info("Register ModTransformers for" + CommonModInitializer.MOD_ID);
     }
 
     /**
@@ -135,7 +135,7 @@ public class ModTransformers {
     // ! Helpers
 
     private static Function<Float, Float> register(String name, Function<Float, Float> transformer) {
-        var identifier = Identifier.fromNamespaceAndPath(LecternEnchantedBooks.MOD_ID, name);
+        var identifier = Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID, name);
         var registry = getOrCreateRegistry();
         return Registry.register(registry, identifier, transformer);
     }
