@@ -5,7 +5,8 @@
     "mixins": [
         "BlockMixin",
         "BlockEntityMixin",
-        "LecternBlockEntityMixin"
+        "LecternBlockEntityMixin",
+        "LecternBlockMixin"
     ],
     "injectors": {
         "defaultRequire": 1

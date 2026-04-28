@@ -1,5 +1,6 @@
 package net.bristn.interactive_enchanted_books.mixin;
 
+import net.bristn.interactive_enchanted_books.gamerules.ModGameRules;
 import net.bristn.interactive_enchanted_books.particle.ModParticles;
 import net.bristn.interactive_enchanted_books.screen.handlers.LecternEnchantedBookMenu;
 import net.bristn.interactive_enchanted_books.tag.ModEnchantmentTags;
@@ -11,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -21,6 +23,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.WritableBookContent;
+import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LecternBlock;
@@ -52,6 +56,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     private static final int SLOT_BOOK = LecternEnchantedBookMenu.SLOT_BOOK;
     private static final int[] SLOTS = new int[] { SLOT_BOOK };
+    private static final int PAGE_SOUND_EVENT = 1043;
 
     private ItemStack cachedBook;
     private List<EnchantmentWrapper> cachedEnchantments;
@@ -59,6 +64,8 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     private int cachedPage;
     private int cachedSignal;
     private int particleIndex;
+
+    private boolean wasPowered;
 
     @Shadow
     protected ItemStack book;
@@ -80,6 +87,9 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Shadow
     public abstract void setBook(ItemStack book);
+
+    @Shadow
+    public abstract void setPage(int page);
 
     private final Container enchantedBookAccess = new Container() {
         @Override
@@ -144,7 +154,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         @Override
         public boolean stillValid(Player player) {
             var validEntity = Container.stillValidBlockEntity(LecternBlockEntityMixin.this, player);
-            var hasBook = LecternBlockEntityMixin.this.hasEnchantedBook();
+            var hasBook = LecternBlockEntityMixin.this.hasBook();
             return validEntity && hasBook;
         }
 
@@ -188,8 +198,12 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     /**
      * Replaces the hasBook() method to properly check for enchanted books
      */
-    private boolean hasEnchantedBook() {
-        return this.book.has(DataComponents.STORED_ENCHANTMENTS);
+    @Inject(method = "hasBook", at = @At("TAIL"), cancellable = true)
+    public void hasEnchantedBook(CallbackInfoReturnable<Boolean> method) {
+        var hasEnchanted = this.book.has(DataComponents.STORED_ENCHANTMENTS);
+        if (hasEnchanted) {
+            method.setReturnValue(true);
+        }
     }
 
     private void setEnchantedBookPage(int page) {
@@ -197,7 +211,41 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         if (newPage != this.page) {
             this.page = newPage;
             this.setChanged();
-            LecternBlock.signalPageChange(this.getLevel(), this.getBlockPos(), this.getBlockState());
+
+            // ! Don't send an outgoing redstone signal if the game rule to switch pages using signals is on
+            // By default the lectern outputs signal, but this game rule acts on input signals
+            if (this.level instanceof ServerLevel serverLevel) {
+                var signalChangesPage = serverLevel.getGameRules().get(ModGameRules.SIGNAL_CHANGES_LECTERN_PAGE);
+                if (signalChangesPage == true) {
+                    level.levelEvent(PAGE_SOUND_EVENT, this.getBlockPos(), 0);
+                    return;
+                }
+
+                LecternBlock.signalPageChange(this.getLevel(), this.getBlockPos(), this.getBlockState());
+            }
+        }
+    }
+
+    @Inject(method = "setPage", at = @At("HEAD"), cancellable = true)
+    public void setRegularBookPage(final int page, CallbackInfo method) {
+        // Original code from LecternBlockEntity
+        int newPage = Mth.clamp(page, 0, this.pageCount - 1);
+        if (newPage != this.page) {
+            this.page = newPage;
+            this.setChanged();
+
+            // ! Don't send an outgoing redstone signal if the game rule to switch pages using signals is on
+            // By default the lectern outputs signal, but this game rule acts on input signals
+            if (this.level instanceof ServerLevel serverLevel) {
+                var signalChangesPage = serverLevel.getGameRules().get(ModGameRules.SIGNAL_CHANGES_LECTERN_PAGE);
+                if (signalChangesPage == true) {
+                    level.levelEvent(PAGE_SOUND_EVENT, this.getBlockPos(), 0);
+                    method.cancel();
+                    return;
+                }
+
+                LecternBlock.signalPageChange(this.getLevel(), this.getBlockPos(), this.getBlockState());
+            }
         }
     }
 
@@ -263,9 +311,8 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     }
 
     /**
-     * Injects a custom callback when opening the lectern GUI. If the lectern
-     * contains an enchanted book, show a custom Screen which displays the book
-     * information
+     * Injects a custom callback when opening the lectern GUI. If the lectern contains an enchanted
+     * book, show a custom Screen which displays the book information
      */
     @Inject(method = "createMenu", at = @At("HEAD"), cancellable = true)
     private void openLectern(int id, Inventory inventory, Player player, CallbackInfoReturnable<AbstractContainerMenu> method) {
@@ -360,11 +407,25 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
+        if (this.level instanceof ServerLevel serverLevel) {
+            var hopperInteractsWithLectern = serverLevel.getGameRules().get(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN);
+            if (hopperInteractsWithLectern == false) {
+                return false;
+            }
+        }
+
         return slot == SLOT_BOOK && this.book.isEmpty() && stack.is(ItemTags.LECTERN_BOOKS);
     }
 
     @Override
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
+        if (this.level instanceof ServerLevel serverLevel) {
+            var hopperInteractsWithLectern = serverLevel.getGameRules().get(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN);
+            if (hopperInteractsWithLectern == false) {
+                return false;
+            }
+        }
+
         return slot == SLOT_BOOK && this.book.isEmpty() == false;
     }
 
@@ -372,6 +433,17 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Override
     public int getPageCount() {
+        // ! For regular books, use vanilla code of determining the page count (see LecternBlockEntity)
+        if (this.book.getItem() != Items.ENCHANTED_BOOK) {
+            var writtenContent = (WrittenBookContent) book.get(DataComponents.WRITTEN_BOOK_CONTENT);
+            if (writtenContent != null) {
+                return writtenContent.pages().size();
+            } else {
+                var writableContent = (WritableBookContent) book.get(DataComponents.WRITABLE_BOOK_CONTENT);
+                return writableContent != null ? writableContent.pages().size() : 0;
+            }
+        }
+
         var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(this.book);
         if (itemEnchants.entrySet().size() == 1) {
             return 1;
@@ -387,7 +459,12 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Override
     public void setCurrentPage(int page) {
-        this.setEnchantedBookPage(page);
+
+        if (this.book.getItem() == Items.ENCHANTED_BOOK) {
+            this.setEnchantedBookPage(page);
+        } else {
+            this.setPage(page);
+        }
     }
 
     @Override
@@ -424,7 +501,6 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Override
     public int updateParticleIndex() {
-
         // If the lectern is on a specific enchantment page (not the cover), show the
         // respective particle only. Otherwise loop the different enchantment particles
         var enchantments = getCachedEnchantments();
@@ -435,5 +511,15 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         }
 
         return particleIndex;
+    }
+
+    @Override
+    public void setWasPowered(boolean wasPowered) {
+        this.wasPowered = wasPowered;
+    }
+
+    @Override
+    public boolean getWasPowered() {
+        return this.wasPowered;
     }
 }

@@ -1,4 +1,8 @@
 {
+    "gamerule.interactive_enchanted_books.hopper_interacts_with_lectern": "Hoppers interact with lecterns",
+    "gamerule.interactive_enchanted_books.hopper_interacts_with_lectern.description": "Enables interactions between hoppers and lecterns",
+    "gamerule.interactive_enchanted_books.signal_changes_lectern_page": "Redstone changes active lectern page",
+    "gamerule.interactive_enchanted_books.signal_changes_lectern_page.description": "Sending a redstone pulse to a lectern increments the active page. Page changes no longer output redstone pulses",
     "gui.interactive_enchanted_books.unable_to_get_identifier": "An error occurred while getting the internal enchantment Identifier",
     "gui.interactive_enchanted_books.no-description": "Unknown translation",
     "gui.interactive_enchanted_books.title": "Enchanted book",

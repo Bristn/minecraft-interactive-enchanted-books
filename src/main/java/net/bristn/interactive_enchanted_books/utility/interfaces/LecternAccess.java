@@ -21,4 +21,8 @@ public interface LecternAccess {
     public List<ParticleOptions> getCachedParticles();
 
     public int updateParticleIndex();
+
+    public boolean getWasPowered();
+
+    public void setWasPowered(boolean wasPowered);
 }

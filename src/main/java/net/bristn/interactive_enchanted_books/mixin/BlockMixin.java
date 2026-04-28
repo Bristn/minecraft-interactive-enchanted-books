@@ -19,13 +19,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Injects into the animateTick method to spawn particles based on the enchanted
- * book of the lectern
+ * Injects into the animateTick method to spawn particles based on the enchanted book of the lectern
  */
 @Mixin(Block.class)
 public class BlockMixin {
-    private static final float MAX_PARTICLE_CHANCE = 0.6f;
-    private static final float MIN_PARTICLE_CHANCE = 0.2f;
+    private static final float MAX_PARTICLE_CHANCE = 0.5f;
+    private static final float MIN_PARTICLE_CHANCE = 0.1f;
     private static final float RANGE_PARTICLE_CHANCE = MAX_PARTICLE_CHANCE - MIN_PARTICLE_CHANCE;
 
     private static final float MAX_PARTICLE_RANDOM_SPEED = 0.25f;
@@ -81,9 +80,8 @@ public class BlockMixin {
     }
 
     /**
-     * Spawns a particle using the enchantment and the lectern position. The
-     * particle origin is the center of the book, whilst all particles move away
-     * from the book in a random direction
+     * Spawns a particle using the enchantment and the lectern position. The particle origin is the
+     * center of the book, whilst all particles move away from the book in a random direction
      */
     private void renderEnchantmentParticle(ParticleOptions particle, Level world, BlockPos pos, RandomSource random,
             LecternBlockEntity lectern, float normalizedLevel) {
@@ -102,8 +100,8 @@ public class BlockMixin {
         var basePos = new Vector3f(pos.getX() + 0.5f, pos.getY() + 1.25f, pos.getZ() + 0.5f);
 
         // For higher enchantment levels, spawn more than one particle at a time
-        // At most spawns 3 particles at once if the enchantment is at the highest level
-        var maxParticles = 1 + normalizedLevel * 2f;
+        // At most spawns 2 particles at once if the enchantment is at the highest level
+        var maxParticles = 1 + normalizedLevel * 1f;
         for (int i = 0; i < maxParticles; i++) {
             var x = basePos.x + (random.nextDouble() - 0.5) * 0.25;
             var y = basePos.y + (random.nextDouble() - 0.5) * 0.25;

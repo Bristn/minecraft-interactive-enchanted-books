@@ -1,5 +1,6 @@
 package net.bristn.interactive_enchanted_books;
 
+import net.bristn.interactive_enchanted_books.gamerules.ModGameRules;
 import net.bristn.interactive_enchanted_books.particle.ModParticles;
 import net.bristn.interactive_enchanted_books.payloads.ModPayloads;
 import net.bristn.interactive_enchanted_books.resources.loader.ModResourceLoaders;
@@ -21,6 +22,7 @@ public class CommonModInitializer implements ModInitializer {
         ModScreens.registerModScreens();
         ModParticles.registerModParticles();
         ModPayloads.registerModPayloads();
+        ModGameRules.registerModGameRules();
 
         ModItemTags.registerModItemTags();
         ModEnchantmentTags.registerModEnchantmentTags();

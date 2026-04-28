@@ -1,5 +1,6 @@
 package net.bristn.interactive_enchanted_books.payloads;
 
+import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
@@ -13,9 +14,8 @@ public class ModPayloadListeners {
     }
 
     /**
-     * Uses a custom networking message to keep track of what book the lectern
-     * contains. The regular networking from minecraft does not sync the complete
-     * book, but a version with reduced information
+     * Uses a custom networking message to keep track of what book the lectern contains. The regular
+     * networking from minecraft does not sync the complete book, but a version with reduced information
      */
     private static void handleSyncLecternItemPayload(SyncLecternItemPayload payload, Context context) {
         var level = context.client().level;
@@ -32,6 +32,9 @@ public class ModPayloadListeners {
         if (lectern != null) {
             lectern.setBook(book);
             lectern.setChanged();
+
+            var access = (LecternAccess) lectern;
+            access.setCurrentPage(payload.page());
         }
     }
 
