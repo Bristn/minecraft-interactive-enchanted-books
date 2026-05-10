@@ -1,4 +1,6 @@
-![](./doc/client_header.png)
+![Icon header](./doc/icon_header.gif)
+
+![Client header](./doc/client_header.png)
 
 # Interactive enchanted books
 
@@ -6,7 +8,7 @@ Using an enchanted book opens a screen showing information about the enchantment
 
 ![Preview when right-clicking with enchanted book](./doc/item_preview.gif)
 
-![](./doc/server_header.png)
+![Server header](./doc/server_header.png)
 
 # Enchanted books in lecterns
 
@@ -29,10 +31,30 @@ If a lectern contains an enchanted book, the book will emit particles based on t
 
 # Hopper functionality for lecterns
 
-Hoppers are able to input written or enchanted books into lecterns. Additionally they are able to remove the active book of a lectern.
+![Gamerule header](./doc/gamerule_header.png)
+
+The hopper interactions are disabled by default and must be enabled using the following game rule, which can also be found in the "Miscellaneous" section
+
+`/gamerule interactive_enchanted_books:hopper_interacts_with_lectern true`
+
+If enabled, hoppers are able to input written or enchanted books into lecterns. Additionally they are able to remove the active book of a lectern.
 
 ![Preview of the hopper interactions](./doc/hopper_preview.gif)
 
-![](./doc/integration_header.png)
+# Changing pages using redstone
+
+![Gamerule header](./doc/gamerule_header.png)
+
+Changing the selected lectern page using a redstone pulse is disabled by default and must be enabled using the following game rule, which can also be found in the "Miscellaneous" section
+
+`/gamerule interactive_enchanted_books:signal_changes_lectern_page true`
+
+Sending a redstone pulse to the lectern block results in the active page being incremented. If the last page is reached, the lectern will loop back to the first page.
+
+**If this game rule is enabled the default behaviour of lecterns outputting a redstone pulse when changing pages is disabled**. Changing the active page still results in an observer update.
+
+![Signal changing page preview](./doc/signal_preview.gif)
+
+![Integration header](./doc/integration_header.png)
 
 See the [example repository](https://github.com/Bristn/minecraft-interactive-enchanted-books-example) for more details on how to integrate custom enchantments.

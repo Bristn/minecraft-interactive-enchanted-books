@@ -42,3 +42,5 @@ replay_*.log
 
 checklist.md
 logs/*
+*output*
+*blend1
