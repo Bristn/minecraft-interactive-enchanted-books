@@ -68,7 +68,7 @@ public class LecternEnchantedBookMenu extends AbstractContainerMenu {
                 return false;
             }
 
-            ItemStack book = this.lectern.removeItemNoUpdate(0);
+            var book = this.lectern.removeItemNoUpdate(0);
             this.lectern.setChanged();
             if (!player.getInventory().add(book)) {
                 player.drop(book, false);

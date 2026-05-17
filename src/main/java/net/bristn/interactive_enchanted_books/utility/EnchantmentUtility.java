@@ -84,9 +84,8 @@ public class EnchantmentUtility {
     }
 
     /**
-     * Determines the particle from the enchantment. Tries to read the
-     * enchantment_particle.json. If any error occurs, the default enchantment
-     * particle is returned
+     * Determines the particle from the enchantment. Tries to read the enchantment_particle.json. If any
+     * error occurs, the default enchantment particle is returned
      */
     public static EnchantmentData getParticleForEnchantment(Holder<Enchantment> holder) {
         var enchantment = holder.value();

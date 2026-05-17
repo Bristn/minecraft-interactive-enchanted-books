@@ -11,8 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
- * Custom version of the BookAccess used by vanilla. Returns a custom record per
- * page instead of a single renderable component
+ * Custom version of the BookAccess used by vanilla. Returns a custom record per page instead of a
+ * single renderable component
  */
 public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
     public int getPageCount() {

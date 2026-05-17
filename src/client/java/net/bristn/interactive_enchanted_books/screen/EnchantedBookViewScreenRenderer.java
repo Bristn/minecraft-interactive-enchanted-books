@@ -18,8 +18,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 
 /**
- * A separate class for rendering the menu page. This reduces the complexity of
- * the screen class itself why keeping all rendering logic in one place
+ * A separate class for rendering the menu page. This reduces the complexity of the screen class
+ * itself why keeping all rendering logic in one place
  */
 public class EnchantedBookViewScreenRenderer {
     public static final int BACKGROUND_WIDTH = 272;
@@ -45,8 +45,7 @@ public class EnchantedBookViewScreenRenderer {
     }
 
     /**
-     * Public interface to this renderer. Handles rendering the static background of
-     * the menu
+     * Public interface to this renderer. Handles rendering the static background of the menu
      */
     public void renderBackground(GuiGraphicsExtractor graphics) {
         if (this.screen == null) {
@@ -57,8 +56,8 @@ public class EnchantedBookViewScreenRenderer {
     }
 
     /**
-     * Public interface to this renderer. Handles rendering all foreground elements,
-     * including the displayed texts, icons and tooltips
+     * Public interface to this renderer. Handles rendering all foreground elements, including the
+     * displayed texts, icons and tooltips
      */
     public void renderForeground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page,
             int currentPage, int totalPages) {
@@ -72,9 +71,8 @@ public class EnchantedBookViewScreenRenderer {
     }
 
     /**
-     * Renders the title and the description of the current page Returns the y
-     * position below all texts. Used to dynamically draw the exclusive set
-     * afterwards
+     * Renders the title and the description of the current page Returns the y position below all texts.
+     * Used to dynamically draw the exclusive set afterwards
      */
     private int renderLeftPage(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page) {
         var x = screen.width / 2 - LEFT_TEXT_OFFSET;
@@ -105,8 +103,8 @@ public class EnchantedBookViewScreenRenderer {
     }
 
     /**
-     * renders the supported items section of the interface. Includes the text hint,
-     * the icons and tooltips for each icon
+     * renders the supported items section of the interface. Includes the text hint, the icons and
+     * tooltips for each icon
      */
     private void renderRightPage(GuiGraphicsExtractor graphics, int mouseX, int mouseY, LecternScreenPageData page,
             int currentPage, int totalPages) {
@@ -180,8 +178,8 @@ public class EnchantedBookViewScreenRenderer {
     }
 
     /**
-     * Draws the given supported icon at the given position. Additionally adds a
-     * tooltip when hovering the icon
+     * Draws the given supported icon at the given position. Additionally adds a tooltip when hovering
+     * the icon
      */
     private void renderSupportedIcon(GuiGraphicsExtractor graphics, int x, int y, int mouseX, int mouseY,
             LecternScreenSupportedIconData data) {
@@ -210,8 +208,8 @@ public class EnchantedBookViewScreenRenderer {
     }
 
     /**
-     * Renders the given text in multiple lines if it is too long. Returns the new
-     * vertical position below the text.
+     * Renders the given text in multiple lines if it is too long. Returns the new vertical position
+     * below the text.
      */
     private int renderTextLines(ActiveTextCollector collector, int x, int y, MutableComponent text, ChatFormatting format,
             TextAlignment align) {

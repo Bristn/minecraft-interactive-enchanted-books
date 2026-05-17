@@ -16,6 +16,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -97,5 +99,36 @@ public abstract class BlockEntityMixin {
         }
 
         method.setReturnValue(ClientboundBlockEntityDataPacket.create((BlockEntity) (Object) this));
+    }
+
+    /**
+     * Additionally save the chiseled book count in the nbt data. This allows properly displaying the
+     * particle effects after a reload
+     */
+    @Inject(method = "saveAdditional", at = @At("HEAD"))
+    protected void saveChiseledBookCount(ValueOutput output, CallbackInfo method) {
+        var blockEntity = (BlockEntity) (Object) this;
+        if (blockEntity instanceof LecternBlockEntity == false) {
+            return;
+        }
+
+        var access = (LecternAccess) blockEntity;
+        output.putInt("chiseled_book_count", access.getChiseledBookshelfBookCount());
+    }
+
+    /**
+     * On the client, load the chiseled book count from the nbt data. The server automatically updates
+     * the value on the neighbor change event
+     */
+    @Inject(method = "loadAdditional", at = @At("HEAD"))
+    protected void loadChiseledBookCount(ValueInput input, CallbackInfo method) {
+        var blockEntity = (BlockEntity) (Object) this;
+        if (blockEntity instanceof LecternBlockEntity == false) {
+            return;
+        }
+
+        var access = (LecternAccess) blockEntity;
+        var bookCount = input.getIntOr("chiseled_book_count", 0);
+        access.setChiseledBookshelfBookCount(bookCount);
     }
 }

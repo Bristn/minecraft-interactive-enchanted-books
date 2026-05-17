@@ -7,10 +7,10 @@ import net.bristn.interactive_enchanted_books.tag.ModEnchantmentTags;
 import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
+import net.bristn.interactive_enchanted_books.utility.wrappers.ParticleWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
@@ -60,10 +60,12 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     private ItemStack cachedBook;
     private List<EnchantmentWrapper> cachedEnchantments;
-    private List<ParticleOptions> cachedParticles;
+    private List<ParticleWrapper> cachedParticles = new ArrayList<>();
+
     private int cachedPage;
     private int cachedSignal;
     private int particleIndex;
+    private int chiseledBookshelfBookCount;
 
     private boolean wasPowered;
 
@@ -474,19 +476,34 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
         }
 
         cachedBook = book;
+        cachedParticles.clear();
         cachedEnchantments = EnchantmentUtility.getSortedEnchantments(book, this.level);
 
-        ArrayList<ParticleOptions> particles = new ArrayList<>();
+        var totalWeight = 0.0f;
         for (var wrapper : cachedEnchantments) {
             var entry = EnchantmentUtility.getParticleForEnchantment(wrapper.holder());
-            if (entry != null) {
-                particles.add(entry.particle);
-            } else {
-                particles.add(ModParticles.ENCHANT);
-            }
+
+            var enchantment = wrapper.enchantment();
+            var enchantmentLevel = wrapper.enchantmentLevel();
+            var maxEnchantmentLevel = enchantment.getMaxLevel();
+            var normalizedLevel = (float) enchantmentLevel / (float) maxEnchantmentLevel;
+
+            // Store the particle with the normalized enchantment level
+            var particle = entry != null ? entry.particle : ModParticles.ENCHANT;
+            var particleWrapper = new ParticleWrapper(normalizedLevel, particle, entry.enchantment);
+            cachedParticles.add(particleWrapper);
+
+            totalWeight += particleWrapper.weight;
         }
 
-        cachedParticles = particles;
+        // Normalize all weights to have the sum of them be equal to 1
+        for (var particleWrapper : cachedParticles) {
+            particleWrapper.weight = particleWrapper.weight / totalWeight;
+        }
+
+        // Sort the particles by weight. Multiply the float weight to get a integer for comparison
+        // Uses a large number to allow smaller weights to still result in different integers
+        cachedParticles.sort((a, b) -> (int) (b.weight * 10000) - (int) (a.weight * 10000));
     }
 
     @Override
@@ -495,7 +512,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     }
 
     @Override
-    public List<ParticleOptions> getCachedParticles() {
+    public List<ParticleWrapper> getCachedParticles() {
         return cachedParticles;
     }
 
@@ -521,5 +538,15 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     @Override
     public boolean getWasPowered() {
         return this.wasPowered;
+    }
+
+    @Override
+    public void setChiseledBookshelfBookCount(int bookCount) {
+        this.chiseledBookshelfBookCount = bookCount;
+    }
+
+    @Override
+    public int getChiseledBookshelfBookCount() {
+        return this.chiseledBookshelfBookCount;
     }
 }

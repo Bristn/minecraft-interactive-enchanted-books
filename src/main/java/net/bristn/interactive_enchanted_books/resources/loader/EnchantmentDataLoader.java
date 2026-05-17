@@ -80,8 +80,8 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
     }
 
     /**
-     * Reads the json data of the resource file and converts the data into a
-     * collection of java objects per array entry
+     * Reads the json data of the resource file and converts the data into a collection of java objects
+     * per array entry
      */
     private List<EnchantmentDataJson> loadResource(Resource resource) throws IOException {
 
@@ -111,10 +111,9 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
     }
 
     /**
-     * Helper function to parse the nested array of parameters. Each parameter
-     * corresponds to one LevelBasedValue. A single LevelBasedValue can have
-     * multiple names and formatters. This way the enchantment level may be used to
-     * gather different type of display values
+     * Helper function to parse the nested array of parameters. Each parameter corresponds to one
+     * LevelBasedValue. A single LevelBasedValue can have multiple names and formatters. This way the
+     * enchantment level may be used to gather different type of display values
      */
     private ArrayList<ArrayList<EnchantmentNamedParameterJson>> getNamedParameters(JsonObject jsonObject) {
         var result = new ArrayList<ArrayList<EnchantmentNamedParameterJson>>();
@@ -149,9 +148,8 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
     }
 
     /**
-     * Performs final modifications on all read data in the main thread. Converts
-     * the HashMap of multiple mods into a single list that respects the priorities
-     * of the json
+     * Performs final modifications on all read data in the main thread. Converts the HashMap of
+     * multiple mods into a single list that respects the priorities of the json
      */
     private void apply(List<EnchantmentDataJson> prepared) {
 

@@ -162,8 +162,7 @@ public class EnchantedBookViewScreen extends Screen {
     }
 
     /**
-     * Show & hide the page buttons based on the current page and number of total
-     * pages
+     * Show & hide the page buttons based on the current page and number of total pages
      */
     private void updateButtonVisibility() {
         this.forwardButton.visible = this.currentPage < this.getNumPages() - 1;

@@ -3,7 +3,7 @@ package net.bristn.interactive_enchanted_books.utility.interfaces;
 import java.util.List;
 
 import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
-import net.minecraft.core.particles.ParticleOptions;
+import net.bristn.interactive_enchanted_books.utility.wrappers.ParticleWrapper;
 import net.minecraft.world.item.ItemStack;
 
 public interface LecternAccess {
@@ -18,11 +18,15 @@ public interface LecternAccess {
 
     public List<EnchantmentWrapper> getCachedEnchantments();
 
-    public List<ParticleOptions> getCachedParticles();
+    public List<ParticleWrapper> getCachedParticles();
 
     public int updateParticleIndex();
 
     public boolean getWasPowered();
 
     public void setWasPowered(boolean wasPowered);
+
+    public void setChiseledBookshelfBookCount(int bookCount);
+
+    public int getChiseledBookshelfBookCount();
 }

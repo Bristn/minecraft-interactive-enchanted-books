@@ -11,6 +11,10 @@ public class ModPayloadListeners {
         ClientPlayNetworking.registerGlobalReceiver(SyncLecternItemPayload.ID, (payload, context) -> {
             handleSyncLecternItemPayload(payload, context);
         });
+
+        ClientPlayNetworking.registerGlobalReceiver(SyncLecternBookCountPayload.ID, (payload, context) -> {
+            handleSyncLecternBookCountPayload(payload, context);
+        });
     }
 
     /**
@@ -31,11 +35,35 @@ public class ModPayloadListeners {
         var lectern = (LecternBlockEntity) blockEntity;
         if (lectern != null) {
             lectern.setBook(book);
-            lectern.setChanged();
 
             var access = (LecternAccess) lectern;
             access.setCurrentPage(payload.page());
+
+            lectern.setChanged();
         }
     }
 
+    /**
+     * Uses a custom networking message to keep track of how many books are in the nearest chiseled
+     * bookshelf next to a lectern
+     */
+    private static void handleSyncLecternBookCountPayload(SyncLecternBookCountPayload payload, Context context) {
+        var level = context.client().level;
+        if (level == null) {
+            return;
+        }
+
+        var pos = payload.pos();
+        var bookCount = payload.bookCount();
+
+        // Update the book of the lectern and mark it as dirty
+        var blockEntity = level.getBlockEntity(pos);
+        var lectern = (LecternBlockEntity) blockEntity;
+        if (lectern != null) {
+            var access = (LecternAccess) lectern;
+            access.setChiseledBookshelfBookCount(bookCount);
+
+            lectern.setChanged();
+        }
+    }
 }

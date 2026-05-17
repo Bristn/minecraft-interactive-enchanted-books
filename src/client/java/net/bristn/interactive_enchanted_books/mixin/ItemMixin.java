@@ -17,8 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 /**
- * Client-only injection on the use method. Used if the mod is not installed on
- * the server
+ * Client-only injection on the use method. Used if the mod is not installed on the server
  */
 @Mixin(Item.class)
 public abstract class ItemMixin {

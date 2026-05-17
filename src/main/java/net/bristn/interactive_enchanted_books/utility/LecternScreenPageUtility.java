@@ -28,9 +28,8 @@ import net.minecraft.world.level.Level;
 
 public class LecternScreenPageUtility {
     /**
-     * Utility function to determine the pages of the given enchanted book item.
-     * Iterates the different enchantments and returns a separate page array entry
-     * for each enchantment
+     * Utility function to determine the pages of the given enchanted book item. Iterates the different
+     * enchantments and returns a separate page array entry for each enchantment
      */
     public static List<LecternScreenPageData> getScreenPages(ItemStack book, Level level) {
         var pages = new ArrayList<LecternScreenPageData>();
@@ -50,8 +49,7 @@ public class LecternScreenPageUtility {
     }
 
     /**
-     * Get the content page. This includes title, description, exclusive set and
-     * support items
+     * Get the content page. This includes title, description, exclusive set and support items
      */
     private static LecternScreenPageData getContentPage(Holder<Enchantment> holder, int enchantmentLevel) {
         var enchantment = holder.value();
@@ -93,9 +91,8 @@ public class LecternScreenPageUtility {
     }
 
     /**
-     * If there are multiple enchantments in the book, get a title page that shows
-     * the included enchantments and all supported items. Does not include a list of
-     * exclusive sets
+     * If there are multiple enchantments in the book, get a title page that shows the included
+     * enchantments and all supported items. Does not include a list of exclusive sets
      */
     private static LecternScreenPageData getTitlePage(List<LecternScreenPageData> pages, List<EnchantmentWrapper> enchantments,
             ItemEnchantments itemEnchants) {
@@ -143,18 +140,16 @@ public class LecternScreenPageUtility {
     }
 
     /**
-     * Determines the localized enchantment description by using the key of the
-     * title translation and appending a prefix. <br>
-     * The method uses 3 steps to determine the translation. The first successful
-     * step is returned <br>
-     * 1. "title_key.desc.level-enchantmentLevel": The translation for the exact
-     * enchantment and level (Allows listing details for each level) <br>
+     * Determines the localized enchantment description by using the key of the title translation and
+     * appending a prefix. <br>
+     * The method uses 3 steps to determine the translation. The first successful step is returned <br>
+     * 1. "title_key.desc.level-enchantmentLevel": The translation for the exact enchantment and level
+     * (Allows listing details for each level) <br>
      * <b> Example: enchantment.minecraft.blast_protection.desc.level-4</b> <br>
-     * 2. "title_key.desc"; The general translation for this enchantment. Has the
-     * same format as <b>Enchantment Descriptions</b> <br>
+     * 2. "title_key.desc"; The general translation for this enchantment. Has the same format as
+     * <b>Enchantment Descriptions</b> <br>
      * <b>Example: enchantment.minecraft.blast_protection.desc</b> <br>
-     * 3. A fallback translation that shows the user which translation keys need to
-     * be implemented
+     * 3. A fallback translation that shows the user which translation keys need to be implemented
      */
     private static String getEnchantmentDescription(Holder<Enchantment> holder, int enchantmentLevel) {
         var descriptionKey = "n/a";
@@ -215,10 +210,9 @@ public class LecternScreenPageUtility {
     }
 
     /**
-     * Uses the list of supported items to determine a list of textures. Uses the
-     * loaded tags from the json file to get the relevant texture. If a supported
-     * item does not have any tag that is contained in the json, the item is added
-     * to the missing items list
+     * Uses the list of supported items to determine a list of textures. Uses the loaded tags from the
+     * json file to get the relevant texture. If a supported item does not have any tag that is
+     * contained in the json, the item is added to the missing items list
      */
     private static LecternScreenSupportedData getSupportedItemData(HashSet<Item> supportedItems) {
         var supportedTags = ItemTagTextureLoader.getMap();
