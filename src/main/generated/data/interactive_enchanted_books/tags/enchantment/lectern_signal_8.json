@@ -1,7 +1,8 @@
 {
   "values": [
-    "minecraft:piercing",
-    "minecraft:multishot",
-    "minecraft:quick_charge"
+    "minecraft:frost_walker",
+    "minecraft:depth_strider",
+    "minecraft:feather_falling",
+    "minecraft:soul_speed"
   ]
 }

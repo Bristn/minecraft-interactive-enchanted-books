@@ -1,3 +1,13 @@
 {
-  "values": []
+  "values": [
+    "minecraft:punch",
+    "minecraft:infinity",
+    "minecraft:flame",
+    "minecraft:multishot",
+    "minecraft:quick_charge",
+    "minecraft:piercing",
+    "minecraft:channeling",
+    "minecraft:loyalty",
+    "minecraft:riptide"
+  ]
 }

@@ -1,3 +1,10 @@
 {
-  "values": []
+  "values": [
+    "minecraft:fire_aspect",
+    "minecraft:sweeping_edge",
+    "minecraft:knockback",
+    "minecraft:looting",
+    "minecraft:wind_burst",
+    "minecraft:lunge"
+  ]
 }

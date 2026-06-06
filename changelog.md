@@ -4,3 +4,5 @@
   - If there are no books in nearby chiseled bookshelves, no particles will be emitted
   - If there is at least one book, particles will be emitted
   - With each additional book, the particles lifetime is increased
+- Update comparator signal strengths
+  - New enchantment grouping fills the spectrum of signal strengths more thoroughly while also (hopefully) being future proof

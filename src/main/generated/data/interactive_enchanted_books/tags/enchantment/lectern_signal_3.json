@@ -1,10 +1,6 @@
 {
   "values": [
-    "minecraft:protection",
-    "minecraft:projectile_protection",
-    "minecraft:fire_protection",
-    "minecraft:blast_protection",
-    "minecraft:thorns",
+    "minecraft:vanishing_curse",
     "minecraft:binding_curse"
   ]
 }

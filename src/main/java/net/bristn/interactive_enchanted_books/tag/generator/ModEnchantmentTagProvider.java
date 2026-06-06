@@ -33,66 +33,66 @@ public class ModEnchantmentTagProvider extends FabricTagsProvider<Enchantment> {
 
         var groups = new ArrayList<List<ResourceKey<Enchantment>>>();
 
-        // Lectern signal 1 (Cover page - no enchantments)
+        // ! Lectern signal 1 (Cover page - no enchantments)
         groups.add(List.of());
 
-        // Lectern signal 2 (Universal)
-        groups.add(List.of(Enchantments.MENDING, Enchantments.UNBREAKING, Enchantments.VANISHING_CURSE));
+        // ! Lectern signal 2 (Universal)
+        groups.add(List.of(Enchantments.MENDING, Enchantments.UNBREAKING));
 
-        // Lectern signal 3 (Universal armor slots)
+        // ! Lectern signal 3 (Curses)
+        groups.add(List.of(Enchantments.VANISHING_CURSE, Enchantments.BINDING_CURSE));
+
+        // ! Lectern signal 4 (All armor slots)
         groups.add(List.of(Enchantments.PROTECTION, Enchantments.PROJECTILE_PROTECTION, Enchantments.FIRE_PROTECTION,
-                Enchantments.BLAST_PROTECTION, Enchantments.THORNS, Enchantments.BINDING_CURSE));
+                Enchantments.BLAST_PROTECTION));
 
-        // Lectern signal 4 (Special armor slots)
-        groups.add(List.of(
-                // Boots
-                Enchantments.FROST_WALKER, Enchantments.DEPTH_STRIDER, Enchantments.FEATHER_FALLING, Enchantments.SOUL_SPEED,
-                // Helmets
-                Enchantments.AQUA_AFFINITY, Enchantments.RESPIRATION,
-                // Leggings
-                Enchantments.SWIFT_SNEAK));
+        // ! Lectern signal 5 (Special armor helmets)
+        groups.add(List.of(Enchantments.AQUA_AFFINITY, Enchantments.RESPIRATION));
 
-        // Lectern signal 5 (Tools)
+        // ! Lectern signal 6 (Special armor chestplates)
+        // Not really chestplate exclusive, but in this section to have some entries
+        groups.add(List.of(Enchantments.THORNS));
+
+        // ! Lectern signal 7 (Special armor leggings)
+        groups.add(List.of(Enchantments.SWIFT_SNEAK));
+
+        // ! Lectern signal 8 (Special armor boots)
+        groups.add(List.of(Enchantments.FROST_WALKER, Enchantments.DEPTH_STRIDER, Enchantments.FEATHER_FALLING,
+                Enchantments.SOUL_SPEED));
+
+        // ! Lectern signal 9 (Mining Tools)
         groups.add(List.of(Enchantments.FORTUNE, Enchantments.EFFICIENCY, Enchantments.SILK_TOUCH));
 
-        // Lectern signal 6 (Swords)
+        // ! Lectern signal 10 (Weapons Melee - Damage)
         groups.add(List.of(
-                // Damaging
-                Enchantments.SHARPNESS, Enchantments.FIRE_ASPECT, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS,
-                // Utility
-                Enchantments.SWEEPING_EDGE, Enchantments.KNOCKBACK, Enchantments.FLAME, Enchantments.LOOTING));
+                // Swords
+                Enchantments.SHARPNESS, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS, Enchantments.IMPALING,
+                // Maces
+                Enchantments.DENSITY, Enchantments.BREACH));
 
-        // Lectern signal 7 (Bow)
-        groups.add(List.of(Enchantments.PUNCH, Enchantments.POWER, Enchantments.INFINITY));
-
-        // Lectern signal 8 (Crossbow)
-        groups.add(List.of(Enchantments.PIERCING, Enchantments.MULTISHOT, Enchantments.QUICK_CHARGE));
-
-        // Lectern signal 9 (Special tools - Trident, Mace, Spear, Fishing rod)
+        // ! Lectern signal 11 (Weapons Melee - Utility)
         groups.add(List.of(
+                // Swords
+                Enchantments.FIRE_ASPECT, Enchantments.SWEEPING_EDGE, Enchantments.KNOCKBACK, Enchantments.LOOTING,
+                // Maces
+                Enchantments.WIND_BURST,
+                // Spears
+                Enchantments.LUNGE));
+
+        // ! Lectern signal 12 (Weapons Ranged - Damage)
+        groups.add(List.of(Enchantments.POWER));
+
+        // ! Lectern signal 13 (Weapons Ranged - Utility)
+        groups.add(List.of(
+                // Bow
+                Enchantments.PUNCH, Enchantments.INFINITY, Enchantments.FLAME,
+                // Crossbow
+                Enchantments.MULTISHOT, Enchantments.QUICK_CHARGE, Enchantments.PIERCING,
                 // Trident
-                Enchantments.CHANNELING, Enchantments.LOYALTY, Enchantments.RIPTIDE, Enchantments.IMPALING,
-                // Mace
-                Enchantments.DENSITY, Enchantments.BREACH, Enchantments.WIND_BURST,
-                // Spear
-                Enchantments.LUNGE,
-                // Fishing rod
-                Enchantments.LURE, Enchantments.LUCK_OF_THE_SEA));
+                Enchantments.CHANNELING, Enchantments.LOYALTY, Enchantments.RIPTIDE));
 
-        // Lectern signal 10 ()
-        groups.add(List.of());
-
-        // Lectern signal 11 ()
-        groups.add(List.of());
-
-        // Lectern signal 12 ()
-        groups.add(List.of());
-
-        // Lectern signal 13 ()
-        groups.add(List.of());
-
-        // Lectern signal 14 ()
-        groups.add(List.of());
+        // ! Lectern signal 14 (Other Tools - Utility)
+        groups.add(List.of(Enchantments.LURE, Enchantments.LUCK_OF_THE_SEA));
 
         // Lectern signal 15 ()
         groups.add(List.of());
