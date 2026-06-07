@@ -22,10 +22,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.WritableBookContent;
 import net.minecraft.world.item.component.WrittenBookContent;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -61,6 +59,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     private ItemStack cachedBook;
     private List<EnchantmentWrapper> cachedEnchantments;
     private List<ParticleWrapper> cachedParticles = new ArrayList<>();
+    private List<ParticleWrapper> pageParticles = new ArrayList<>();
 
     private int cachedPage;
     private int cachedSignal;
@@ -202,7 +201,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
      */
     @Inject(method = "hasBook", at = @At("TAIL"), cancellable = true)
     public void hasEnchantedBook(CallbackInfoReturnable<Boolean> method) {
-        var hasEnchanted = this.book.has(DataComponents.STORED_ENCHANTMENTS);
+        var hasEnchanted = EnchantmentUtility.hasEnchantments(this.book);
         if (hasEnchanted) {
             method.setReturnValue(true);
         }
@@ -253,7 +252,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Inject(method = "getRedstoneSignal", at = @At("HEAD"), cancellable = true)
     public void getEnchantedBookRedstoneSignal(CallbackInfoReturnable<Integer> method) {
-        if (this.book.getItem() != Items.ENCHANTED_BOOK || this.page < 0) {
+        if (EnchantmentUtility.isEnchantedBookLike(this.book) == false || this.page < 0) {
             return;
         }
 
@@ -290,8 +289,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     public void loadEnchantedBook(ValueInput input, CallbackInfo method) {
         // ! Original setBook uses resolveBook method
         this.book = (ItemStack) input.read("Book", ItemStack.CODEC).orElse(ItemStack.EMPTY);
-        var item = book.getItem();
-        if (item != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(this.book) == false) {
             return;
         }
 
@@ -301,8 +299,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Inject(method = "setBook", at = @At("TAIL"), cancellable = true)
     public void setEnchantedBook(final ItemStack book, final CallbackInfo method) {
-        var item = book.getItem();
-        if (item != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(book) == false) {
             return;
         }
 
@@ -319,7 +316,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     @Inject(method = "createMenu", at = @At("HEAD"), cancellable = true)
     private void openLectern(int id, Inventory inventory, Player player, CallbackInfoReturnable<AbstractContainerMenu> method) {
         var lectern = (LecternBlockEntity) (Object) this;
-        if (lectern.getBook().getItem() != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(lectern.getBook()) == false) {
             return;
         }
 
@@ -329,12 +326,11 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Inject(method = "getPage", at = @At("HEAD"), cancellable = true)
     private void getEnchantedPage(CallbackInfoReturnable<Integer> method) {
-        var item = this.book.getItem();
-        if (item != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(this.book) == false) {
             return;
         }
 
-        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(this.book);
+        var itemEnchants = EnchantmentUtility.getEnchantments(this.book);
         var enchantmentCount = itemEnchants.entrySet().size();
         if (enchantmentCount == 1) {
             method.setReturnValue(enchantmentCount);
@@ -436,17 +432,17 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     @Override
     public int getPageCount() {
         // ! For regular books, use vanilla code of determining the page count (see LecternBlockEntity)
-        if (this.book.getItem() != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(this.book) == false) {
             var writtenContent = (WrittenBookContent) book.get(DataComponents.WRITTEN_BOOK_CONTENT);
             if (writtenContent != null) {
                 return writtenContent.pages().size();
-            } else {
-                var writableContent = (WritableBookContent) book.get(DataComponents.WRITABLE_BOOK_CONTENT);
-                return writableContent != null ? writableContent.pages().size() : 0;
             }
+
+            var writableContent = (WritableBookContent) book.get(DataComponents.WRITABLE_BOOK_CONTENT);
+            return writableContent != null ? writableContent.pages().size() : 0;
         }
 
-        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(this.book);
+        var itemEnchants = EnchantmentUtility.getEnchantments(this.book);
         if (itemEnchants.entrySet().size() == 1) {
             return 1;
         }
@@ -461,8 +457,7 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
     @Override
     public void setCurrentPage(int page) {
-
-        if (this.book.getItem() == Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(this.book)) {
             this.setEnchantedBookPage(page);
         } else {
             this.setPage(page);
@@ -490,8 +485,9 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
 
             // Store the particle with the normalized enchantment level
             var particle = entry != null ? entry.particle : ModParticles.ENCHANT;
-            var particleWrapper = new ParticleWrapper(normalizedLevel, particle, entry.enchantment);
+            var particleWrapper = new ParticleWrapper(normalizedLevel, particle, wrapper);
             cachedParticles.add(particleWrapper);
+            pageParticles.add(particleWrapper);
 
             totalWeight += particleWrapper.weight;
         }
@@ -514,6 +510,11 @@ public abstract class LecternBlockEntityMixin extends BlockEntity implements Wor
     @Override
     public List<ParticleWrapper> getCachedParticles() {
         return cachedParticles;
+    }
+
+    @Override
+    public ParticleWrapper getParticleForPage(int page) {
+        return pageParticles.get(page - 1);
     }
 
     @Override

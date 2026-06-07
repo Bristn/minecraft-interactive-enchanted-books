@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenPageData;
+import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
 import net.bristn.interactive_enchanted_books.utility.LecternScreenPageUtility;
 import net.bristn.interactive_enchanted_books.screen.EnchantedBookAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 /**
  * Custom version of the BookAccess used by vanilla. Returns a custom record per page instead of a
@@ -34,8 +34,7 @@ public record EnchantedBookAccess(List<LecternScreenPageData> pages) {
      * Utility to get the BookAccess from a given item stack
      */
     public static EnchantedBookAccess fromItem(ItemStack stack) {
-        var item = stack.getItem();
-        if (item != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(stack) == false) {
             return new EnchantedBookAccess(new ArrayList<>());
         }
 

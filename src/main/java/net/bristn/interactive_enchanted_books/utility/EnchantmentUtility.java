@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 
 import net.bristn.interactive_enchanted_books.CommonModInitializer;
+import net.bristn.interactive_enchanted_books.items.ModItems;
 import net.bristn.interactive_enchanted_books.resources.EnchantmentData;
 import net.bristn.interactive_enchanted_books.resources.loader.EnchantmentDataLoader;
 import net.bristn.interactive_enchanted_books.utility.wrappers.EnchantmentWrapper;
@@ -14,6 +15,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -21,12 +23,52 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 
 public class EnchantmentUtility {
     private static final Logger LOGGER = CommonModInitializer.LOGGER;
+
+    public static boolean isEnchantedBookLike(Item item) {
+        if (item == Items.ENCHANTED_BOOK) {
+            return true;
+        }
+
+        if (item == ModItems.ENCHANTMENT_ECHO) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isEnchantedBookLike(ItemStack stack) {
+        return isEnchantedBookLike(stack.getItem());
+    }
+
+    /**
+     * Helper to determine the enchantments. Either the ones of an enchanted book, or the enchantments
+     * of an already enchanted item
+     */
+    public static ItemEnchantments getEnchantments(ItemStack stack) {
+        var stored = stack.get(DataComponents.STORED_ENCHANTMENTS);
+        if (stored != null && stored.isEmpty() == false) {
+            return stored;
+        }
+
+        var regular = stack.get(DataComponents.ENCHANTMENTS);
+        if (regular != null && regular.isEmpty() == false) {
+            return regular;
+        }
+
+        return null;
+    }
+
+    public static boolean hasEnchantments(ItemStack stack) {
+        var enchantments = EnchantmentUtility.getEnchantments(stack);
+        return enchantments != null;
+    }
 
     /**
      * Utility function to get the enchantments of an item in the correct ordering
@@ -35,7 +77,7 @@ public class EnchantmentUtility {
 
         // Uses snippet of "addToTooltip" to properly order the enchantments. Using the
         // entrySet results in alphabetical ordering
-        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
+        var itemEnchants = getEnchantments(book);
         var registries = Item.TooltipContext.of(level).registries();
         var order = getTagOrEmpty(registries, Registries.ENCHANTMENT, EnchantmentTags.TOOLTIP_ORDER);
         var enchantments = new ArrayList<EnchantmentWrapper>();

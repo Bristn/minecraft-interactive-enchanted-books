@@ -1,0 +1,7 @@
+{
+  "type": "interactive_enchanted_books:cloning",
+  "material": "minecraft:book",
+  "result": {
+    "id": "interactive_enchanted_books:enchantment_echo"
+  }
+}

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.bristn.interactive_enchanted_books.CommonModInitializer;
+import net.bristn.interactive_enchanted_books.items.ModItems;
 import net.bristn.interactive_enchanted_books.resources.loader.ItemTagTextureLoader;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenPageData;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenSupportedData;
@@ -22,7 +23,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 
@@ -35,14 +35,20 @@ public class LecternScreenPageUtility {
         var pages = new ArrayList<LecternScreenPageData>();
 
         var enchantments = EnchantmentUtility.getSortedEnchantments(book, level);
-        var itemEnchants = EnchantmentHelper.getEnchantmentsForCrafting(book);
+        var itemEnchants = EnchantmentUtility.getEnchantments(book);
+        var isEcho = book.getItem() == ModItems.ENCHANTMENT_ECHO;
 
         for (var wrapper : enchantments) {
-            pages.add(getContentPage(wrapper.holder(), wrapper.enchantmentLevel()));
+            pages.add(getContentPage(wrapper.holder(), wrapper.enchantmentLevel(), isEcho));
         }
 
         if (pages.size() > 1) {
-            pages.add(0, getTitlePage(pages, enchantments, itemEnchants));
+            var bookTitle = book.getCustomName();
+            if (bookTitle == null) {
+                bookTitle = book.getItemName();
+            }
+
+            pages.add(0, getTitlePage(pages, enchantments, itemEnchants, isEcho, bookTitle.copy()));
         }
 
         return pages;
@@ -51,7 +57,7 @@ public class LecternScreenPageUtility {
     /**
      * Get the content page. This includes title, description, exclusive set and support items
      */
-    private static LecternScreenPageData getContentPage(Holder<Enchantment> holder, int enchantmentLevel) {
+    private static LecternScreenPageData getContentPage(Holder<Enchantment> holder, int enchantmentLevel, boolean isEcho) {
         var enchantment = holder.value();
         var leftHeaders = new ArrayList<MutableComponent>();
         var leftTexts = new ArrayList<MutableComponent>();
@@ -87,7 +93,10 @@ public class LecternScreenPageUtility {
 
         var signal = ModEnchantmentTags.getRedstoneSignal(holder);
         var redstoneSignal = Component.literal((signal == 0 ? "" : signal) + "");
-        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal);
+
+        var particleWrapper = EnchantmentUtility.getParticleForEnchantment(holder);
+        var particleId = particleWrapper.particleId;
+        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal, isEcho, particleId);
     }
 
     /**
@@ -95,12 +104,11 @@ public class LecternScreenPageUtility {
      * enchantments and all supported items. Does not include a list of exclusive sets
      */
     private static LecternScreenPageData getTitlePage(List<LecternScreenPageData> pages, List<EnchantmentWrapper> enchantments,
-            ItemEnchantments itemEnchants) {
+            ItemEnchantments itemEnchants, boolean isEcho, MutableComponent bookName) {
 
         var leftHeaders = new ArrayList<MutableComponent>();
         var leftTexts = new ArrayList<MutableComponent>();
 
-        var title = Component.translatable("gui.interactive_enchanted_books.title");
         leftHeaders.add(Component.translatable("gui.interactive_enchanted_books.enchantments"));
 
         // Determine a set of all supported items from every enchantment
@@ -127,7 +135,7 @@ public class LecternScreenPageUtility {
         var supported = getSupportedItemData(items);
 
         var redstoneSignal = Component.literal("1");
-        return new LecternScreenPageData(supported, title, leftHeaders, leftTexts, redstoneSignal);
+        return new LecternScreenPageData(supported, bookName, leftHeaders, leftTexts, redstoneSignal, isEcho, null);
     }
 
     /**
@@ -203,7 +211,7 @@ public class LecternScreenPageUtility {
         // with the mod. Uses the other keys to inform the user which keys can be
         // implemented
         var result = new ArrayList<String>();
-        result.add(Component.translatable("gui.interactive_enchanted_books.no-description").getString());
+        result.add(Component.translatable("gui.interactive_enchanted_books.no_description").getString());
         result.add(descriptionKey);
         result.add(descriptionLevelKey);
         return String.join("\n\n", result);

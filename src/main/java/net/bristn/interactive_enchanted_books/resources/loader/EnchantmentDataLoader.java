@@ -183,20 +183,21 @@ public class EnchantmentDataLoader implements PreparableReloadListener {
         DATA_BY_TAG.clear();
         for (var entry : flatMap.values()) {
             var enchantmentIdentifier = Identifier.tryParse(entry.enchantment());
-            var particleIdentifier = Identifier.tryParse(entry.particle());
+            var particleId = Identifier.tryParse(entry.particle());
 
-            var particleOptional = BuiltInRegistries.PARTICLE_TYPE.get(particleIdentifier);
+            var particleOptional = BuiltInRegistries.PARTICLE_TYPE.get(particleId);
             if (particleOptional.isPresent() == false) {
                 continue;
             }
 
-            var particle = particleOptional.get().value();
-            if (particle instanceof ParticleOptions == false) {
+            var particleType = particleOptional.get().value();
+            if (particleType instanceof ParticleOptions == false) {
                 continue;
             }
 
+            var particle = (ParticleOptions) particleType;
             var parameters = EnchantmentNamedParameter.fromJsonList(entry.parameters());
-            var data = new EnchantmentData(enchantmentIdentifier, (ParticleOptions) particle, parameters);
+            var data = new EnchantmentData(enchantmentIdentifier, particle, parameters, entry.isCurse(), particleId);
             DATA.add(data);
             DATA_BY_TAG.put(enchantmentIdentifier, data);
         }

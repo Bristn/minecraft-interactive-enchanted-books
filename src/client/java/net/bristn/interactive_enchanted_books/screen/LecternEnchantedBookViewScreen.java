@@ -56,13 +56,14 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
     }
 
     /**
-     * Creates the "done" and "take book" buttons. Additionally sets up their
-     * handlers
+     * Creates the "done" and "take book" buttons. Additionally sets up their handlers
      */
     protected void createMenuControls() {
         // In adventure mode, prevent showing the take book button
         if (this.minecraft.player.mayBuild() == false) {
             super.createMenuControls();
+
+            this.createInfoMenuControls();
             return;
         }
 
@@ -76,10 +77,12 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
         this.addRenderableWidget(done.build());
 
         // Render the take book button
-        var take = Button.builder(TAKE_BOOK_LABEL, (button) -> this.sendButtonClick(3));
+        var take = Button.builder(TAKE_BOOK_LABEL, (button) -> this.sendButtonClick(LecternEnchantedBookMenu.BUTTON_TAKE_BOOK));
         take.pos(middle + 2, buttonY);
         take.width(98);
         this.addRenderableWidget(take.build());
+
+        this.createInfoMenuControls();
     }
 
     protected void pageBack() {
@@ -100,8 +103,7 @@ public class LecternEnchantedBookViewScreen extends EnchantedBookViewScreen impl
     }
 
     /**
-     * Send the button click event using the server to ensure the page changes for
-     * all players
+     * Send the button click event using the server to ensure the page changes for all players
      */
     private void sendButtonClick(int button) {
         this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, button);

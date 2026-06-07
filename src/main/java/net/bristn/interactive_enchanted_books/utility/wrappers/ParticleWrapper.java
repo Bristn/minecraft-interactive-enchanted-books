@@ -3,16 +3,15 @@ package net.bristn.interactive_enchanted_books.utility.wrappers;
 import java.util.List;
 
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 
 public class ParticleWrapper {
 
     public float weight;
     public ParticleOptions particle;
-    public Identifier enchantment;
+    public EnchantmentWrapper enchantment;
 
-    public ParticleWrapper(float weight, ParticleOptions particle, Identifier enchantment) {
+    public ParticleWrapper(float weight, ParticleOptions particle, EnchantmentWrapper enchantment) {
         this.weight = weight;
         this.particle = particle;
         this.enchantment = enchantment;

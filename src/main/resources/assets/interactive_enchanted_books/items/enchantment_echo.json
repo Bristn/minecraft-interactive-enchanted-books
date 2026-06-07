@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "interactive_enchanted_books:item/enchantment_echo"
+  }
+}

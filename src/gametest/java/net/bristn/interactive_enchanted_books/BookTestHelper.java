@@ -3,6 +3,7 @@ package net.bristn.interactive_enchanted_books;
 import java.util.List;
 import java.util.Optional;
 
+import net.bristn.interactive_enchanted_books.items.ModItems;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -34,6 +35,16 @@ public class BookTestHelper {
 
     public static ItemStack getEnchantedBook(GameTestHelper context) {
         var stack = Items.ENCHANTED_BOOK.getDefaultInstance();
+        var lookup = context.getLevel().holderLookup(Registries.ENCHANTMENT);
+        var aquaAffinity = lookup.get(Enchantments.AQUA_AFFINITY).get();
+        var sharpness = lookup.get(Enchantments.SHARPNESS).get();
+        stack.enchant(aquaAffinity, 1);
+        stack.enchant(sharpness, 1);
+        return stack;
+    }
+
+    public static ItemStack getEnchantmentEcho(GameTestHelper context) {
+        var stack = ModItems.ENCHANTMENT_ECHO.getDefaultInstance();
         var lookup = context.getLevel().holderLookup(Registries.ENCHANTMENT);
         var aquaAffinity = lookup.get(Enchantments.AQUA_AFFINITY).get();
         var sharpness = lookup.get(Enchantments.SHARPNESS).get();

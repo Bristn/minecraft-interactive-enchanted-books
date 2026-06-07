@@ -1,12 +1,10 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "net.bristn.interactive_enchanted_books.mixin",
-    "compatibilityLevel": "JAVA_25",
-    "client": [
-        "ItemMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    }
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.bristn.interactive_enchanted_books.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": ["ItemMixin", "ParticleResourcesAccessor", "MinecraftAccessor"],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

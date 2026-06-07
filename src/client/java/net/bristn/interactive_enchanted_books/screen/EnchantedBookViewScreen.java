@@ -3,8 +3,13 @@ package net.bristn.interactive_enchanted_books.screen;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
+import net.bristn.interactive_enchanted_books.screen.info.EchoInfoPanel;
+import net.bristn.interactive_enchanted_books.screen.info.InfoButton;
+import net.bristn.interactive_enchanted_books.screen.info.ParticleInfoPanel;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.client.input.KeyEvent;
@@ -16,7 +21,10 @@ import net.minecraft.util.Mth;
 public class EnchantedBookViewScreen extends Screen {
     private static final Component TITLE = Component.translatable("book.view.title");
     private static final Style PAGE_TEXT_STYLE = Style.EMPTY.withoutShadow().withColor(-16777216);
+
     public static final EnchantedBookAccess EMPTY_ACCESS = new EnchantedBookAccess(List.of());
+    public static final String BUTTON_PARTICLE_KEY = "particle_info_button";
+    public static final String BUTTON_ECHO_KEY = "echo_info_button";
 
     private EnchantedBookAccess bookAccess;
     private int currentPage = 0;
@@ -28,6 +36,9 @@ public class EnchantedBookViewScreen extends Screen {
 
     /** Delegates rendering the elements to a separate script */
     private EnchantedBookViewScreenRenderer renderer;
+    private EchoInfoPanel echoInfoPanel;
+    private ParticleInfoPanel particleInfoPanel;
+    private InfoButton particleInfoButton;
 
     public EnchantedBookViewScreen(EnchantedBookAccess bookAccess) {
         this(bookAccess, true);
@@ -51,6 +62,8 @@ public class EnchantedBookViewScreen extends Screen {
 
     public boolean setPage(int page) {
         int clampedPage = Mth.clamp(page, 0, this.bookAccess.getPageCount() - 1);
+        this.particleInfoButton.visible = CommonModInitializer.isInstalledOnServer;
+
         if (clampedPage != this.currentPage) {
             this.currentPage = clampedPage;
             this.updateButtonVisibility();
@@ -66,6 +79,8 @@ public class EnchantedBookViewScreen extends Screen {
 
     protected void init() {
         this.renderer = new EnchantedBookViewScreenRenderer(this);
+        this.echoInfoPanel = new EchoInfoPanel();
+        this.particleInfoPanel = new ParticleInfoPanel();
         this.createMenuControls();
         this.createPageControlButtons();
     }
@@ -75,7 +90,8 @@ public class EnchantedBookViewScreen extends Screen {
         super.extractBackground(graphics, mouseX, mouseY, a);
 
         if (renderer != null) {
-            renderer.renderBackground(graphics);
+            var page = this.bookAccess.getPage(this.currentPage);
+            renderer.renderBackground(graphics, page);
         }
     }
 
@@ -93,7 +109,9 @@ public class EnchantedBookViewScreen extends Screen {
         }
 
         var page = pages.get(this.currentPage);
-        renderer.renderForeground(graphics, mouseX, mouseY, page, this.currentPage, this.getNumPages());
+        this.echoInfoPanel.drawPanel(graphics, mouseX, mouseY, this.width);
+        this.particleInfoPanel.drawPanel(graphics, mouseX, mouseY, this.width, page.particleId());
+        this.renderer.renderForeground(graphics, mouseX, mouseY, page, this.currentPage, this.getNumPages());
     }
 
     public Component getNarrationMessage() {
@@ -119,10 +137,42 @@ public class EnchantedBookViewScreen extends Screen {
      * Creates the "done" button and sets up its handler
      */
     protected void createMenuControls() {
-        var button = Button.builder(CommonComponents.GUI_DONE, (btn) -> this.onClose());
-        button.pos((this.width - 200) / 2, 196);
-        button.width(200);
-        this.addRenderableWidget(button.build());
+        var done = Button.builder(CommonComponents.GUI_DONE, (btn) -> this.onClose());
+        done.pos((this.width - 200) / 2, 196);
+        done.width(200);
+        this.addRenderableWidget(done.build());
+
+        this.createInfoMenuControls();
+    }
+
+    protected void createInfoMenuControls() {
+        if (CommonModInitializer.isInstalledOnServer == false) {
+            return;
+        }
+
+        var y = EnchantedBookViewScreenRenderer.INFO_BUTTON_Y;
+        var xOffset = EnchantedBookViewScreenRenderer.INFO_BUTTON_X_FROM_MIDDLE;
+
+        {
+            var button = new InfoButton((btn) -> {
+                this.particleInfoPanel.togglePanel();
+            }, BUTTON_PARTICLE_KEY);
+
+            button.setPosition(this.width / 2 - xOffset - InfoButton.WIDTH, y);
+            button.setTooltip(Tooltip.create(Component.translatable("gui.interactive_enchanted_books.particle_info")));
+            this.addRenderableWidget(button);
+            this.particleInfoButton = button;
+        }
+
+        if (CommonModInitializer.areEchosCraftable == true) {
+            var button = new InfoButton((btn) -> {
+                this.echoInfoPanel.togglePanel();
+            }, BUTTON_ECHO_KEY);
+
+            button.setPosition(this.width / 2 + xOffset, y);
+            button.setTooltip(Tooltip.create(Component.translatable("gui.interactive_enchanted_books.echo_info")));
+            this.addRenderableWidget(button);
+        }
     }
 
     /**

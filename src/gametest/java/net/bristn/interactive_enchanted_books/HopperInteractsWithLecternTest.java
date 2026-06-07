@@ -8,6 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.bristn.interactive_enchanted_books.gamerules.ModGameRules;
+import net.bristn.interactive_enchanted_books.items.ModItems;
 import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 
@@ -17,8 +18,8 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
     private static final BlockPos BOTTOM_HOPPER = new BlockPos(0, 3, 0);
 
     @GameTest(maxTicks = 1000)
-    public void enableEnchantedBook(GameTestHelper context) {
-        var rule = GameRuleTestOrder.HOPPER_FALSE_ENCHANTED_BOOk;
+    public void disableEnchantedBook(GameTestHelper context) {
+        var rule = GameRuleTestOrder.HOPPER_FALSE_ENCHANTED_BOOK;
 
         GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.HOPPER_ORDER, () -> {
             var server = context.getLevel().getServer();
@@ -27,7 +28,9 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
             context.setBlock(LECTERN, Blocks.LECTERN);
             context.setBlock(BOTTOM_HOPPER, Blocks.HOPPER);
-            context.spawnItem(Items.ENCHANTED_BOOK, new Vec3(0.5, 5.5, 0.5));
+
+            var enchantedBook = BookTestHelper.getEnchantedBook(context);
+            BookTestHelper.spawnItemStack(context, enchantedBook, TOP_HOPPER.above().getCenter());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerContains(TOP_HOPPER, Items.ENCHANTED_BOOK);
@@ -36,19 +39,20 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
                 rule.succeed();
             });
         });
-
     }
 
     @GameTest(maxTicks = 1000)
-    public void disableEnchantedBook(GameTestHelper context) {
-        var rule = GameRuleTestOrder.HOPPER_TRUE_ENCHANTED_BOOk;
+    public void enableEnchantedBook(GameTestHelper context) {
+        var rule = GameRuleTestOrder.HOPPER_TRUE_ENCHANTED_BOOK;
 
         GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.HOPPER_ORDER, () -> {
             var server = context.getLevel().getServer();
             context.getLevel().getGameRules().set(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN, true, server);
 
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
-            context.spawnItem(Items.ENCHANTED_BOOK, new Vec3(0.5, 5.5, 0.5));
+
+            var enchantedBook = BookTestHelper.getEnchantedBook(context);
+            BookTestHelper.spawnItemStack(context, enchantedBook, TOP_HOPPER.above().getCenter());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerContains(TOP_HOPPER, Items.ENCHANTED_BOOK);
@@ -67,7 +71,38 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
                 });
             });
         });
+    }
 
+    @GameTest(maxTicks = 1000)
+    public void enableEnchantmentEcho(GameTestHelper context) {
+        var rule = GameRuleTestOrder.HOPPER_TRUE_ENCHANTMENT_ECHO;
+
+        GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.HOPPER_ORDER, () -> {
+            var server = context.getLevel().getServer();
+            context.getLevel().getGameRules().set(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN, true, server);
+
+            context.setBlock(TOP_HOPPER, Blocks.HOPPER);
+
+            var enchantmentEcho = BookTestHelper.getEnchantmentEcho(context);
+            BookTestHelper.spawnItemStack(context, enchantmentEcho, TOP_HOPPER.above().getCenter());
+
+            context.runAfterDelay(20, () -> {
+                context.assertContainerContains(TOP_HOPPER, ModItems.ENCHANTMENT_ECHO);
+                context.setBlock(LECTERN, Blocks.LECTERN);
+
+                context.runAfterDelay(20, () -> {
+                    context.assertContainerEmpty(TOP_HOPPER);
+                    context.setBlock(BOTTOM_HOPPER, Blocks.HOPPER);
+
+                    context.runAfterDelay(20, () -> {
+                        context.assertContainerContains(BOTTOM_HOPPER, ModItems.ENCHANTMENT_ECHO);
+                        context.assertContainerEmpty(TOP_HOPPER);
+                        context.succeed();
+                        rule.succeed();
+                    });
+                });
+            });
+        });
     }
 
     @Override

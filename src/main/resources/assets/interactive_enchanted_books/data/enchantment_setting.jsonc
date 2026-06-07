@@ -1,11 +1,13 @@
 [
   {
     "enchantment": "minecraft:aqua_affinity",
+    "particle": "interactive_enchanted_books:aqua_affinity",
     "priority": 0,
     "parameters": []
   },
   {
     "enchantment": "minecraft:bane_of_arthropods",
+    "particle": "interactive_enchanted_books:bane_of_arthropods",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -29,11 +31,13 @@
   },
   {
     "enchantment": "minecraft:binding_curse",
-    "particle": "interactive_enchanted_books:curse_particle",
+    "particle": "interactive_enchanted_books:binding_curse",
+    "isCurse": true,
     "priority": 0
   },
   {
     "enchantment": "minecraft:blast_protection",
+    "particle": "interactive_enchanted_books:blast_protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -53,6 +57,7 @@
   },
   {
     "enchantment": "minecraft:breach",
+    "particle": "interactive_enchanted_books:breach",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -66,10 +71,12 @@
   },
   {
     "enchantment": "minecraft:channeling",
+    "particle": "interactive_enchanted_books:channeling",
     "priority": 0
   },
   {
     "enchantment": "minecraft:density",
+    "particle": "interactive_enchanted_books:density",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -83,6 +90,7 @@
   },
   {
     "enchantment": "minecraft:depth_strider",
+    "particle": "interactive_enchanted_books:depth_strider",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -96,6 +104,7 @@
   },
   {
     "enchantment": "minecraft:efficiency",
+    "particle": "interactive_enchanted_books:efficiency",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -108,6 +117,7 @@
   },
   {
     "enchantment": "minecraft:feather_falling",
+    "particle": "interactive_enchanted_books:feather_falling",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -121,6 +131,7 @@
   },
   {
     "enchantment": "minecraft:fire_aspect",
+    "particle": "interactive_enchanted_books:fire_aspect",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -133,6 +144,7 @@
   },
   {
     "enchantment": "minecraft:fire_protection",
+    "particle": "interactive_enchanted_books:fire_protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -152,6 +164,7 @@
   },
   {
     "enchantment": "minecraft:flame",
+    "particle": "interactive_enchanted_books:flame",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -164,6 +177,7 @@
   },
   {
     "enchantment": "minecraft:fortune",
+    "particle": "interactive_enchanted_books:fortune",
     "priority": 0,
     "parameters": [
       [
@@ -177,6 +191,7 @@
   },
   {
     "enchantment": "minecraft:frost_walker",
+    "particle": "interactive_enchanted_books:frost_walker",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -189,6 +204,7 @@
   },
   {
     "enchantment": "minecraft:impaling",
+    "particle": "interactive_enchanted_books:impaling",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -202,10 +218,12 @@
   },
   {
     "enchantment": "minecraft:infinity",
+    "particle": "interactive_enchanted_books:infinity",
     "priority": 0
   },
   {
     "enchantment": "minecraft:knockback",
+    "particle": "interactive_enchanted_books:knockback",
     "priority": 0,
     "parameters": [
       [
@@ -219,6 +237,7 @@
   },
   {
     "enchantment": "minecraft:looting",
+    "particle": "interactive_enchanted_books:looting",
     "priority": 0,
     "parameters": [
       [
@@ -235,6 +254,7 @@
   },
   {
     "enchantment": "minecraft:loyalty",
+    "particle": "interactive_enchanted_books:loyalty",
     "priority": 0,
     "parameters": [
       [
@@ -248,6 +268,7 @@
   },
   {
     "enchantment": "minecraft:luck_of_the_sea",
+    "particle": "interactive_enchanted_books:luck_of_the_sea",
     "priority": 0,
     "parameters": [
       [
@@ -267,6 +288,7 @@
   },
   {
     "enchantment": "minecraft:lunge",
+    "particle": "interactive_enchanted_books:lunge",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -290,6 +312,7 @@
   },
   {
     "enchantment": "minecraft:lure",
+    "particle": "interactive_enchanted_books:lure",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -302,10 +325,12 @@
   },
   {
     "enchantment": "minecraft:mending",
+    "particle": "interactive_enchanted_books:mending",
     "priority": 0
   },
   {
     "enchantment": "minecraft:multishot",
+    "particle": "interactive_enchanted_books:multishot",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -323,6 +348,7 @@
   },
   {
     "enchantment": "minecraft:piercing",
+    "particle": "interactive_enchanted_books:piercing",
     "priority": 0,
     "parameters": [
       [
@@ -335,6 +361,7 @@
   },
   {
     "enchantment": "minecraft:power",
+    "particle": "interactive_enchanted_books:power",
     "priority": 0,
     "parameters": [
       [
@@ -348,6 +375,7 @@
   },
   {
     "enchantment": "minecraft:projectile_protection",
+    "particle": "interactive_enchanted_books:projectile_protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -361,6 +389,7 @@
   },
   {
     "enchantment": "minecraft:protection",
+    "particle": "interactive_enchanted_books:protection",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -374,6 +403,7 @@
   },
   {
     "enchantment": "minecraft:punch",
+    "particle": "interactive_enchanted_books:punch",
     "priority": 0,
     "parameters": [
       [
@@ -387,6 +417,7 @@
   },
   {
     "enchantment": "minecraft:quick_charge",
+    "particle": "interactive_enchanted_books:quick_charge",
     "priority": 0,
     "parameters": [
       [
@@ -400,6 +431,7 @@
   },
   {
     "enchantment": "minecraft:respiration",
+    "particle": "interactive_enchanted_books:respiration",
     "priority": 0,
     "parameters": [
       [
@@ -417,6 +449,7 @@
   },
   {
     "enchantment": "minecraft:riptide",
+    "particle": "interactive_enchanted_books:riptide",
     "priority": 0,
     "parameters": [
       [
@@ -430,6 +463,7 @@
   },
   {
     "enchantment": "minecraft:sharpness",
+    "particle": "interactive_enchanted_books:sharpness",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -443,10 +477,12 @@
   },
   {
     "enchantment": "minecraft:silk_touch",
+    "particle": "interactive_enchanted_books:silk_touch",
     "priority": 0
   },
   {
     "enchantment": "minecraft:smite",
+    "particle": "interactive_enchanted_books:smite",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -460,6 +496,7 @@
   },
   {
     "enchantment": "minecraft:soul_speed",
+    "particle": "interactive_enchanted_books:soul_speed",
     "priority": 0,
     "parameters": [
       [
@@ -473,6 +510,7 @@
   },
   {
     "enchantment": "minecraft:sweeping_edge",
+    "particle": "interactive_enchanted_books:sweeping_edge",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -486,6 +524,7 @@
   },
   {
     "enchantment": "minecraft:swift_sneak",
+    "particle": "interactive_enchanted_books:swift_sneak",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -499,6 +538,7 @@
   },
   {
     "enchantment": "minecraft:thorns",
+    "particle": "interactive_enchanted_books:thorns",
     "priority": 0,
     "parameters": [
       [
@@ -523,6 +563,7 @@
   },
   {
     "enchantment": "minecraft:unbreaking",
+    "particle": "interactive_enchanted_books:unbreaking",
     "priority": 0,
     "parameters": [
       [] /* Enchantment level */,
@@ -537,11 +578,13 @@
   },
   {
     "enchantment": "minecraft:vanishing_curse",
-    "particle": "interactive_enchanted_books:curse_particle",
+    "particle": "interactive_enchanted_books:vanishing_curse",
+    "isCurse": true,
     "priority": 0
   },
   {
     "enchantment": "minecraft:wind_burst",
+    "particle": "interactive_enchanted_books:wind_burst",
     "priority": 0,
     "parameters": [
       [

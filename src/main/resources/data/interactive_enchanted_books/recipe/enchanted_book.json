@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "source": "interactive_enchanted_books:enchantment_echo",
+  "input": "interactive_enchanted_books:enchantment_echo",
+  "material": "minecraft:echo_shard",
+  "material_count": 1,
+  "add_material_count_to_result": false,
+  "result": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:max_stack_size": 1
+    },
+    "count": 1
+  }
+}

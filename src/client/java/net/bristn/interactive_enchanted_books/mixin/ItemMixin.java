@@ -7,13 +7,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.bristn.interactive_enchanted_books.screen.EnchantedBookAccess;
 import net.bristn.interactive_enchanted_books.screen.EnchantedBookViewScreen;
+import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 /**
@@ -29,8 +29,7 @@ public abstract class ItemMixin {
         }
 
         var stack = player.getItemInHand(hand);
-        var item = stack.getItem();
-        if (item != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(stack) == false) {
             return;
         }
 

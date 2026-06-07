@@ -20,6 +20,8 @@ public interface LecternAccess {
 
     public List<ParticleWrapper> getCachedParticles();
 
+    public ParticleWrapper getParticleForPage(int page);
+
     public int updateParticleIndex();
 
     public boolean getWasPowered();

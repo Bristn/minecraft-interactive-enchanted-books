@@ -14,8 +14,10 @@ public record SyncLecternBookCountPayload(BlockPos pos, Integer bookCount) imple
             Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID, "sync_lectern_book_count"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLecternBookCountPayload> CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, SyncLecternBookCountPayload::pos, ByteBufCodecs.INT, SyncLecternBookCountPayload::bookCount,
-            SyncLecternBookCountPayload::new);
+            BlockPos.STREAM_CODEC, SyncLecternBookCountPayload::pos, //
+            ByteBufCodecs.INT, SyncLecternBookCountPayload::bookCount, //
+            SyncLecternBookCountPayload::new //
+    );
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

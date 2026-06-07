@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:enchanted_book"
+    "minecraft:enchanted_book",
+    "interactive_enchanted_books:enchantment_echo"
   ]
 }

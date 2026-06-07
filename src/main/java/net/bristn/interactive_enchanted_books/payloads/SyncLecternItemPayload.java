@@ -15,8 +15,11 @@ public record SyncLecternItemPayload(BlockPos pos, ItemStack book, Integer page)
             Identifier.fromNamespaceAndPath(CommonModInitializer.MOD_ID, "sync_lectern_item"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLecternItemPayload> CODEC = StreamCodec.composite(
-            BlockPos.STREAM_CODEC, SyncLecternItemPayload::pos, ItemStack.STREAM_CODEC, SyncLecternItemPayload::book,
-            ByteBufCodecs.INT, SyncLecternItemPayload::page, SyncLecternItemPayload::new);
+            BlockPos.STREAM_CODEC, SyncLecternItemPayload::pos, //
+            ItemStack.STREAM_CODEC, SyncLecternItemPayload::book, //
+            ByteBufCodecs.INT, SyncLecternItemPayload::page, //
+            SyncLecternItemPayload::new //
+    );
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

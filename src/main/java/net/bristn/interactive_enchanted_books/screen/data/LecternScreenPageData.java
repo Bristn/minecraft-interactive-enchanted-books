@@ -5,15 +5,30 @@ import java.util.List;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
 
 /**
  * Contains all data needed to render one of the menu pages
  */
-public record LecternScreenPageData(LecternScreenSupportedData supported, MutableComponent title,
-        List<MutableComponent> leftHeaders, List<MutableComponent> leftTexts, MutableComponent redstoneSignal) {
+public record LecternScreenPageData( //
+        LecternScreenSupportedData supported, //
+        MutableComponent title, //
+        List<MutableComponent> leftHeaders, //
+        List<MutableComponent> leftTexts, //
+        MutableComponent redstoneSignal, //
+        boolean isEcho, //
+        Identifier particleId//
+) {
 
-    public static LecternScreenPageData EMPTY = new LecternScreenPageData(LecternScreenSupportedData.EMPTY, Component.empty(),
-            new ArrayList<>(), new ArrayList<>(), Component.empty());
+    public static LecternScreenPageData EMPTY = new LecternScreenPageData( //
+            LecternScreenSupportedData.EMPTY, //
+            Component.empty(), //
+            new ArrayList<>(), //
+            new ArrayList<>(), //
+            Component.empty(), //
+            false, //
+            null //
+    );
 
     public List<Component> getNarrationMessage() {
         var result = new ArrayList<Component>();

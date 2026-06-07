@@ -1,5 +1,6 @@
 package net.bristn.interactive_enchanted_books;
 
+import net.bristn.interactive_enchanted_books.recipe.ModRecipeProvider;
 import net.bristn.interactive_enchanted_books.tag.generator.ModEnchantmentTagProvider;
 import net.bristn.interactive_enchanted_books.tag.generator.ModItemTagProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -12,5 +13,6 @@ public class CommonModDataGenerator implements DataGeneratorEntrypoint {
 
         pack.addProvider(ModItemTagProvider::new);
         pack.addProvider(ModEnchantmentTagProvider::new);
+        pack.addProvider(ModRecipeProvider::new);
     }
 }

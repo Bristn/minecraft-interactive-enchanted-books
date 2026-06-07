@@ -1,12 +1,11 @@
 package net.bristn.interactive_enchanted_books.mixin;
 
-import net.bristn.interactive_enchanted_books.CommonModInitializer;
+import net.bristn.interactive_enchanted_books.utility.EnchantmentUtility;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.bristn.interactive_enchanted_books.utility.wrappers.ParticleWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LecternBlock;
@@ -41,7 +40,7 @@ public class BlockMixin {
 
         var lectern = (LecternBlockEntity) blockEntity;
         var item = lectern.getBook().getItem();
-        if (item != Items.ENCHANTED_BOOK) {
+        if (EnchantmentUtility.isEnchantedBookLike(item) == false) {
             return;
         }
 
@@ -54,31 +53,30 @@ public class BlockMixin {
             return;
         }
 
-        // If the lectern is on a specific enchantment page (not the cover), show the
-        // respective particle only. Otherwise loop the different enchantment particles
-        var enchantments = access.getCachedEnchantments();
-        var particleIndex = access.updateParticleIndex();
-        if (particleIndex >= enchantments.size() || particleIndex < 0) {
-            var message = "Particle index {} is not valid. Count of enchantments {}";
-            CommonModInitializer.LOGGER.error(message, particleIndex, enchantments.size());
-            return;
-        }
-
         // Only spawn a particle every other tick
         if (random.nextFloat() > 0.5) {
             return;
         }
 
-        var wrapper = enchantments.get(particleIndex);
-        var enchantment = wrapper.enchantment();
-        var enchantmentLevel = wrapper.enchantmentLevel();
-        var maxEnchantmentLevel = enchantment.getMaxLevel();
-
         // Determine the random particle & spawn it
         var particles = access.getCachedParticles();
         var particleWrapper = ParticleWrapper.getRandomParticle(particles, random);
+
+        var currentPage = access.getCurrentPage();
+        var pageCount = access.getPageCount();
+        if (pageCount > 1 && currentPage != 0) {
+            particleWrapper = access.getParticleForPage(currentPage);
+        }
+
+        // Determine the normalized level (with 1 being the highest level the enchantment can reach)
+        var enchantmentWrapper = particleWrapper.enchantment;
+        var enchantment = enchantmentWrapper.enchantment();
+        var enchantmentLevel = enchantmentWrapper.enchantmentLevel();
+        var maxEnchantmentLevel = enchantment.getMaxLevel();
         var normalizedLevel = (float) enchantmentLevel / (float) maxEnchantmentLevel;
-        renderEnchantmentParticle(particleWrapper.particle, world, pos, random, lectern, normalizedLevel, bookCount);
+
+        var particle = particleWrapper.particle;
+        renderEnchantmentParticle(particle, world, pos, random, lectern, normalizedLevel, bookCount);
     }
 
     /**
@@ -128,7 +126,7 @@ public class BlockMixin {
 
         // Offset the particles to not all spawn in the same spot
         var offset = movementDir.mul(0.1f);
-        world.addParticle((ParticleOptions) particle, x + offset.x, y + offset.y, z + offset.z, xSpeed, encodedSpeed, zSpeed);
+        world.addParticle(particle, x + offset.x, y + offset.y, z + offset.z, xSpeed, encodedSpeed, zSpeed);
     }
 
     private static float getRandomAngleOffset(RandomSource random) {

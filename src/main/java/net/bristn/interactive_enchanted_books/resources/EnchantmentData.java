@@ -9,12 +9,16 @@ public class EnchantmentData {
     public final Identifier enchantment;
     public final ParticleOptions particle;
     public final ArrayList<ArrayList<EnchantmentNamedParameter>> parameters;
+    public final boolean isCurse;
+    public final Identifier particleId;
 
     public EnchantmentData(Identifier enchantment, ParticleOptions particle,
-            ArrayList<ArrayList<EnchantmentNamedParameter>> parameters) {
+            ArrayList<ArrayList<EnchantmentNamedParameter>> parameters, boolean isCurse, Identifier particleId) {
 
         this.enchantment = enchantment;
         this.particle = particle;
         this.parameters = parameters;
+        this.isCurse = isCurse;
+        this.particleId = particleId;
     }
 }

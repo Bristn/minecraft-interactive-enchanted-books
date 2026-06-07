@@ -1,5 +1,6 @@
 package net.bristn.interactive_enchanted_books.payloads;
 
+import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
@@ -14,6 +15,10 @@ public class ModPayloadListeners {
 
         ClientPlayNetworking.registerGlobalReceiver(SyncLecternBookCountPayload.ID, (payload, context) -> {
             handleSyncLecternBookCountPayload(payload, context);
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(ServerRunsModPayload.ID, (payload, context) -> {
+            handleServerRunsModPayload(payload, context);
         });
     }
 
@@ -65,5 +70,19 @@ public class ModPayloadListeners {
 
             lectern.setChanged();
         }
+    }
+
+    /**
+     * Uses a custom networking message sent by the server to allow clients to query if the mod is also
+     * installed on the server. Can be used to disable ui functions if the server does not run the mod
+     */
+    private static void handleServerRunsModPayload(ServerRunsModPayload payload, Context context) {
+        var level = context.client().level;
+        if (level == null) {
+            return;
+        }
+
+        CommonModInitializer.isInstalledOnServer = payload.installed();
+        CommonModInitializer.areEchosCraftable = payload.echoCraftable();
     }
 }
