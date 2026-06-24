@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
 import net.bristn.interactive_enchanted_books.gamerules.ModGameRules;
 import net.bristn.interactive_enchanted_books.items.ModItems;
 import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
@@ -30,7 +29,7 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
             context.setBlock(BOTTOM_HOPPER, Blocks.HOPPER);
 
             var enchantedBook = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, enchantedBook, TOP_HOPPER.above().getCenter());
+            BookTestHelper.spawnItemStack(context, enchantedBook, TOP_HOPPER.above());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerContains(TOP_HOPPER, Items.ENCHANTED_BOOK);
@@ -52,7 +51,7 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
 
             var enchantedBook = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, enchantedBook, TOP_HOPPER.above().getCenter());
+            BookTestHelper.spawnItemStack(context, enchantedBook, TOP_HOPPER.above());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerContains(TOP_HOPPER, Items.ENCHANTED_BOOK);
@@ -84,7 +83,7 @@ public class HopperInteractsWithLecternTest implements CustomTestMethodInvoker {
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
 
             var enchantmentEcho = BookTestHelper.getEnchantmentEcho(context);
-            BookTestHelper.spawnItemStack(context, enchantmentEcho, TOP_HOPPER.above().getCenter());
+            BookTestHelper.spawnItemStack(context, enchantmentEcho, TOP_HOPPER.above());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerContains(TOP_HOPPER, ModItems.ENCHANTMENT_ECHO);

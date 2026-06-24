@@ -55,7 +55,7 @@ public class ClientOnlyModInitializer implements ClientModInitializer {
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
             if (stack.is(Items.ENCHANTED_BOOK) || stack.is(ModItems.ENCHANTMENT_ECHO)) {
                 var text = Component.translatable("gui.interactive_enchanted_books.openable_tooltip");
-                lines.add(text.withColor(ChatFormatting.DARK_GREEN.getColor()));
+                lines.add(text.withStyle(ChatFormatting.DARK_GREEN));
             }
         });
     }

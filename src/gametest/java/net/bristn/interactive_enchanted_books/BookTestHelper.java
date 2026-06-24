@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import net.bristn.interactive_enchanted_books.items.ModItems;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -57,9 +58,9 @@ public class BookTestHelper {
      * Custom version of the spawnItem method that ensure the enchantments are still present on the
      * item. Using the regular spawnItem removes the enchantment information
      */
-    public static ItemEntity spawnItemStack(GameTestHelper context, ItemStack stack, Vec3 pos) {
+    public static ItemEntity spawnItemStack(GameTestHelper context, ItemStack stack, BlockPos pos) {
         ServerLevel level = context.getLevel();
-        Vec3 absoluteVec = context.absoluteVec(pos);
+        Vec3 absoluteVec = context.absoluteVec(new Vec3(pos.getX(), pos.getY(), pos.getZ()));
         ItemEntity itemEntity = new ItemEntity(level, absoluteVec.x, absoluteVec.y, absoluteVec.z, stack);
         itemEntity.setDeltaMovement((double) 0.0F, (double) 0.0F, (double) 0.0F);
         level.addFreshEntity(itemEntity);

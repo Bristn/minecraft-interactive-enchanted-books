@@ -115,7 +115,7 @@ public class EchoInfoPanel {
                 if (mouseY > y && mouseY < y + inSize) {
                     var lines = stack.getTooltipLines(context, null, TooltipFlag.Default.NORMAL);
                     for (var tooltip : inputA.tooltips()) {
-                        lines.add(tooltip.withColor(ChatFormatting.GRAY.getColor()));
+                        lines.add(tooltip.withStyle(ChatFormatting.GRAY));
                     }
 
                     graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
@@ -134,7 +134,7 @@ public class EchoInfoPanel {
                 if (mouseY > y && mouseY < y + inSize) {
                     var lines = stack.getTooltipLines(context, null, TooltipFlag.Default.NORMAL);
                     for (var tooltip : inputB.tooltips()) {
-                        lines.add(tooltip.withColor(ChatFormatting.GRAY.getColor()));
+                        lines.add(tooltip.withStyle(ChatFormatting.GRAY));
                     }
 
                     graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
@@ -161,7 +161,7 @@ public class EchoInfoPanel {
                 if (mouseY > y && mouseY < y + outSize) {
                     var lines = stack.getTooltipLines(context, null, TooltipFlag.Default.NORMAL);
                     for (var tooltip : output.tooltips()) {
-                        lines.add(tooltip.withColor(ChatFormatting.GRAY.getColor()));
+                        lines.add(tooltip.withStyle(ChatFormatting.GRAY));
                     }
 
                     graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);

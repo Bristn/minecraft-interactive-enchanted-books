@@ -6,12 +6,13 @@ import net.bristn.interactive_enchanted_books.tag.ModItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.world.item.Items;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 
 /**
- * Adds custom item tags to group certain items into one icon in the supported
- * item section. Vanilla has some tags like "SWORDS", "AXES", etc, but some item
- * groups don't have these tags. Therefore these are created here
+ * Adds custom item tags to group certain items into one icon in the supported item section. Vanilla
+ * has some tags like "SWORDS", "AXES", etc, but some item groups don't have these tags. Therefore
+ * these are created here
  */
 public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
@@ -21,25 +22,26 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
     @Override
     protected void addTags(Provider registries) {
-        valueLookupBuilder(ModItemTags.BOWS).add(Items.BOW).setReplace(false);
+        builder(ModItemTags.BOWS).add(ItemIds.BOW).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.CROSSBOWS).add(Items.CROSSBOW).setReplace(false);
+        builder(ModItemTags.CROSSBOWS).add(ItemIds.CROSSBOW).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.ELYTRAS).add(Items.ELYTRA).setReplace(false);
+        builder(ModItemTags.ELYTRAS).add(ItemIds.ELYTRA).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.SHIELDS).add(Items.SHIELD).setReplace(false);
+        builder(ModItemTags.SHIELDS).add(ItemIds.SHIELD).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.TRIDENTS).add(Items.TRIDENT).setReplace(false);
+        builder(ModItemTags.TRIDENTS).add(ItemIds.TRIDENT).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.MACES).add(Items.MACE).setReplace(false);
+        builder(ModItemTags.MACES).add(ItemIds.MACE).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.MISC).add(Items.FLINT_AND_STEEL).setReplace(false);
+        builder(ModItemTags.MISC).add(ItemIds.FLINT_AND_STEEL).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.MISC).add(Items.BRUSH).add(Items.SHEARS).add(Items.FISHING_ROD)
-                .add(Items.WARPED_FUNGUS_ON_A_STICK).add(Items.CARROT_ON_A_STICK).add(Items.COMPASS).setReplace(false);
+        builder(ModItemTags.MISC).add(ItemIds.BRUSH).add(ItemIds.SHEARS).add(ItemIds.FISHING_ROD)
+                .add(ItemIds.WARPED_FUNGUS_ON_A_STICK).add(ItemIds.CARROT_ON_A_STICK).add(ItemIds.COMPASS).setReplace(false);
 
-        valueLookupBuilder(ModItemTags.SKULLS).add(Items.CARVED_PUMPKIN).add(Items.PLAYER_HEAD).add(Items.SKELETON_SKULL)
-                .add(Items.CREEPER_HEAD).add(Items.ZOMBIE_HEAD).add(Items.DRAGON_HEAD).add(Items.PIGLIN_HEAD)
-                .add(Items.WITHER_SKELETON_SKULL).setReplace(false);
+        builder(ModItemTags.SKULLS).add(BlockItemIds.CARVED_PUMPKIN).add(BlockItemIds.PLAYER_HEAD)
+                .add(BlockItemIds.SKELETON_SKULL).add(BlockItemIds.CREEPER_HEAD).add(BlockItemIds.ZOMBIE_HEAD)
+                .add(BlockItemIds.DRAGON_HEAD).add(BlockItemIds.PIGLIN_HEAD).add(BlockItemIds.WITHER_SKELETON_SKULL)
+                .setReplace(false);
     }
 }

@@ -38,7 +38,7 @@ public class ScreenTest implements FabricClientGameTest {
         context.runOnClient(client -> {
             var access = EnchantedBookAccess.fromItem(book);
             client.execute(() -> {
-                client.setScreen(new EnchantedBookViewScreen(access));
+                client.setScreenAndShow(new EnchantedBookViewScreen(access));
             });
         });
 
@@ -59,7 +59,7 @@ public class ScreenTest implements FabricClientGameTest {
 
         context.runOnClient(client -> {
             client.execute(() -> {
-                client.setScreen(null);
+                client.setScreenAndShow(null);
             });
         });
     }
@@ -72,7 +72,7 @@ public class ScreenTest implements FabricClientGameTest {
         context.runOnClient(client -> {
             var access = EnchantedBookAccess.fromItem(book);
             client.execute(() -> {
-                client.setScreen(new EnchantedBookViewScreen(access));
+                client.setScreenAndShow(new EnchantedBookViewScreen(access));
             });
         });
 
@@ -82,7 +82,7 @@ public class ScreenTest implements FabricClientGameTest {
 
         context.runOnClient(client -> {
             client.execute(() -> {
-                client.setScreen(null);
+                client.setScreenAndShow(null);
             });
         });
     }
@@ -95,7 +95,7 @@ public class ScreenTest implements FabricClientGameTest {
         context.runOnClient(client -> {
             var access = EnchantedBookAccess.fromItem(book);
             client.execute(() -> {
-                client.setScreen(new EnchantedBookViewScreen(access));
+                client.setScreenAndShow(new EnchantedBookViewScreen(access));
             });
         });
 
@@ -103,7 +103,7 @@ public class ScreenTest implements FabricClientGameTest {
 
         context.runOnClient(client -> {
             client.execute(() -> {
-                client.setScreen(null);
+                client.setScreenAndShow(null);
             });
         });
     }

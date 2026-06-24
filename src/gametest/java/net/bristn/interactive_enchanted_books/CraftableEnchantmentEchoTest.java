@@ -32,14 +32,14 @@ public class CraftableEnchantmentEchoTest implements CustomTestMethodInvoker {
             context.setBlock(CRAFTER, Blocks.CRAFTER, Direction.SOUTH);
 
             var enchantedBook = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, enchantedBook, INPUT_HOPPER.above().getCenter());
+            BookTestHelper.spawnItemStack(context, enchantedBook, INPUT_HOPPER.above());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerEmpty(INPUT_HOPPER);
                 context.assertContainerContains(CRAFTER, enchantedBook.getItem());
 
                 var book = new ItemStack(Items.BOOK, 1);
-                BookTestHelper.spawnItemStack(context, book, INPUT_HOPPER.above().getCenter());
+                BookTestHelper.spawnItemStack(context, book, INPUT_HOPPER.above());
 
                 context.runAfterDelay(20, () -> {
                     context.assertContainerEmpty(INPUT_HOPPER);
@@ -70,14 +70,14 @@ public class CraftableEnchantmentEchoTest implements CustomTestMethodInvoker {
 
             // ! Swapped spawn order, as crafter caches recipes (Original order will still work until restart)
             var book = new ItemStack(Items.BOOK, 1);
-            BookTestHelper.spawnItemStack(context, book, INPUT_HOPPER.above().getCenter());
+            BookTestHelper.spawnItemStack(context, book, INPUT_HOPPER.above());
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerEmpty(INPUT_HOPPER);
                 context.assertContainerContains(CRAFTER, book.getItem());
 
                 var enchantedBook = BookTestHelper.getEnchantedBook(context);
-                BookTestHelper.spawnItemStack(context, enchantedBook, INPUT_HOPPER.above().getCenter());
+                BookTestHelper.spawnItemStack(context, enchantedBook, INPUT_HOPPER.above());
 
                 context.runAfterDelay(20, () -> {
                     context.assertContainerEmpty(INPUT_HOPPER);
@@ -105,7 +105,7 @@ public class CraftableEnchantmentEchoTest implements CustomTestMethodInvoker {
             context.setBlock(CHISELED_BOOKSHELF, Blocks.CHISELED_BOOKSHELF);
 
             var echo = new ItemStack(ModItems.ENCHANTMENT_ECHO, 1);
-            BookTestHelper.spawnItemStack(context, echo, INPUT_HOPPER.above().getCenter());
+            BookTestHelper.spawnItemStack(context, echo, INPUT_HOPPER.above());
 
             context.runAfterDelay(40, () -> {
                 context.assertContainerEmpty(INPUT_HOPPER);

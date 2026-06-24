@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.mixin.MinecraftAccessor;
+import net.bristn.interactive_enchanted_books.mixin.ParticleEngineAccessor;
 import net.bristn.interactive_enchanted_books.mixin.ParticleResourcesAccessor;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenPageData;
 import net.bristn.interactive_enchanted_books.screen.data.LecternScreenSupportedIconData;
@@ -59,7 +60,8 @@ public class EnchantedBookViewScreenRenderer {
         this.screen = screen;
 
         var minecraft = (MinecraftAccessor) Minecraft.getInstance();
-        var resources = (ParticleResourcesAccessor) minecraft.getParticleResources();
+        var engine = (ParticleEngineAccessor) minecraft.getParticleEngine();
+        var resources = (ParticleResourcesAccessor) engine.getParticleResources();
         this.particleSpriteSets = resources.getSpriteSets();
     }
 

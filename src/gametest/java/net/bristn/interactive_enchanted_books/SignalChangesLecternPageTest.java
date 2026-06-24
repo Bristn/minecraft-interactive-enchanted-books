@@ -7,7 +7,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
-import net.minecraft.world.phys.Vec3;
 import net.bristn.interactive_enchanted_books.gamerules.ModGameRules;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
 import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
@@ -32,7 +31,7 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
             context.setBlock(LECTERN, Blocks.LECTERN);
 
             var stack = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, stack, new Vec3(0.5, 3.5, 0.5));
+            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
@@ -81,10 +80,10 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
 
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
             context.setBlock(LECTERN, Blocks.LECTERN);
-            context.setBlock(COPPER_BULB, Blocks.COPPER_BULB);
+            context.setBlock(COPPER_BULB, Blocks.COPPER_BULB.asList().getFirst());
 
             var stack = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, stack, new Vec3(0.5, 3.5, 0.5));
+            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
@@ -133,7 +132,7 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
             context.setBlock(LECTERN, Blocks.LECTERN);
 
             var stack = BookTestHelper.getWrittenBook();
-            BookTestHelper.spawnItemStack(context, stack, new Vec3(0.5, 3.5, 0.5));
+            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
@@ -182,10 +181,10 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
 
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
             context.setBlock(LECTERN, Blocks.LECTERN);
-            context.setBlock(COPPER_BULB, Blocks.COPPER_BULB);
+            context.setBlock(COPPER_BULB, Blocks.COPPER_BULB.asList().getFirst());
 
             var stack = BookTestHelper.getWrittenBook();
-            BookTestHelper.spawnItemStack(context, stack, new Vec3(0.5, 3.5, 0.5));
+            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {

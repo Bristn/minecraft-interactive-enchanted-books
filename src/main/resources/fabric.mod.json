@@ -1,41 +1,37 @@
 {
-    "schemaVersion": 1,
-    "id": "interactive_enchanted_books",
-    "version": "${version}",
-    "name": "Interactive Enchanted Books",
-    "description": "Allows opening of enchanted books to view enchantment details",
-    "authors": [
-        "Bristn"
+  "schemaVersion": 1,
+  "id": "interactive_enchanted_books",
+  "version": "${version}",
+  "name": "Interactive Enchanted Books",
+  "description": "Allows opening of enchanted books to view enchantment details",
+  "authors": ["Bristn"],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/Bristn/minecraft-interactive-enchanted-books"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/interactive_enchanted_books/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.bristn.interactive_enchanted_books.ClientOnlyModInitializer"
     ],
-    "contact": {
-        "homepage": "",
-        "sources": "https://github.com/Bristn/minecraft-interactive-enchanted-books"
-    },
-    "license": "CC0-1.0",
-    "icon": "assets/interactive_enchanted_books/icon.png",
-    "environment": "*",
-    "entrypoints": {
-        "client": [
-            "net.bristn.interactive_enchanted_books.ClientOnlyModInitializer"
-        ],
-        "main": [
-            "net.bristn.interactive_enchanted_books.CommonModInitializer"
-        ],
-        "fabric-datagen": [
-            "net.bristn.interactive_enchanted_books.CommonModDataGenerator"
-        ]
-    },
-    "mixins": [
-        "interactive_enchanted_books.mixins.json",
-        {
-            "config": "interactive_enchanted_books.client.mixins.json",
-            "environment": "client"
-        }
-    ],
-    "depends": {
-        "fabricloader": ">=0.18.4",
-        "minecraft": "~26.1-",
-        "java": ">=25",
-        "fabric-api": "*"
+    "main": ["net.bristn.interactive_enchanted_books.CommonModInitializer"],
+    "fabric-datagen": [
+      "net.bristn.interactive_enchanted_books.CommonModDataGenerator"
+    ]
+  },
+  "mixins": [
+    "interactive_enchanted_books.mixins.json",
+    {
+      "config": "interactive_enchanted_books.client.mixins.json",
+      "environment": "client"
     }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.2-",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
 }

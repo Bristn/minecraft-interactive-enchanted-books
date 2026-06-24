@@ -35,6 +35,6 @@ public abstract class ItemMixin {
 
         var screen = new EnchantedBookViewScreen(EnchantedBookAccess.fromItem(stack));
         var client = Minecraft.getInstance();
-        client.setScreen(screen);
+        client.setScreenAndShow(screen);
     }
 }

@@ -107,7 +107,4 @@ publishing {
 		// retrieving dependencies.
 	}
 }
-
-test {
-	useJUnitPlatform()
-}
+ 

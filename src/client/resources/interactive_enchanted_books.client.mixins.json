@@ -3,7 +3,12 @@
   "minVersion": "0.8",
   "package": "net.bristn.interactive_enchanted_books.mixin",
   "compatibilityLevel": "JAVA_25",
-  "client": ["ItemMixin", "ParticleResourcesAccessor", "MinecraftAccessor"],
+  "client": [
+    "ItemMixin",
+    "ParticleResourcesAccessor",
+    "ParticleEngineAccessor",
+    "MinecraftAccessor"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

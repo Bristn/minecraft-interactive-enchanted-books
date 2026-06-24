@@ -4,6 +4,7 @@ import java.util.Map;
 
 import net.bristn.interactive_enchanted_books.CommonModInitializer;
 import net.bristn.interactive_enchanted_books.mixin.MinecraftAccessor;
+import net.bristn.interactive_enchanted_books.mixin.ParticleEngineAccessor;
 import net.bristn.interactive_enchanted_books.mixin.ParticleResourcesAccessor;
 import net.bristn.interactive_enchanted_books.screen.EnchantedBookViewScreenRenderer;
 import net.minecraft.ChatFormatting;
@@ -47,7 +48,8 @@ public class ParticleInfoPanel {
         this.font = Minecraft.getInstance().font;
 
         var minecraft = (MinecraftAccessor) Minecraft.getInstance();
-        var resources = (ParticleResourcesAccessor) minecraft.getParticleResources();
+        var engine = (ParticleEngineAccessor) minecraft.getParticleEngine();
+        var resources = (ParticleResourcesAccessor) engine.getParticleResources();
         this.particleSpriteSets = resources.getSpriteSets();
     }
 
@@ -131,7 +133,7 @@ public class ParticleInfoPanel {
                 if (mouseY > y && mouseY < y + inSize) {
                     var lines = stack.getTooltipLines(context, null, TooltipFlag.Default.NORMAL);
                     for (var tooltip : inputA.tooltips()) {
-                        lines.add(tooltip.withColor(ChatFormatting.GRAY.getColor()));
+                        lines.add(tooltip.withStyle(ChatFormatting.GRAY));
                     }
 
                     graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
@@ -154,7 +156,7 @@ public class ParticleInfoPanel {
                 if (mouseY > y && mouseY < y + inSize) {
                     var lines = stack.getTooltipLines(context, null, TooltipFlag.Default.NORMAL);
                     for (var tooltip : inputB.tooltips()) {
-                        lines.add(tooltip.withColor(ChatFormatting.GRAY.getColor()));
+                        lines.add(tooltip.withStyle(ChatFormatting.GRAY));
                     }
 
                     graphics.setComponentTooltipForNextFrame(font, lines, mouseX, mouseY);
