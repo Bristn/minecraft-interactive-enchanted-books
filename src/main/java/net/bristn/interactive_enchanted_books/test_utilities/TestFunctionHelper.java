@@ -1,4 +1,4 @@
-package net.bristn.interactive_enchanted_books;
+package net.bristn.interactive_enchanted_books.test_utilities;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
-public class BookTestHelper {
+public class TestFunctionHelper {
 
     public static int PAGE_COUNT = 3;
 

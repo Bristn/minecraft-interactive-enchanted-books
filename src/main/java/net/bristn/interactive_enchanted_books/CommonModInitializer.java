@@ -9,6 +9,7 @@ import net.bristn.interactive_enchanted_books.resources.loader.ModResourceLoader
 import net.bristn.interactive_enchanted_books.screen.ModScreens;
 import net.bristn.interactive_enchanted_books.tag.ModEnchantmentTags;
 import net.bristn.interactive_enchanted_books.tag.ModItemTags;
+import net.bristn.interactive_enchanted_books.test_functions.ModTestFunctions;
 import net.bristn.interactive_enchanted_books.transformers.ModTransformers;
 import net.fabricmc.api.ModInitializer;
 
@@ -39,5 +40,7 @@ public class CommonModInitializer implements ModInitializer {
 
         ModTransformers.registerModTransformers();
         ModResourceLoaders.registerModResourceLoaders();
+
+        ModTestFunctions.registerModTestFunctions();
     }
 }
