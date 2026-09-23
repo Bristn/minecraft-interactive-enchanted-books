@@ -1,28 +1,32 @@
-package net.bristn.interactive_enchanted_books;
-
-import java.lang.reflect.Method;
+package net.bristn.interactive_enchanted_books.test_functions;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.bristn.interactive_enchanted_books.gamerules.ModGameRules;
+import net.bristn.interactive_enchanted_books.test_utilities.TestFunctionHelper;
+import net.bristn.interactive_enchanted_books.test_utilities.TestFunctionOrder;
 import net.bristn.interactive_enchanted_books.utility.interfaces.LecternAccess;
-import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 
-public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
+public class RedstoneFunctionTest {
+    public RedstoneFunctionTest() {
+        TestFunctionOrder.resetIfFinished();
+    }
+
     private static final BlockPos TOP_HOPPER = new BlockPos(0, 3, 0);
     private static final BlockPos LECTERN = new BlockPos(0, 2, 0);
     private static final BlockPos REDSTONE_BLOCK = new BlockPos(0, 1, 0);
     private static final BlockPos COPPER_BULB = new BlockPos(1, 2, 0);
 
     @GameTest(maxTicks = 1000)
-    public void enableEnchantedBook(GameTestHelper context) {
-        var rule = GameRuleTestOrder.SIGNAL_TRUE_ENCHANTED_BOOK;
+    public void signalChangeEnabled(GameTestHelper context) {
+        var rule = TestFunctionOrder.SIGNAL_TRUE_ENCHANTED_BOOK;
 
-        GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.SIGNAL_ORDER, () -> {
+        TestFunctionOrder.waitForTestToSucceed(context, rule, TestFunctionOrder.SIGNAL_ORDER, () -> {
             var server = context.getLevel().getServer();
             context.getLevel().getGameRules().set(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN, true, server);
             context.getLevel().getGameRules().set(ModGameRules.SIGNAL_CHANGES_LECTERN_PAGE, true, server);
@@ -30,13 +34,13 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
             context.setBlock(LECTERN, Blocks.LECTERN);
 
-            var stack = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
+            var stack = TestFunctionHelper.getEnchantedBook(context);
+            TestFunctionHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerEmpty(TOP_HOPPER);
-                context.assertValueEqual(lectern.getPageCount(), BookTestHelper.PAGE_COUNT, "Page count");
+                context.assertValueEqual(lectern.getPageCount(), TestFunctionHelper.PAGE_COUNT, "Page count");
                 context.assertValueEqual(lectern.getCurrentPage(), 0, "Initial page");
                 context.setBlock(REDSTONE_BLOCK, Blocks.REDSTONE_BLOCK);
 
@@ -70,10 +74,10 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
     }
 
     @GameTest(maxTicks = 1000)
-    public void disableEnchantedBook(GameTestHelper context) {
-        var rule = GameRuleTestOrder.SIGNAL_FALSE_ENCHANTED_BOOK;
+    public void signalChangeDisabled(GameTestHelper context) {
+        var rule = TestFunctionOrder.SIGNAL_FALSE_ENCHANTED_BOOK;
 
-        GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.SIGNAL_ORDER, () -> {
+        TestFunctionOrder.waitForTestToSucceed(context, rule, TestFunctionOrder.SIGNAL_ORDER, () -> {
             var server = context.getLevel().getServer();
             context.getLevel().getGameRules().set(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN, true, server);
             context.getLevel().getGameRules().set(ModGameRules.SIGNAL_CHANGES_LECTERN_PAGE, false, server);
@@ -82,13 +86,13 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
             context.setBlock(LECTERN, Blocks.LECTERN);
             context.setBlock(COPPER_BULB, Blocks.COPPER_BULB.asList().getFirst());
 
-            var stack = BookTestHelper.getEnchantedBook(context);
-            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
+            var stack = TestFunctionHelper.getEnchantedBook(context);
+            TestFunctionHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerEmpty(TOP_HOPPER);
-                context.assertValueEqual(lectern.getPageCount(), BookTestHelper.PAGE_COUNT, "Page count");
+                context.assertValueEqual(lectern.getPageCount(), TestFunctionHelper.PAGE_COUNT, "Page count");
                 context.assertValueEqual(lectern.getCurrentPage(), 0, "Initial page");
                 context.setBlock(REDSTONE_BLOCK, Blocks.REDSTONE_BLOCK);
 
@@ -101,11 +105,11 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
                         context.destroyBlock(REDSTONE_BLOCK);
                         context.assertValueEqual(lectern.getCurrentPage(), 0, "Page is the same");
                         context.setBlock(REDSTONE_BLOCK, Blocks.REDSTONE_BLOCK);
-                        BookTestHelper.advancePage(lectern);
+                        TestFunctionHelper.advancePage(lectern);
 
                         context.runAfterDelay(20, () -> {
                             assertCopperBulbIsOn(context, COPPER_BULB);
-                            BookTestHelper.advancePage(lectern);
+                            TestFunctionHelper.advancePage(lectern);
 
                             context.runAfterDelay(20, () -> {
                                 assertCopperBulbIsOff(context, COPPER_BULB);
@@ -120,10 +124,10 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
     }
 
     @GameTest(maxTicks = 1000)
-    public void enableRegularBook(GameTestHelper context) {
-        var rule = GameRuleTestOrder.SIGNAL_TRUE_REGULAR_BOOK;
+    public void signalChangeEnabledRegularBook(GameTestHelper context) {
+        var rule = TestFunctionOrder.SIGNAL_TRUE_REGULAR_BOOK;
 
-        GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.SIGNAL_ORDER, () -> {
+        TestFunctionOrder.waitForTestToSucceed(context, rule, TestFunctionOrder.SIGNAL_ORDER, () -> {
             var server = context.getLevel().getServer();
             context.getLevel().getGameRules().set(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN, true, server);
             context.getLevel().getGameRules().set(ModGameRules.SIGNAL_CHANGES_LECTERN_PAGE, true, server);
@@ -131,13 +135,13 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
             context.setBlock(TOP_HOPPER, Blocks.HOPPER);
             context.setBlock(LECTERN, Blocks.LECTERN);
 
-            var stack = BookTestHelper.getWrittenBook();
-            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
+            var stack = TestFunctionHelper.getWrittenBook();
+            TestFunctionHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerEmpty(TOP_HOPPER);
-                context.assertValueEqual(lectern.getPageCount(), BookTestHelper.PAGE_COUNT, "Page count");
+                context.assertValueEqual(lectern.getPageCount(), TestFunctionHelper.PAGE_COUNT, "Page count");
                 context.assertValueEqual(lectern.getCurrentPage(), 0, "Initial page");
                 context.setBlock(REDSTONE_BLOCK, Blocks.REDSTONE_BLOCK);
 
@@ -171,10 +175,10 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
     }
 
     @GameTest(maxTicks = 1000)
-    public void disableRegularBook(GameTestHelper context) {
-        var rule = GameRuleTestOrder.SIGNAL_FALSE_REGULAR_BOOK;
+    public void signalChangeDisabledRegularBook(GameTestHelper context) {
+        var rule = TestFunctionOrder.SIGNAL_FALSE_REGULAR_BOOK;
 
-        GameRuleTestOrder.waitForTestToSucceed(context, rule, GameRuleTestOrder.SIGNAL_ORDER, () -> {
+        TestFunctionOrder.waitForTestToSucceed(context, rule, TestFunctionOrder.SIGNAL_ORDER, () -> {
             var server = context.getLevel().getServer();
             context.getLevel().getGameRules().set(ModGameRules.HOPPER_INTERACTS_WITH_LECTERN, true, server);
             context.getLevel().getGameRules().set(ModGameRules.SIGNAL_CHANGES_LECTERN_PAGE, false, server);
@@ -183,13 +187,13 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
             context.setBlock(LECTERN, Blocks.LECTERN);
             context.setBlock(COPPER_BULB, Blocks.COPPER_BULB.asList().getFirst());
 
-            var stack = BookTestHelper.getWrittenBook();
-            BookTestHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
+            var stack = TestFunctionHelper.getWrittenBook();
+            TestFunctionHelper.spawnItemStack(context, stack, new BlockPos(0, 3, 0));
             var lectern = (LecternAccess) (LecternBlockEntity) context.getLevel().getBlockEntity(context.absolutePos(LECTERN));
 
             context.runAfterDelay(20, () -> {
                 context.assertContainerEmpty(TOP_HOPPER);
-                context.assertValueEqual(lectern.getPageCount(), BookTestHelper.PAGE_COUNT, "Page count");
+                context.assertValueEqual(lectern.getPageCount(), TestFunctionHelper.PAGE_COUNT, "Page count");
                 context.assertValueEqual(lectern.getCurrentPage(), 0, "Initial page");
                 context.setBlock(REDSTONE_BLOCK, Blocks.REDSTONE_BLOCK);
 
@@ -202,11 +206,11 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
                         context.destroyBlock(REDSTONE_BLOCK);
                         context.assertValueEqual(lectern.getCurrentPage(), 0, "Page is the same");
                         context.setBlock(REDSTONE_BLOCK, Blocks.REDSTONE_BLOCK);
-                        BookTestHelper.advancePage(lectern);
+                        TestFunctionHelper.advancePage(lectern);
 
                         context.runAfterDelay(20, () -> {
                             assertCopperBulbIsOn(context, COPPER_BULB);
-                            BookTestHelper.advancePage(lectern);
+                            TestFunctionHelper.advancePage(lectern);
 
                             context.runAfterDelay(20, () -> {
                                 assertCopperBulbIsOff(context, COPPER_BULB);
@@ -227,10 +231,5 @@ public class SignalChangesLecternPageTest implements CustomTestMethodInvoker {
 
     private void assertCopperBulbIsOff(GameTestHelper context, BlockPos pos) {
         context.assertBlockState(pos, t -> t.getLightEmission() == 0, t -> Component.literal("Bulb is off"));
-    }
-
-    @Override
-    public void invokeTestMethod(GameTestHelper context, Method method) throws ReflectiveOperationException {
-        method.invoke(this, context);
     }
 }

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "interactive_enchanted_books:hopper_interaction_enabled_for_echo",
+  "max_ticks": 10000,
+  "required": true,
+  "setup_ticks": 1,
+  "structure": "interactive_enchanted_books:test_bounds"
+}

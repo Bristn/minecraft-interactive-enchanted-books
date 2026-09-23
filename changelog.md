@@ -1,3 +1,1 @@
-# Changelog for version 1.1.0+26.2
-
-- Update to Minecraft 26.2
+- Make tests executable in game using `/test run interactive_enchanted_books:\*`

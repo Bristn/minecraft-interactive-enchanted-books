@@ -6,11 +6,7 @@
   "icon": "assets/example-mod/icon.png",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": [
-      "net.bristn.interactive_enchanted_books.SignalChangesLecternPageTest",
-      "net.bristn.interactive_enchanted_books.HopperInteractsWithLecternTest",
-      "net.bristn.interactive_enchanted_books.CraftableEnchantmentEchoTest"
-    ],
+    "fabric-gametest": [],
     "fabric-client-gametest": [
       "net.bristn.interactive_enchanted_books.EnchantmentValueUtilityTest",
       "net.bristn.interactive_enchanted_books.client.ScreenTest"

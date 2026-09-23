@@ -189,3 +189,9 @@ The Enchantment Echo clones the enchantments of the original item **without** de
 ![Integration header](./doc/headers//integration_header.png)
 
 See the [example repository](https://github.com/Bristn/minecraft-interactive-enchanted-books-example) for more details on how to integrate custom enchantments.
+
+<hr></hr>
+
+![Modpack header](./doc/headers/modpack_header.png)
+
+Feel free to use this mod in any modpacks. **Like with any other mod, you should backup your world before adding this mod**. To check if there might be any compatibility issues with other mods, create a superflat world and run the command `/test run interactive_enchanted_books:*`. These tests probably don't cover all edge cases, but are a good start to find any major problems. The tests can be cleared using `/test clearall`
