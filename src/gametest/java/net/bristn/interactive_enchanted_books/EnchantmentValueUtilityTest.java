@@ -17,7 +17,7 @@ public class EnchantmentValueUtilityTest implements FabricClientGameTest {
 
     @Override
     public void runTest(ClientGameTestContext context) {
-        var lookup = VanillaRegistries.createLookup();
+        var lookup = VanillaRegistries.createWorldLookup();
 
         var registry = lookup.lookupOrThrow(Registries.ENCHANTMENT);
         var remaining = new ArrayList<ResourceKey<Enchantment>>();

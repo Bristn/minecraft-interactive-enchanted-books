@@ -22,7 +22,7 @@ public class ScreenTest implements FabricClientGameTest {
     @Override
     public void runTest(ClientGameTestContext context) {
         var singlePlayer = context.worldBuilder().create();
-        singlePlayer.getClientLevel().waitForChunksRender();
+        singlePlayer.getConnection().waitForChunksRender();
 
         testBothEnabled(context);
         testBothDisabled(context);

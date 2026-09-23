@@ -1,6 +1,7 @@
 package net.bristn.interactive_enchanted_books.screen.handlers;
 
 import net.bristn.interactive_enchanted_books.screen.ModScreens;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
@@ -71,7 +72,7 @@ public class LecternEnchantedBookMenu extends AbstractContainerMenu {
             var book = this.lectern.removeItemNoUpdate(0);
             this.lectern.setChanged();
             if (!player.getInventory().add(book)) {
-                player.drop(book, false);
+                player.drop(book, false, Prediction.PREDICTED);
             }
 
             return true;
